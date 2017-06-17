@@ -32,7 +32,7 @@ var_dump($hoarderDto);
 echo "<br/>";
 echo "<br/>";
 
-if ($_GET['isCron'] == 1) {
+if ($_GET['isCron'] == 2) {
     sendStatus($today[0][0], $totalDonations, $topDonaterDto);
     if (sizeof($hoarderDto->members) > 0) {
         sendHoarderStatus($hoarderDto);

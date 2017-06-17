@@ -1,3 +1,5 @@
-/vendor/
+/vendor/*
+!/vendor/autoload.php
 /client_secret.json
-/Config.php
+/Config*
+/nbproject/private/

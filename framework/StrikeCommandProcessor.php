@@ -61,6 +61,12 @@ class StrikeCommandProcessor implements ICommandProcessor{
         }
         
         $conquest = $this->conquestRepository->GetCurrentConquest();
+        $check = $this->zoneRepository->GetZone($conquest, $zone);
+        if ($check != null && !$check->is_owned)
+        {
+            $this->response = "Zone *$zone* has not yet been completed/removed.  Please mark it as done or lost before trying again.\n" .
+                    "Hint: zone # (done|lost)";
+        }       
         $this->zoneRepository->CreateZone($conquest, $zone);
         $zone = $this->zoneRepository->GetZone($conquest, $zone);
         $this->CreateNodes($zone, $hold);

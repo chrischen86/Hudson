@@ -10,6 +10,8 @@ namespace framework;
 use framework\slack\SlackApi;
 use framework\conquest\ConquestManager;
 use framework\conquest\StatsDto;
+use DateTime;
+use dal\Phases;
 /**
  * Description of SummaryCommandProcessor
  *
@@ -48,9 +50,15 @@ class SummaryCommandProcessor implements ICommandProcessor {
     
     private function BuildDateSummary(StatsDto $stats)
     {
-        $this->response = 'Here is the summary for the conquest between *' .
-                $stats->forDate->format('Y-m-d') . '* and *' .
-                $stats->endDate->format('Y-m-d') . '*:';
+        if ($this->IsConquestOver())
+        {
+            $this->response = 'Here is the summary for the conquest between *' .
+                $stats->forDate->format('Y-m-d') . '* and *' . $stats->endDate->format('Y-m-d') . '*:';
+        }
+        else
+        {
+            $this->response = 'The conquest is not yet over, but here is the data thus far:';
+        }
     }
     
     private function BuildZoneSummary(StatsDto $stats, &$attachments)
@@ -93,9 +101,7 @@ class SummaryCommandProcessor implements ICommandProcessor {
     }
     
     private function BuildStrikeSummary(StatsDto $stats, &$attachments)
-    {
-        $fields = array();
-        
+    {        
         $attackDictionary = array();
         $totalNonemptyAttacks = 0;
         foreach ($stats->strikes as $strike)
@@ -106,13 +112,25 @@ class SummaryCommandProcessor implements ICommandProcessor {
                 $totalNonemptyAttacks++;
             }
         }
-
         arsort($attackDictionary);
+        
+        $this->BuildParticipationSummary($attachments, $attackDictionary);       
+        if ($this->IsConquestOver())
+        {
+            $this->BuildAttackSummary($attachments, $attackDictionary, $totalNonemptyAttacks);
+        }
+    }
+    
+    private function BuildParticipationSummary(&$attachments, $attackDictionary)
+    {
+        $fields = array();
+        $message = 'A total of *' . sizeof($attackDictionary) . "* members have participated in this conquest!\n" . 
+                'This means we had a participation rate of *' . number_format(sizeof($attackDictionary) / 40 * 100, 2) . "%*!\n";
+        $message .= $this->IsConquestOver() ? implode(', ', array_keys($attackDictionary)) . "\n\nWe could not have done it without you!"
+                : '';
         array_push($fields, array(
             'title' => 'Participation Summary',
-            'value' => 'A total of *' . sizeof($attackDictionary) . "* members have participated in this conquest!\n" . 
-                'This means we had a participation rate of *' . number_format(sizeof($attackDictionary) / 40 * 100, 2) . "%*!\n" .
-                implode(', ', array_keys($attackDictionary)) . "\n\nWe could not have done it without you!"
+            'value' => $message,                
         ));
         
         array_push($attachments, array(
@@ -120,8 +138,11 @@ class SummaryCommandProcessor implements ICommandProcessor {
             'text' => '',
             'fields' => $fields,
             'mrkdwn_in' => ["fields"]
-        ));
-        
+        )); 
+    }
+    
+    private function BuildAttackSummary(&$attachments, $attackDictionary, $totalNonemptyAttacks)
+    {
         $message = '';
         foreach ($attackDictionary as $attacker => $attackCount)
         {
@@ -141,5 +162,16 @@ class SummaryCommandProcessor implements ICommandProcessor {
             'fields' => $achievements,
             'mrkdwn_in' => ["fields"]
         ));
+    }
+    
+    private function IsConquestOver()
+    {
+        $now = new DateTime();
+        $dayOfWeek = $now->format('l');
+        $hour = $now->format('H');
+        return (($dayOfWeek == 'Tuesday' && $hour >= Phases::Phase3 + Phases::PhaseLength)
+                || $dayOfWeek == 'Wednesday'
+                || $dayOfWeek == 'Thursday'
+                || ($dayOfWeek == 'Friday' && $hour <= Phases::Phase1));
     }
 }

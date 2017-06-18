@@ -23,6 +23,7 @@ class LeadCommandProcessor implements ICommandProcessor {
     private $slackApi;
     
     private $response;
+    private $topic;
 
     public function __construct($data) {
         $this->eventData = $data;        
@@ -43,10 +44,15 @@ class LeadCommandProcessor implements ICommandProcessor {
         $conquest = $this->conquestRepository->GetCurrentConquest();
         $this->conquestRepository->SetCommander($user);
         $this->response = '<@' . $user->name . '> has volunteered to lead, please follow their instructions!';
+        
+        $this->topic = 'Commander: <@' . $user->name . '> ' .
+                'for battle phase *' . $conquest->phase . '* ' .
+                'on *' . $conquest->date->format('Y-m-d') . '*';
     }
 
     public function SendResponse() 
     {
         $this->slackApi->SendMessage($this->response, null, $this->eventData['channel']);
+        $this->slackApi->SetTopic($this->topic, $this->eventData['channel']);
     }
 }

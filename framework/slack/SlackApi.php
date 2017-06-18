@@ -17,6 +17,7 @@ class SlackApi {
     private $PostMessageApiUri = 'https://slack.com/api/chat.postMessage';
     private $UpdateMessageApiUri = 'https://slack.com/api/chat.update';
     private $GroupHistoryApiUri = 'https://slack.com/api/channels.history';
+    private $TopicApiUri = 'https://slack.com/api/channels.setTopic';
     
     public function SendMessage($message, $attachments=null, $channel='test2')
     {
@@ -61,6 +62,19 @@ class SlackApi {
         $queryString .= "&channel=" . $channel;
         $queryString .= "&count=3";
         $uri = $this->GroupHistoryApiUri . "?" . $queryString;        
+        $response = \Httpful\Request::post($uri)
+               ->addHeader('Content-Type', 'text/plain; charset=utf-8')
+               ->send();
+        
+        return $response;
+    }
+    
+    public function SetTopic($topic, $channel)
+    {
+        $queryString = "token=" . \Config::$BotOAuthToken;
+        $queryString .= "&channel=$channel";
+        $queryString .= "&topic=$topic";
+        $uri = $this->TopicApiUri . "?" . $queryString;        
         $response = \Httpful\Request::post($uri)
                ->addHeader('Content-Type', 'text/plain; charset=utf-8')
                ->send();

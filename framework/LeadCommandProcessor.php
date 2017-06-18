@@ -8,6 +8,7 @@
 
 namespace framework;
 use dal\managers\ConquestRepository;
+use dal\managers\UserRepository;
 use framework\slack\SlackApi;
 
 /**
@@ -18,6 +19,7 @@ use framework\slack\SlackApi;
 class LeadCommandProcessor implements ICommandProcessor {
     private $eventData;
     private $conquestRepository;
+    private $userRepository;
     private $slackApi;
     
     private $response;
@@ -27,6 +29,7 @@ class LeadCommandProcessor implements ICommandProcessor {
         $this->slackApi = new SlackApi();
         
         $this->conquestRepository = new ConquestRepository();
+        $this->userRepository = new UserRepository();
     }
     
     public function Process() 

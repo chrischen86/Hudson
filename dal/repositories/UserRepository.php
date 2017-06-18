@@ -37,6 +37,10 @@ class UserRepository {
                 'FROM users ' .
                 "WHERE id = '$id'";
         $result = $this->adapter->query_single($sql);
+        if ($result == null)
+        {
+            return null;
+        }
         return ModelBuildingHelper::BuildUserModel($result);
     }
 }

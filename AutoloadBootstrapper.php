@@ -38,6 +38,7 @@ require_once __DIR__ . '/framework' . '/ZoneCommandProcessor.php';
 require_once __DIR__ . '/framework' . '/ClearCommandProcessor.php';
 require_once __DIR__ . '/framework' . '/StatsCommandProcessor.php';
 require_once __DIR__ . '/framework' . '/SummaryCommandProcessor.php';
+require_once __DIR__ . '/framework' . '/CancelCommandProcessor.php';
 
 require_once __DIR__ . '/framework' . '/slack' . '/SlackApi.php';
 

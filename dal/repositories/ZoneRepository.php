@@ -113,4 +113,13 @@ class ZoneRepository {
                 'VALUES (' . $conquest->id . ', ' . $zone . ', ' . $battleCount . ', 0)';
         $this->adapter->query($sql);
     }
+    
+    public function DeleteZone(ConquestModel $conquest, $zone)
+    {
+        $sql = 'DELETE FROM conquest_zones ' .
+                'WHERE zone = ' . $zone . ' ' .
+                'AND conquest_id = ' . $conquest->id . ' ' .
+                'AND is_owned = 0';
+        $this->adapter->query($sql);
+    }
 }

@@ -8,18 +8,17 @@ $input = json_decode($inputJSON, TRUE); //convert JSON into array
 $array = preg_split('/\//', $input['ref']);
 $branch = array_values(array_slice($array, -1))[0];
 
-exec('git fetch', $output);
-PrintOutput($output);
+exec('git rev-parse --abbrev-ref HEAD', $output);
+$currentBranch = $output[0];
 
-if ($branch != 'master')
+exec('git fetch', $output);
+if ($currentBranch != 'master')
 {
     exec("git checkout $branch -f", $output);
-    PrintOutput($output);
 }
-
 exec('git pull', $output);
-PrintOutput($output);
 
+PrintOutput($output);
 echo "End: Pull code from Github<br/>";
 
 function PrintOutput($output)

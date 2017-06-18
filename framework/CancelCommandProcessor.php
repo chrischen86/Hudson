@@ -7,6 +7,10 @@
  */
 
 namespace framework;
+use dal\managers\ZoneRepository;
+use dal\managers\ConquestRepository;
+use framework\slack\SlackApi;
+
 
 /**
  * Description of CancelCommandProcessor

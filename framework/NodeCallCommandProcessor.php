@@ -57,16 +57,6 @@ class NodeCallCommandProcessor implements ICommandProcessor
         $zoneValue = $matches[1];
         $nodeValue = $matches[2];
         $userValue = sizeof($matches) >= 4 ? $matches[4] : $this->eventData['user'];
-        
-        $conquest = $this->conquestRepository->GetCurrentConquest();
-        $zone = $this->zoneRepository->GetZone($conquest, $zoneValue);
-        if ($zone->is_owned)
-        {
-            $this->response = "That zone (*$zoneValue*) is no longer active, please double check your call!";
-            return;
-        }
-
-        $node = $this->nodeRepository->GetNode($zone, $nodeValue);
         $user = $this->userRepository->GetUserById($userValue);
         if ($user == null)
         {
@@ -74,6 +64,15 @@ class NodeCallCommandProcessor implements ICommandProcessor
             return;
         }
         
+        $conquest = $this->conquestRepository->GetCurrentConquest();
+        $zone = $this->zoneRepository->GetZone($conquest, $zoneValue);
+        if ($zone == null || $zone->is_owned)
+        {
+            $this->response = "That zone (*$zoneValue*) is no longer active, please double check your call!";
+            return;
+        }
+
+        $node = $this->nodeRepository->GetNode($zone, $nodeValue);       
         $currentStrike = $this->strikeRepository->GetStrike($node);
         if ($currentStrike->user_id != null)
         {

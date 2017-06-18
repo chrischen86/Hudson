@@ -54,9 +54,19 @@ class NodeCallCommandProcessor implements ICommandProcessor
             return;
         }
         
-        $zoneValue = $matches[1];
-        $nodeValue = $matches[2];
-        $userValue = sizeof($matches) >= 4 ? $matches[4] : $this->eventData['user'];
+        $offset = 0;
+        if (sizeof($matches) >= 5)
+        {
+            $offset = 2;
+            $userValue = $matches[5];    
+        }
+        else 
+        {
+            $userValue = $this->eventData['user'];
+        }
+        
+        $zoneValue = $matches[1+$offset];
+        $nodeValue = $matches[2+$offset];        
         $user = $this->userRepository->GetUserById($userValue);
         if ($user == null)
         {

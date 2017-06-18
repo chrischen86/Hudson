@@ -20,7 +20,7 @@ class SlackApi {
     
     public function SendMessage($message, $attachments=null, $channel='test2')
     {
-        $queryString = "token=" . \Config::$BotAuthToken;
+        $queryString = "token=" . \Config::$BotUserOAuthToken;
         $queryString .= "&channel=" . $channel;
         $queryString .= "&as_user=" . "true";
         $queryString .= "&text=" . urlencode($message);
@@ -39,7 +39,7 @@ class SlackApi {
     
     public function UpdateMessage($ts, $channel, $message, $attachments=[])
     {
-        $queryString = "token=" . \Config::$BotAuthToken;
+        $queryString = "token=" . \Config::$BotUserOAuthToken;
         $queryString .= "&ts=" . $ts;
         $queryString .= "&channel=" . $channel;
         $queryString .= "&as_user=" . "true";

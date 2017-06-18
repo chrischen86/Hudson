@@ -30,7 +30,7 @@ class NodeCallCommandProcessor implements ICommandProcessor
     private $userRepository;
     private $slackApi;
     private $response;
-    private $NodeCallRegex = '/(\d+)(?:\.|-)(\d+)((?:\s<@)([A-Z0-9]+)(?:>))?/i';
+    private $NodeCallRegex = '/^(\d{1,2})(?:\.|-)(\d{1,2})$|^(\d{1,2})(?:\.|-)(\d{1,2})((?:\s<@)([A-Z0-9]+)(?:>))$/i';
 
     public function __construct($data)
     {
@@ -50,23 +50,22 @@ class NodeCallCommandProcessor implements ICommandProcessor
         $matches = [];
         if (!preg_match($this->NodeCallRegex, $data, $matches))
         {
-            $this->response = 'Check your syntax!  Hint: 4.5 or 4.5 @christopher';
             return;
         }
         
-        $zoneValue = $matches[1];
-        $nodeValue = $matches[2];
-        $userValue = sizeof($matches) >= 4 ? $matches[4] : $this->eventData['user'];
-        
-        $conquest = $this->conquestRepository->GetCurrentConquest();
-        $zone = $this->zoneRepository->GetZone($conquest, $zoneValue);
-        if ($zone->is_owned)
+        $offset = 0;
+        if (sizeof($matches) >= 6)
         {
-            $this->response = "That zone (*$zoneValue*) is no longer active, please double check your call!";
-            return;
+            $offset = 2;
+            $userValue = $matches[6];    
         }
-
-        $node = $this->nodeRepository->GetNode($zone, $nodeValue);
+        else 
+        {
+            $userValue = $this->eventData['user'];
+        }
+        
+        $zoneValue = $matches[1+$offset];
+        $nodeValue = $matches[2+$offset];        
         $user = $this->userRepository->GetUserById($userValue);
         if ($user == null)
         {
@@ -74,6 +73,15 @@ class NodeCallCommandProcessor implements ICommandProcessor
             return;
         }
         
+        $conquest = $this->conquestRepository->GetCurrentConquest();
+        $zone = $this->zoneRepository->GetZone($conquest, $zoneValue);
+        if ($zone == null || $zone->is_owned)
+        {
+            $this->response = "That zone (*$zoneValue*) is no longer active, please double check your call!";
+            return;
+        }
+
+        $node = $this->nodeRepository->GetNode($zone, $nodeValue);       
         $currentStrike = $this->strikeRepository->GetStrike($node);
         if ($currentStrike->user_id != null)
         {

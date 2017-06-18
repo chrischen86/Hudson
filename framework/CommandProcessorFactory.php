@@ -25,6 +25,7 @@ class CommandProcessorFactory {
     private $StatsRegex = '/(stats)/i';
     private $SummaryRegex = '/(summary)/i';
     private $CancelRegex = '/(cancel)/i';
+    private $CommandRegex = '/(command|take control|lead)/i';
     
     public function CreateProcessor(Request $request)
     { 
@@ -86,6 +87,10 @@ class CommandProcessorFactory {
         else if (preg_match($this->CancelRegex, $text))
         {
             return new CancelCommandProcessor($event);
+        }
+        else if (preg_match($this->CommandRegex, $text))
+        {
+            return new LeadCommandProcessor($event);
         }
         return null;
     }

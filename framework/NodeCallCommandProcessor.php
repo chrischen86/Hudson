@@ -30,7 +30,7 @@ class NodeCallCommandProcessor implements ICommandProcessor
     private $userRepository;
     private $slackApi;
     private $response;
-    private $NodeCallRegex = '/(\d)(?:\.|-)(\d)((?:\s<@)([A-Z0-9]+)(?:>))?/i';
+    private $NodeCallRegex = '/(\d+)(?:\.|-)(\d+)((?:\s<@)([A-Z0-9]+)(?:>))?/i';
 
     public function __construct($data)
     {

@@ -18,7 +18,7 @@ class CommandProcessorFactory {
     private $InitiateRegex = '/(initiate|init|begin) (ASC)/i';    
     private $SetupRegex = '/(setup|start) (zone)/i';
     private $StatusRegex = '/(status)/i';
-    private $NodeCallRegex = '/(^\d{1,2})(\.|-)(\d{1,2})$/i';
+    private $NodeCallRegex = '/(^\d{1,2})(\.|-)(\d{1,2})/i';
     private $ZoneCompleteRegex = '/(zone) (\d{1,2}) (completed|is ours|finished|done|lost)/i';
     private $HoldRegex = '/(hold) (\d{1,2})(\.|-)(\d{1,2})/i';
     private $ClearRegex = '/(clear) (\d{1,2})(\.|-)(\d{1,2})/i';

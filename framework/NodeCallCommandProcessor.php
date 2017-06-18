@@ -50,7 +50,6 @@ class NodeCallCommandProcessor implements ICommandProcessor
         $matches = [];
         if (!preg_match($this->NodeCallRegex, $data, $matches))
         {
-            $this->response = 'Check your syntax!  Hint: 4.5 or 4.5 @christopher';
             return;
         }
         

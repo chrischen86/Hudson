@@ -1,12 +1,21 @@
 <?php
-
 require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__.'/../AutoloadBootstrapper.php';
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use framework\CommandProcessorFactory;
-  
+
 $app = new Silex\Application();
 $app['debug'] = true;
+
+$app->get('', function (Request $request)
+{
+    $conquestManager = new \framework\conquest\ConquestManager();
+    $conquestManager->GetLastPhaseStats();
+    echo var_dump($conquestManager);
+    return new Response('', 200);
+});
 
 $app->post('', function(Request $request){
     $data = json_decode($request->getContent(), true);
@@ -31,7 +40,7 @@ $app->post('/slack/verify', function(Request $request){
     {
         return new Response('Wrong type of request', 400);
     }
-    if ($data['token'] != Config::$JarvisToken)
+    if ($data['token'] != Config::$BotToken)
     {
         return new Response('Invalid token', 400);
     }    
@@ -40,7 +49,7 @@ $app->post('/slack/verify', function(Request $request){
 
 function HandleVerification($data)
 {
-    if ($data['token'] != Config::$JarvisToken)
+    if ($data['token'] != Config::$BotToken)
     {
         return new Response('Invalid token', 400);
     }    

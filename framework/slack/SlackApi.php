@@ -20,7 +20,7 @@ class SlackApi {
     
     public function SendMessage($message, $attachments=null, $channel='test2')
     {
-        $queryString = "token=" . \Config::$JarvisBotAuthToken;
+        $queryString = "token=" . \Config::$BotAuthToken;
         $queryString .= "&channel=" . $channel;
         $queryString .= "&as_user=" . "true";
         $queryString .= "&text=" . urlencode($message);
@@ -39,7 +39,7 @@ class SlackApi {
     
     public function UpdateMessage($ts, $channel, $message, $attachments=[])
     {
-        $queryString = "token=" . \Config::$JarvisBotAuthToken;
+        $queryString = "token=" . \Config::$BotAuthToken;
         $queryString .= "&ts=" . $ts;
         $queryString .= "&channel=" . $channel;
         $queryString .= "&as_user=" . "true";
@@ -56,7 +56,7 @@ class SlackApi {
     
     public function GetGroupMessagesSince($ts, $channel)
     {
-        $queryString = "token=" . \Config::$JarvisOAuthToken;
+        $queryString = "token=" . \Config::$BotOAuthToken;
         $queryString .= "&oldest=" . $ts;
         $queryString .= "&channel=" . $channel;
         $queryString .= "&count=3";

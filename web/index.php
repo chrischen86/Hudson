@@ -1,6 +1,6 @@
 <?php
-
 require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__.'/../AutoloadBootstrapper.php';
 
 use framework\DonationManager;
 use framework\SheetManager;

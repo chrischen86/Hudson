@@ -8,14 +8,13 @@
 
 namespace framework;
 use Symfony\Component\HttpFoundation\Request;
+use Config;
 /**
  * Description of CommandProcessor
  *
  * @author chris
  */
 class CommandProcessorFactory {
-    //put your code here
-    private $JarvisRegex = '/(U59UGA9HS|jarvis)/i';    
     private $InitiateRegex = '/(initiate|init|begin) (ASC)/i';    
     private $SetupRegex = '/(setup|start) (zone)/i';
     private $StatusRegex = '/(status)/i';
@@ -25,9 +24,11 @@ class CommandProcessorFactory {
     private $ClearRegex = '/(clear) (\d{1,2})(\.|-)(\d{1,2})/i';
     private $StatsRegex = '/(stats)/i';
     private $SummaryRegex = '/(summary)/i';
+    private $CancelRegex = '/(cancel)/i';
     
     public function CreateProcessor(Request $request)
     { 
+        $botRegex = '/(' . Config::$BotId . '|' . Config::$BotName . ')/i';
         $data = json_decode($request->getContent(), true);
         $event = $data['event'];
         if ($event['type'] != 'message' || $event['subtype'] == 'message_changed')
@@ -35,7 +36,7 @@ class CommandProcessorFactory {
             return null;
         }
         
-        if (preg_match($this->JarvisRegex, $event['user']))
+        if (preg_match($botRegex, $event['user']))
         {
             return;
         }
@@ -49,7 +50,7 @@ class CommandProcessorFactory {
         {
             return new ZoneCommandProcessor($event);
         }
-        if (!preg_match($this->JarvisRegex, $text))
+        if (!preg_match($botRegex, $text))
         {
             return null;
         }
@@ -81,6 +82,10 @@ class CommandProcessorFactory {
         else if (preg_match($this->SummaryRegex, $text))
         {
             return new SummaryCommandProcessor($event);
+        }
+        else if (preg_match($this->CancelRegex, $text))
+        {
+            return new CancelCommandProcessor($event);
         }
         return null;
     }

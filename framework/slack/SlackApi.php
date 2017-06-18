@@ -73,7 +73,7 @@ class SlackApi {
     {
         $queryString = "token=" . \Config::$BotOAuthToken;
         $queryString .= "&channel=$channel";
-        $queryString .= "&topic=$topic";
+        $queryString .= "&topic=" . urlencode($topic);
         $uri = $this->TopicApiUri . "?" . $queryString;        
         $response = \Httpful\Request::post($uri)
                ->addHeader('Content-Type', 'text/plain; charset=utf-8')

@@ -55,7 +55,7 @@ class NodeCallCommandProcessor implements ICommandProcessor
         }
         
         $offset = 0;
-        if (sizeof($matches) == 6)
+        if (sizeof($matches) >= 6)
         {
             $offset = 2;
             $userValue = $matches[6];    

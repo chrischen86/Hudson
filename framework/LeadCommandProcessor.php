@@ -10,6 +10,7 @@ namespace framework;
 use dal\managers\ConquestRepository;
 use dal\managers\UserRepository;
 use framework\slack\SlackApi;
+use Config;
 
 /**
  * Description of LeadCommandProcessor
@@ -34,7 +35,12 @@ class LeadCommandProcessor implements ICommandProcessor {
     }
     
     public function Process() 
-    {        
+    {
+        if ($this->eventData['channel'] != Config::$ConquestChannel)
+        {
+            return;
+        }
+        
         $user = $this->userRepository->GetUserById($this->eventData['user']);
         if ($user == null)
         {

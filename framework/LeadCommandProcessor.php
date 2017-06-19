@@ -58,6 +58,11 @@ class LeadCommandProcessor implements ICommandProcessor {
 
     public function SendResponse() 
     {
+        if ($this->eventData['channel'] != Config::$ConquestChannel)
+        {
+            return;
+        }
+        
         $this->slackApi->SendMessage($this->response, null, $this->eventData['channel']);
         $this->slackApi->SetTopic($this->topic, $this->eventData['channel']);
     }

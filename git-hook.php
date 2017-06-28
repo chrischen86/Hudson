@@ -17,7 +17,7 @@ if ($currentBranch != 'master')
     exec("git checkout $branch -f", $output);
 }
 exec('git pull', $output);
-exec('composer install', $output);
+exec('/opt/php56/bin/php composer.phar install', $output);
 
 PrintOutput($output);
 echo "End: Pull code from Github<br/>";

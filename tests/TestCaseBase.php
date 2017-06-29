@@ -57,8 +57,12 @@ class TestCaseBase extends TestCase
             'ISlackApi' => DI\object('framework\slack\NullSlackApi'),
             'framework\command\ICommandStrategy' => [
                 DI\object('framework\command\ClearCommandStrategy'),
-                        DI\object('framework\command\InitCommandStrategy')
-                        ->constructor(DI\get('CoreRepository'), DI\get('ISlackApi')),
+                DI\object('framework\command\InitCommandStrategy')
+                    ->constructor(DI\get('CoreRepository'), DI\get('ISlackApi')),
+                DI\object('framework\command\StrikeCommandStrategy')
+                    ->constructor(DI\get('ConquestRepository'),
+                        DI\get('ZoneRepository'), DI\get('NodeRepository'),
+                        DI\get('StrikeRepository'), DI\get('ISlackApi'))
             ],
             'CommandStrategyFactory' => DI\factory(function($strategies)
             {

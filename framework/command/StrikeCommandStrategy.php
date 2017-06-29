@@ -2,7 +2,7 @@
 
 namespace framework\command;
 
-use framework\slack\SlackApi;
+use framework\slack\ISlackApi;
 use dal\managers\ConquestRepository;
 use dal\managers\ZoneRepository;
 use dal\managers\NodeRepository;
@@ -28,7 +28,7 @@ class StrikeCommandStrategy implements ICommandStrategy
 
     public function __construct(ConquestRepository $conquestRepository,
             ZoneRepository $zoneRepository, NodeRepository $nodeRepository,
-            StrikeRepository $strikeRepository, SlackApi $slackApi)
+            StrikeRepository $strikeRepository, ISlackApi $slackApi)
     {
         $this->slackApi = $slackApi;
 

@@ -22,7 +22,20 @@ class CommandProcessorFactoryTest extends TestCaseBase
         $this->factory = $this->container->get('CommandStrategyFactory');
     }
     
-    public function etstCreateClearStrategy()
+    public function testNoMatchingStrategy()
+    {
+        $requestMock = $this->getMockBuilder(Request::class)
+                ->setMethods(['getContent'])
+                ->getMock();
+        $requestMock->expects($this->once())
+                ->method('getContent')
+                ->willReturn($this->BuildJarvisMessage('asdfsdafas'));
+                
+        $strategy = $this->factory->GetCommandStrategy($requestMock);
+        $this->assertNull($strategy);
+    }
+    
+    public function testCreateClearStrategy()
     {
         $requestMock = $this->getMockBuilder(Request::class)
                 ->setMethods(['getContent'])

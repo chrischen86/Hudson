@@ -41,9 +41,9 @@ class TestCaseBase extends TestCase
         $container = new ContainerBuilder();
 
         $container->addDefinitions([
-            'DataAccessAdapter' => $this->CreateMockAdapter(),
+            'IDataAccessAdapter' => $this->CreateMockAdapter(),
             'CoreRepository' => DI\object('dal\managers\CoreRepository')
-                    ->constructor(DI\get('DataAccessAdapter')),
+                    ->constructor(DI\get('IDataAccessAdapter')),
             'ConquestRepository' => DI\object('dal\managers\ConquestRepository')
                     ->constructor(DI\get('IDataAccessAdapter')),
             'ZoneRepository' => DI\object('dal\managers\ZoneRepository')
@@ -62,7 +62,11 @@ class TestCaseBase extends TestCase
                 DI\object('framework\command\StrikeCommandStrategy')
                     ->constructor(DI\get('ConquestRepository'),
                         DI\get('ZoneRepository'), DI\get('NodeRepository'),
-                        DI\get('StrikeRepository'), DI\get('ISlackApi'))
+                        DI\get('StrikeRepository'), DI\get('ISlackApi')),
+                DI\object('framework\command\StatusCommandStrategy')
+                    ->constructor(DI\get('CoreRepository'), DI\get('ConquestRepository'),
+                        DI\get('ZoneRepository'),
+                        DI\get('StrikeRepository'), DI\get('ISlackApi')),
             ],
             'CommandStrategyFactory' => DI\factory(function($strategies)
             {

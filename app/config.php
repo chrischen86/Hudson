@@ -27,7 +27,11 @@ return [
         DI\object('framework\command\StrikeCommandStrategy')
             ->constructor(DI\get('ConquestRepository'),
                 DI\get('ZoneRepository'), DI\get('NodeRepository'),
-                DI\get('StrikeRepository'), DI\get('ISlackApi'))
+                DI\get('StrikeRepository'), DI\get('ISlackApi')),
+        DI\object('framework\command\StatusCommandStrategy')
+            ->constructor(DI\get('CoreRepository'), DI\get('ConquestRepository'),
+                DI\get('ZoneRepository'),
+                DI\get('StrikeRepository'), DI\get('ISlackApi')),
     ],
     'CommandStrategyFactory' => DI\factory(function($strategies)
     {

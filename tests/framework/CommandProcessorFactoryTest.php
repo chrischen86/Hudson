@@ -60,4 +60,30 @@ class CommandProcessorFactoryTest extends TestCaseBase
         $strategy = $this->factory->GetCommandStrategy($requestMock);
         $this->assertInstanceOf(\framework\command\InitCommandStrategy::class, $strategy);
     }
+    
+    public function testCreateStrikeProcessor()
+    {
+        $requestMock = $this->getMockBuilder(Request::class)
+                ->setMethods(['getContent'])
+                ->getMock();
+        $requestMock->expects($this->once())
+                ->method('getContent')
+                ->willReturn($this->BuildJarvisMessage('setup zone 9'));
+
+        $strategy = $this->factory->GetCommandStrategy($requestMock);
+        $this->assertInstanceOf(\framework\command\StrikeCommandStrategy::class, $strategy);
+    }
+    
+    public function testCreateStatusProcessor()
+    {
+        $requestMock = $this->getMockBuilder(Request::class)
+                ->setMethods(['getContent'])
+                ->getMock();
+        $requestMock->expects($this->once())
+                ->method('getContent')
+                ->willReturn($this->BuildJarvisMessage('status'));
+
+        $strategy = $this->factory->GetCommandStrategy($requestMock);
+        $this->assertInstanceOf(\framework\command\StatusCommandStrategy::class, $strategy);
+    }
 }

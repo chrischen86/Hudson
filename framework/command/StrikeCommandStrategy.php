@@ -101,4 +101,9 @@ class StrikeCommandStrategy implements ICommandStrategy
         $this->slackApi->SendMessage($this->response, null, $this->channel);
     }
 
+    public function IsJarvisCommand()
+    {
+        return true;
+    }
+
 }

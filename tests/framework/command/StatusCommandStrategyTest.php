@@ -73,6 +73,7 @@ class StatusCommandStrategyTest extends TestCaseBase
                 ->willReturn((object)array('body' => (object)array('ts' => 1, 'channel' => 'test')));
         $payload = array(
             'channel' => 'TESTCHANNEL',
+            'text' => 'status',
         );
         $this->command->Process($payload);
 

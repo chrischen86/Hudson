@@ -16,4 +16,5 @@ interface ICommandStrategy
     public function Process($payload);
     public function SendResponse();
     public function IsSupportedRequest($text);
+    public function IsJarvisCommand();
 }

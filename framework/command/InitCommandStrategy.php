@@ -55,4 +55,10 @@ class InitCommandStrategy implements ICommandStrategy
     {
         $this->slackApi->SendMessage($this->response);
     }
+
+    public function IsJarvisCommand()
+    {
+        return true;
+    }
+
 }

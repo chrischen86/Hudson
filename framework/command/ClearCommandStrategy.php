@@ -31,4 +31,10 @@ class ClearCommandStrategy implements ICommandStrategy
     {
         
     }
+
+    public function IsJarvisCommand()
+    {
+        return true;
+    }
+
 }

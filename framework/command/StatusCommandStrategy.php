@@ -50,6 +50,7 @@ class StatusCommandStrategy implements ICommandStrategy
     public function Process($payload)
     {
         $this->channel = $payload['channel'];
+        $this->forceMessage = $this->IsSupportedRequest($payload['text']);
 
         $conquest = $this->conquestRepository->GetCurrentConquest();
         $zones = $this->zoneRepository->GetAllZones($conquest);
@@ -110,6 +111,11 @@ class StatusCommandStrategy implements ICommandStrategy
             $this->coreRepository->SetMessageProperties($response->body->ts,
                     $response->body->channel);
         }
+    }
+
+    public function IsJarvisCommand()
+    {
+        return true;
     }
 
 }

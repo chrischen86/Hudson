@@ -39,10 +39,15 @@ class CommandStrategyFactory
         }
         
         $text = $event['text'];
+        $isJarvisCommand = preg_match($botRegex, $text);
         foreach ($this->strategies as $strategy)
         {
             if ($strategy->IsSupportedRequest($text))
             {
+                if ($strategy->IsJarvisCommand() && !$isJarvisCommand)
+                {
+                    return;
+                }
                 return $strategy;
             }
         }

@@ -48,7 +48,7 @@ class CommandProcessorFactoryTest extends TestCaseBase
         $this->assertInstanceOf(\framework\command\ClearCommandStrategy::class, $strategy);
     }
     
-    public function testCreateInitiateProcessor()
+    public function testCreateInitiateStrategy()
     {
         $requestMock = $this->getMockBuilder(Request::class)
                 ->setMethods(['getContent'])
@@ -61,7 +61,7 @@ class CommandProcessorFactoryTest extends TestCaseBase
         $this->assertInstanceOf(\framework\command\InitCommandStrategy::class, $strategy);
     }
     
-    public function testCreateStrikeProcessor()
+    public function testCreateStrikeStrategy()
     {
         $requestMock = $this->getMockBuilder(Request::class)
                 ->setMethods(['getContent'])
@@ -87,7 +87,7 @@ class CommandProcessorFactoryTest extends TestCaseBase
         $this->assertNull($strategy);
     }
     
-    public function testCreateStatusProcessor()
+    public function testCreateStatusStrategy()
     {
         $requestMock = $this->getMockBuilder(Request::class)
                 ->setMethods(['getContent'])
@@ -100,7 +100,7 @@ class CommandProcessorFactoryTest extends TestCaseBase
         $this->assertInstanceOf(\framework\command\StatusCommandStrategy::class, $strategy);
     }
     
-    public function testCreateNodeCallProcessor()
+    public function testCreateNodeCallStrategy()
     {
         $requestMock = $this->getMockBuilder(Request::class)
                 ->setMethods(['getContent'])
@@ -111,5 +111,31 @@ class CommandProcessorFactoryTest extends TestCaseBase
 
         $strategy = $this->factory->GetCommandStrategy($requestMock);
         $this->assertInstanceOf(\framework\command\NodeCallCommandStrategy::class, $strategy);
+    }
+    
+    public function testCreateHoldCommandStrategy()
+    {
+        $requestMock = $this->getMockBuilder(Request::class)
+                ->setMethods(['getContent'])
+                ->getMock();
+        $requestMock->expects($this->once())
+                ->method('getContent')
+                ->willReturn($this->BuildJarvisMessage('hold 1.5'));
+
+        $strategy = $this->factory->GetCommandStrategy($requestMock);
+        $this->assertInstanceOf(\framework\command\HoldCommandStrategy::class, $strategy);
+    }
+    
+    public function testCreateZoneCommandStrategy()
+    {
+        $requestMock = $this->getMockBuilder(Request::class)
+                ->setMethods(['getContent'])
+                ->getMock();
+        $requestMock->expects($this->once())
+                ->method('getContent')
+                ->willReturn($this->BuildMessage('zone 1 done'));
+
+        $strategy = $this->factory->GetCommandStrategy($requestMock);
+        $this->assertInstanceOf(\framework\command\ZoneCommandStrategy::class, $strategy);
     }
 }

@@ -15,8 +15,9 @@ use dal\managers\StrikeRepository;
  */
 class StrikeCommandStrategy implements ICommandStrategy
 {
-    const Regex = '/(?:zone) (\d{1,2})/i';
-    const HoldRegex = '/(?:hold)(?: on)?(?: node)? (\d{1,2})/i';
+    const Regex = '/(setup|start) (zone)/i';
+    private $zoneRegex = '/(?:zone) (\d{1,2})/i';
+    private $holdRegex = '/(?:hold)(?: on)?(?: node)? (\d{1,2})/i';
 
     private $conquestRepository;
     private $zoneRepository;
@@ -49,7 +50,7 @@ class StrikeCommandStrategy implements ICommandStrategy
         $data = $payload['text'];
 
         $matches = [];
-        if (preg_match(StrikeCommandStrategy::Regex, $data, $matches))
+        if (preg_match($this->zoneRegex, $data, $matches))
         {
             $zone = $matches[1];
         }
@@ -59,7 +60,7 @@ class StrikeCommandStrategy implements ICommandStrategy
             return;
         }
         $hold = null;
-        if (preg_match(StrikeCommandStrategy::HoldRegex, $data, $matches))
+        if (preg_match($this->holdRegex, $data, $matches))
         {
             $hold = $matches[1];
         }

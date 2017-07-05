@@ -20,6 +20,11 @@ return [
     'UserRepository' => DI\object('dal\managers\UserRepository')
             ->constructor(DI\get('IDataAccessAdapter')),
     'ISlackApi' => DI\object('framework\slack\SlackApi'),
+    'StatusCommandStrategy' => DI\object('framework\command\StatusCommandStrategy')
+                    ->constructor(DI\get('CoreRepository'),
+                            DI\get('ConquestRepository'),
+                            DI\get('ZoneRepository'),
+                            DI\get('StrikeRepository'), DI\get('ISlackApi')),
     'framework\command\ICommandStrategy' => [
         DI\object('framework\command\ClearCommandStrategy'),
         DI\object('framework\command\InitCommandStrategy')
@@ -28,15 +33,14 @@ return [
                 ->constructor(DI\get('ConquestRepository'),
                         DI\get('ZoneRepository'), DI\get('NodeRepository'),
                         DI\get('StrikeRepository'), DI\get('ISlackApi')),
-        DI\object('framework\command\StatusCommandStrategy')
-                ->constructor(DI\get('CoreRepository'),
-                        DI\get('ConquestRepository'), DI\get('ZoneRepository'),
-                        DI\get('StrikeRepository'), DI\get('ISlackApi')),
+        DI\get('StatusCommandStrategy'),
         DI\object('framework\command\NodeCallCommandStrategy')
                 ->constructor(DI\get('ConquestRepository'),
-                        DI\get('ZoneRepository'), DI\get('NodeRepository'),
-                        DI\get('StrikeRepository'), DI\get('UserRepository'),
-                        DI\get('ISlackApi'), DI\get('framework\command\StatusCommandStrategy')),
+                        DI\get('ZoneRepository'),
+                        DI\get('NodeRepository'),
+                        DI\get('StrikeRepository'),
+                        DI\get('UserRepository'), DI\get('ISlackApi'),
+                        DI\get('StatusCommandStrategy')),
     ],
     'CommandStrategyFactory' => DI\factory(function($strategies)
     {

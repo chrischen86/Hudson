@@ -46,7 +46,7 @@ class NodeCallCommandStrategy implements ICommandStrategy
     
     public function IsSupportedRequest($text)
     {
-        return preg_match(StatusCommandStrategy::Regex, $text);
+        return preg_match(NodeCallCommandStrategy::Regex, $text);
     }
 
     public function Process($payload)

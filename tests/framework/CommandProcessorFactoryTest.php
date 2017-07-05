@@ -81,7 +81,7 @@ class CommandProcessorFactoryTest extends TestCaseBase
                 ->getMock();
         $requestMock->expects($this->once())
                 ->method('getContent')
-                ->willReturn('setup zone 9');
+                ->willReturn($this->BuildMessage('setup zone 9'));
 
         $strategy = $this->factory->GetCommandStrategy($requestMock);
         $this->assertNull($strategy);
@@ -98,5 +98,18 @@ class CommandProcessorFactoryTest extends TestCaseBase
 
         $strategy = $this->factory->GetCommandStrategy($requestMock);
         $this->assertInstanceOf(\framework\command\StatusCommandStrategy::class, $strategy);
+    }
+    
+    public function testCreateNodeCallProcessor()
+    {
+        $requestMock = $this->getMockBuilder(Request::class)
+                ->setMethods(['getContent'])
+                ->getMock();
+        $requestMock->expects($this->once())
+                ->method('getContent')
+                ->willReturn($this->BuildMessage('1.1'));
+
+        $strategy = $this->factory->GetCommandStrategy($requestMock);
+        $this->assertInstanceOf(\framework\command\NodeCallCommandStrategy::class, $strategy);
     }
 }

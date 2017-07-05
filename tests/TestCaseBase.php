@@ -62,22 +62,22 @@ class TestCaseBase extends TestCase
                             DI\get('StrikeRepository'), DI\get('ISlackApi')),
             'framework\command\ICommandStrategy' => [
                 DI\object('framework\command\ClearCommandStrategy'),
-                        DI\object('framework\command\InitCommandStrategy')
-                        ->constructor(DI\get('CoreRepository'),
-                                DI\get('ISlackApi')),
-                        DI\object('framework\command\StrikeCommandStrategy')
-                        ->constructor(DI\get('ConquestRepository'),
-                                DI\get('ZoneRepository'),
-                                DI\get('NodeRepository'),
-                                DI\get('StrikeRepository'), DI\get('ISlackApi')),
+                DI\object('framework\command\InitCommandStrategy')
+                    ->constructor(DI\get('CoreRepository'),
+                            DI\get('ISlackApi')),
+                DI\object('framework\command\StrikeCommandStrategy')
+                    ->constructor(DI\get('ConquestRepository'),
+                            DI\get('ZoneRepository'),
+                            DI\get('NodeRepository'),
+                            DI\get('StrikeRepository'), DI\get('ISlackApi')),
                 DI\get('StatusCommandStrategy'),
-                        DI\object('framework\command\NodeCallCommandStrategy')
-                        ->constructor(DI\get('ConquestRepository'),
-                                DI\get('ZoneRepository'),
-                                DI\get('NodeRepository'),
-                                DI\get('StrikeRepository'),
-                                DI\get('UserRepository'), DI\get('ISlackApi'),
-                                DI\get('StatusCommandStrategy')),
+                DI\object('framework\command\NodeCallCommandStrategy')
+                    ->constructor(DI\get('ConquestRepository'),
+                            DI\get('ZoneRepository'),
+                            DI\get('NodeRepository'),
+                            DI\get('StrikeRepository'),
+                            DI\get('UserRepository'), DI\get('ISlackApi'),
+                            DI\get('StatusCommandStrategy')),
             ],
             'CommandStrategyFactory' => DI\factory(function($strategies)
             {
@@ -98,6 +98,22 @@ class TestCaseBase extends TestCase
                                 "subtype": null,
                                 "user": "U0KJBUYDC",
                                 "text": "<@' . $user . '> ' . $text . '",
+                                "channel": "C350WUH9R",
+                                "event_ts": 1497763686.985701
+                        }
+                    }';
+
+        return $message;
+    }
+    
+    protected function BuildMessage($text)
+    {
+        $message = '{
+                        "event": {
+                                "type": "message",
+                                "subtype": null,
+                                "user": "U0KJBUYDC",
+                                "text": "' . $text . '",
                                 "channel": "C350WUH9R",
                                 "event_ts": 1497763686.985701
                         }

@@ -34,7 +34,7 @@ require_once __DIR__ . '/framework/donation' . '/SheetManager.php';
 
 require_once __DIR__ . '/framework' . '/ICommandProcessor.php';
 require_once __DIR__ . '/framework' . '/CommandProcessorFactory.php';
-require_once __DIR__ . '/framework' . '/ClearCommandProcessor.php';
+
 require_once __DIR__ . '/framework' . '/StatsCommandProcessor.php';
 require_once __DIR__ . '/framework' . '/SummaryCommandProcessor.php';
 require_once __DIR__ . '/framework' . '/CancelCommandProcessor.php';
@@ -53,3 +53,4 @@ require_once __DIR__ . '/framework' . '/command' . '/StatusCommandStrategy.php';
 require_once __DIR__ . '/framework' . '/command' . '/NodeCallCommandStrategy.php';
 require_once __DIR__ . '/framework' . '/command' . '/HoldCommandStrategy.php';
 require_once __DIR__ . '/framework' . '/command' . '/ZoneCommandStrategy.php';
+require_once __DIR__ . '/framework' . '/command' . '/ClearCommandStrategy.php';

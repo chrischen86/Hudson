@@ -93,6 +93,10 @@ class TestCaseBase extends TestCase
                                 DI\get('NodeRepository'),
                                 DI\get('StrikeRepository'), DI\get('ISlackApi'),
                                 DI\get('StatusCommandStrategy')),
+                        DI\object('framework\command\CancelCommandStrategy')
+                        ->constructor(DI\get('ConquestRepository'),
+                                DI\get('ZoneRepository'), DI\get('ISlackApi'),
+                                DI\get('StatusCommandStrategy')),
             ],
             'CommandStrategyFactory' => DI\factory(function($strategies)
             {

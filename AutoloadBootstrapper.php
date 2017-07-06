@@ -37,7 +37,7 @@ require_once __DIR__ . '/framework' . '/CommandProcessorFactory.php';
 
 require_once __DIR__ . '/framework' . '/StatsCommandProcessor.php';
 require_once __DIR__ . '/framework' . '/SummaryCommandProcessor.php';
-require_once __DIR__ . '/framework' . '/CancelCommandProcessor.php';
+
 require_once __DIR__ . '/framework' . '/LeadCommandProcessor.php';
 
 require_once __DIR__ . '/framework' . '/slack' . '/ISlackApi.php';
@@ -54,3 +54,4 @@ require_once __DIR__ . '/framework' . '/command' . '/NodeCallCommandStrategy.php
 require_once __DIR__ . '/framework' . '/command' . '/HoldCommandStrategy.php';
 require_once __DIR__ . '/framework' . '/command' . '/ZoneCommandStrategy.php';
 require_once __DIR__ . '/framework' . '/command' . '/ClearCommandStrategy.php';
+require_once __DIR__ . '/framework' . '/command' . '/CancelCommandStrategy.php';

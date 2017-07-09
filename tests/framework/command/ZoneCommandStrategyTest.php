@@ -15,7 +15,6 @@ class ZoneCommandStrategyTest extends TestCaseBase
     private $command;
     private $conquestRepositoryMock;
     private $zoneRepositoryMock;
-    private $nodeRepositoryMock;
     private $slackApiMock;
     private $statusCommandMock;
 

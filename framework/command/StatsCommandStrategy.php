@@ -52,8 +52,7 @@ class StatsCommandStrategy implements ICommandStrategy
 
     public function SendResponse()
     {
-        $this->slackApi->SendMessage($this->response, $this->attachments,
-                $this->channel);
+        $this->slackApi->SendMessage($this->response, $this->attachments, $this->channel);
     }
 
     private function BuildDateSummary(StatsDto $stats)
@@ -98,15 +97,13 @@ class StatsCommandStrategy implements ICommandStrategy
             }
         }
 
-        array_push($fields,
-                array(
+        array_push($fields, array(
             'title' => 'Zones',
             'value' => "I have tracked a total of *$uniqueCount* unique zones.\nThe most highly contested region(s) include zones *" .
             implode(', ', $mostContested) . "* that were fought over for a total of *$mostContestedCount* time(s)!"
         ));
 
-        array_push($attachments,
-                array(
+        array_push($attachments, array(
             'color' => "#FDC528",
             'text' => '',
             'fields' => $fields,
@@ -123,20 +120,26 @@ class StatsCommandStrategy implements ICommandStrategy
         {
             if ($strike->user_id != null)
             {
-                $attackDictionary["<@" . $strike->user->name . ">"] ++;
+                $index = "<@" . $strike->user->name . ">";
+                if (array_key_exists($index, $attackDictionary))
+                {
+                    $attackDictionary[$index] ++;
+                }
+                else
+                {
+                    $attackDictionary[$index] = 1;
+                }
             }
         }
 
         arsort($attackDictionary);
-        array_push($fields,
-                array(
+        array_push($fields, array(
             'title' => 'Members Summary',
             'value' => 'A total of *' . sizeof($attackDictionary) . "* members have participated in this phase!\n" .
             implode(', ', array_keys($attackDictionary)) . "\n\nWe could not have done it without you!"
         ));
 
-        array_push($attachments,
-                array(
+        array_push($attachments, array(
             'color' => "#FDC528",
             'text' => '',
             'fields' => $fields,
@@ -148,30 +151,29 @@ class StatsCommandStrategy implements ICommandStrategy
         {
             return;
         }
+        
         if (sizeof($first[1]) > 0)
         {
             $message = implode(', ', $first[1]) . ': ' . $first[0] . " hits!  Smashing!\n";
-            $second = $this->GetTopAttackerByLimit($attackDictionary, $first[0]);
         }
-        if (sizeof($second[1]) > 0)
+        $second = $this->GetTopAttackerByLimit($attackDictionary, $first[0]);
+        if (sizeof($second[1]) > 1)
         {
             $message .= implode(', ', $second[1]) . ': ' . $second[0] . " hits!  Amazing!\n";
-            $third = $this->GetTopAttackerByLimit($attackDictionary, $second[0]);
         }
-        if (sizeof($third[1]) > 0)
+        $third = $this->GetTopAttackerByLimit($attackDictionary, $second[0]);
+        if (sizeof($third[1]) > 2)
         {
             $message .= implode(', ', $third[1]) . ': ' . $third[0] . ' hits!  Spectacular!';
         }
 
         $achievements = array();
-        array_push($achievements,
-                array(
+        array_push($achievements, array(
             'title' => 'Achievements',
             'value' => $message
         ));
 
-        array_push($attachments,
-                array(
+        array_push($attachments, array(
             'color' => "#FDC528",
             'text' => '',
             'fields' => $achievements,

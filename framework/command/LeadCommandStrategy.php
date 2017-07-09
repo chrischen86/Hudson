@@ -49,6 +49,7 @@ class LeadCommandStrategy implements ICommandStrategy
         $this->channel = $payload['channel'];
         if ($this->channel != $this->conquestChannel)
         {
+            $this->response = "Please use this command only in the conquest channel!";
             return;
         }
 
@@ -69,12 +70,12 @@ class LeadCommandStrategy implements ICommandStrategy
 
     public function SendResponse()
     {
+        $this->slackApi->SendMessage($this->response, null, $this->channel);
+        
         if ($this->channel != $this->conquestChannel)
         {
             return;
         }
-
-        $this->slackApi->SendMessage($this->response, null, $this->channel);
         $this->slackApi->SetTopic($this->topic, $this->channel);
     }
 

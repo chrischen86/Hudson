@@ -6,13 +6,15 @@
  * and open the template in the editor.
  */
 
-namespace framework;
-
+namespace framework\command;
 /**
  *
  * @author chris
  */
-interface ICommandProcessor {
-    public function Process();
+interface ICommandStrategy
+{
+    public function Process($payload);
     public function SendResponse();
+    public function IsSupportedRequest($text);
+    public function IsJarvisCommand();
 }

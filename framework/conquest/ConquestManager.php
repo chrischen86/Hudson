@@ -7,6 +7,7 @@
  */
 
 namespace framework\conquest;
+
 use \DateTime;
 use dal\Phases;
 use dal\managers\ConquestRepository;
@@ -19,39 +20,47 @@ use dal\managers\StrikeRepository;
  *
  * @author chris
  */
-class ConquestManager {
+class ConquestManager
+{
     private $conquestRepository;
     private $zoneRepository;
     private $nodeRepository;
     private $strikeRepository;
-    
-    public function __construct() 
+
+    public function __construct(ConquestRepository $conquestRepository,
+                                ZoneRepository $zoneRepository,
+                                NodeRepository $nodeRepository,
+                                StrikeRepository $strikeRepository)
     {
-        $this->conquestRepository = new ConquestRepository();
-        $this->zoneRepository = new ZoneRepository();
-        $this->nodeRepository = new NodeRepository();
-        $this->strikeRepository = new StrikeRepository();
+        $this->conquestRepository = $conquestRepository;
+        $this->zoneRepository = $zoneRepository;
+        $this->nodeRepository = $nodeRepository;
+        $this->strikeRepository = $strikeRepository;
     }
-    
+
     public function GetSummaryStats()
     {
         $now = new DateTime();
         $lastStartDate = $this->GetLastStartDate($now);
         $endDate = new DateTime($lastStartDate->format('Y-m-d'));
         $lastEndDate = $endDate->modify('+5 day');
-        
-        $conquests = $this->conquestRepository->GetConquests($lastStartDate, $lastEndDate);
-        
+
+        $conquests = $this->conquestRepository->GetConquests($lastStartDate,
+                $lastEndDate);
+
         $zones = [];
         $nodes = [];
         $strikes = [];
         foreach ($conquests as $conquest)
         {
-            $zones = array_merge($zones, $this->zoneRepository->GetAllZonesByConquest($conquest));
-            $nodes = array_merge($nodes, $this->nodeRepository->GetAllNodesByConquest($conquest));
-            $strikes = array_merge($strikes, $this->strikeRepository->GetStrikesByConquest($conquest));
+            $zones = array_merge($zones,
+                    $this->zoneRepository->GetAllZonesByConquest($conquest));
+            $nodes = array_merge($nodes,
+                    $this->nodeRepository->GetAllNodesByConquest($conquest));
+            $strikes = array_merge($strikes,
+                    $this->strikeRepository->GetStrikesByConquest($conquest));
         }
-        
+
         $toReturn = new StatsDto();
         $toReturn->forDate = $lastStartDate;
         $toReturn->endDate = $lastEndDate;
@@ -59,10 +68,10 @@ class ConquestManager {
         $toReturn->zones = $zones;
         $toReturn->nodes = $nodes;
         $toReturn->strikes = $strikes;
-        
+
         return $toReturn;
     }
-    
+
     public function GetLastPhaseStats()
     {
         $now = new DateTime();
@@ -74,11 +83,11 @@ class ConquestManager {
         {
             return null;
         }
-        
+
         $zones = $this->zoneRepository->GetAllZonesByConquest($conquest);
         $nodes = $this->nodeRepository->GetAllNodesByConquest($conquest);
         $strikes = $this->strikeRepository->GetStrikesByConquest($conquest);
-        
+
         $toReturn = new StatsDto();
         $toReturn->forDate = $lastPhaseDate;
         $toReturn->endDate = null;
@@ -86,10 +95,10 @@ class ConquestManager {
         $toReturn->zones = $zones;
         $toReturn->nodes = $nodes;
         $toReturn->strikes = $strikes;
-        
+
         return $toReturn;
     }
-    
+
     private function GetLastStartDate(DateTime $dateTime)
     {
         $dayOfWeek = $dateTime->format('l');
@@ -128,16 +137,16 @@ class ConquestManager {
         error_log($date->format('m/d/Y'));
         return $date;
     }
-    
+
     private function GetLastPhaseDate(DateTime $dateTime)
     {
         $dayOfWeek = $dateTime->format('l');
         $hour = $dateTime->format('H');
-        
+
         $date = new DateTime($dateTime->format('m/d/Y'));
         switch ($dayOfWeek)
         {
-            case 'Tuesday':                
+            case 'Tuesday':
                 if ($hour < Phases::Phase3 + Phases::PhaseLength)
                 {
                     $date->modify('-1 day');
@@ -194,7 +203,8 @@ class ConquestManager {
             default:
                 break;
         }
-        
+
         return $date;
     }
+
 }

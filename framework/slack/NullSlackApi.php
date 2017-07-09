@@ -9,11 +9,11 @@
 namespace framework\slack;
 
 /**
- * Description of SlackApi
+ * Description of DebugSlackApi
  *
  * @author chris
  */
-class SlackApi implements ISlackApi
+class NullSlackApi implements ISlackApi
 {
     private $PostMessageApiUri = 'https://slack.com/api/chat.postMessage';
     private $UpdateMessageApiUri = 'https://slack.com/api/chat.update';
@@ -31,12 +31,8 @@ class SlackApi implements ISlackApi
             $queryString .= "&attachments=" . urlencode(json_encode($attachments));
         }
         $uri = $this->PostMessageApiUri . "?" . $queryString;
-        $response = \Httpful\Request::post($uri)
-                ->addHeader('Content-Type', 'text/plain; charset=utf-8')
-                ->body($message)
-                ->send();
-
-        return $response;
+        var_dump($uri);
+        return null;
     }
 
     public function UpdateMessage($ts, $channel, $message, $attachments = [])
@@ -48,12 +44,8 @@ class SlackApi implements ISlackApi
         $queryString .= "&text=" . urlencode($message);
         $queryString .= "&attachments=" . urlencode(json_encode($attachments));
         $uri = $this->UpdateMessageApiUri . "?" . $queryString;
-        $response = \Httpful\Request::post($uri)
-                ->addHeader('Content-Type', 'text/plain; charset=utf-8')
-                ->body($message)
-                ->send();
-
-        return $response;
+        var_dump($uri);
+        return null;
     }
 
     public function GetGroupMessagesSince($ts, $channel)
@@ -63,11 +55,8 @@ class SlackApi implements ISlackApi
         $queryString .= "&channel=" . $channel;
         $queryString .= "&count=3";
         $uri = $this->GroupHistoryApiUri . "?" . $queryString;
-        $response = \Httpful\Request::post($uri)
-                ->addHeader('Content-Type', 'text/plain; charset=utf-8')
-                ->send();
-
-        return $response;
+        var_dump($uri);
+        return null;
     }
 
     public function SetTopic($topic, $channel)
@@ -76,21 +65,7 @@ class SlackApi implements ISlackApi
         $queryString .= "&channel=$channel";
         $queryString .= "&topic=" . urlencode($topic);
         $uri = $this->TopicApiUri . "?" . $queryString;
-        $response = \Httpful\Request::post($uri)
-                ->addHeader('Content-Type', 'text/plain; charset=utf-8')
-                ->send();
-
-        return $response;
+        var_dump($uri);
+        return null;
     }
-
-    public function GetMessagesSince($ts, $channel)
-    {
-        
-    }
-
-    public function DeleteMessage()
-    {
-        
-    }
-
 }

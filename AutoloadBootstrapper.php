@@ -1,6 +1,11 @@
 <?php
 
+require_once __DIR__ . '/Config.php';
+require_once __DIR__ . '/app' . '/bootstrap.php';
+
+require_once __DIR__ . '/dal' . '/IDataAccessAdapter.php';
 require_once __DIR__ . '/dal' . '/DataAccessAdapter.php';
+require_once __DIR__ . '/dal' . '/NullDataAccessAdapter.php';
 require_once __DIR__ . '/dal' . '/ModelBuildingHelper.php';
 require_once __DIR__ . '/dal' . '/Phases.php';
 
@@ -27,20 +32,21 @@ require_once __DIR__ . '/framework/donation' . '/DonationManager.php';
 require_once __DIR__ . '/framework/donation' . '/DonationMessageDto.php';
 require_once __DIR__ . '/framework/donation' . '/SheetManager.php';
 
-require_once __DIR__ . '/framework' . '/ICommandProcessor.php';
-require_once __DIR__ . '/framework' . '/CommandProcessorFactory.php';
-require_once __DIR__ . '/framework' . '/InitCommandProcessor.php';
-require_once __DIR__ . '/framework' . '/StrikeCommandProcessor.php';
-require_once __DIR__ . '/framework' . '/StatusCommandProcessor.php';
-require_once __DIR__ . '/framework' . '/NodeCallCommandProcessor.php';
-require_once __DIR__ . '/framework' . '/HoldCommandProcessor.php';
-require_once __DIR__ . '/framework' . '/ZoneCommandProcessor.php';
-require_once __DIR__ . '/framework' . '/ClearCommandProcessor.php';
-require_once __DIR__ . '/framework' . '/StatsCommandProcessor.php';
-require_once __DIR__ . '/framework' . '/SummaryCommandProcessor.php';
-require_once __DIR__ . '/framework' . '/CancelCommandProcessor.php';
-require_once __DIR__ . '/framework' . '/LeadCommandProcessor.php';
-
+require_once __DIR__ . '/framework' . '/slack' . '/ISlackApi.php';
 require_once __DIR__ . '/framework' . '/slack' . '/SlackApi.php';
+require_once __DIR__ . '/framework' . '/slack' . '/NullSlackApi.php';
 
-require_once __DIR__ . '/Config.php';
+require_once __DIR__ . '/framework' . '/command' . '/ICommandStrategy.php';
+require_once __DIR__ . '/framework' . '/command' . '/ClearCommandStrategy.php';
+require_once __DIR__ . '/framework' . '/command' . '/CommandStrategyFactory.php';
+require_once __DIR__ . '/framework' . '/command' . '/InitCommandStrategy.php';
+require_once __DIR__ . '/framework' . '/command' . '/StrikeCommandStrategy.php';
+require_once __DIR__ . '/framework' . '/command' . '/StatusCommandStrategy.php';
+require_once __DIR__ . '/framework' . '/command' . '/NodeCallCommandStrategy.php';
+require_once __DIR__ . '/framework' . '/command' . '/HoldCommandStrategy.php';
+require_once __DIR__ . '/framework' . '/command' . '/ZoneCommandStrategy.php';
+require_once __DIR__ . '/framework' . '/command' . '/ClearCommandStrategy.php';
+require_once __DIR__ . '/framework' . '/command' . '/CancelCommandStrategy.php';
+require_once __DIR__ . '/framework' . '/command' . '/StatsCommandStrategy.php';
+require_once __DIR__ . '/framework' . '/command' . '/SummaryCommandStrategy.php';
+require_once __DIR__ . '/framework' . '/command' . '/LeadCommandStrategy.php';

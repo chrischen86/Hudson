@@ -1,29 +1,27 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace dal\managers;
+
 use \DateTime;
 use dal\models\UserModel;
-use dal\DataAccessAdapter;
+use dal\IDataAccessAdapter;
 use dal\ModelBuildingHelper;
 use dal\Phases;
+
 /**
  * Description of ConquestRepository
  *
  * @author chris
  */
-class ConquestRepository {
-    private $adapter;    
-    
-    public function __construct() {
-        $this->adapter = new DataAccessAdapter();
+class ConquestRepository
+{
+    private $adapter;
+
+    public function __construct(IDataAccessAdapter $adapter)
+    {
+        $this->adapter = $adapter;
     }
-    
+
     public function SetCommander(UserModel $user)
     {
         $conquest = $this->GetCurrentConquestWithUser($user);
@@ -32,45 +30,45 @@ class ConquestRepository {
                 'WHERE id = ' . $conquest->id;
         $this->adapter->query($sql);
     }
-    
+
     public function GetCurrentConquestWithUser(UserModel $user)
     {
         $today = new DateTime();
         $day = $this->GetClosestDay($today);
         $phase = $this->GetPhase($day);
-        
+
         return $this->GetConquest($day, $phase, $user);
     }
-    
+
     public function GetCurrentConquest()
     {
-        $today = new DateTime();     
+        $today = new DateTime();
         echo $today->format('Y-m-d H:i:s') . '<br/>';
         $day = $this->GetClosestDay($today);
-        $phase = $this->GetPhase($day);        
+        $phase = $this->GetPhase($day);
         return $this->GetConquest($day, $phase);
     }
-    
+
     public function GetConquestByDate(DateTime $dateTime)
     {
         echo $dateTime->format('Y-m-d H:i:s') . '<br/>';
         $day = $this->GetClosestDay($dateTime);
-        $phase = $this->GetPhase($day);        
+        $phase = $this->GetPhase($day);
         return $this->GetConquest($day, $phase);
     }
-    
-    public function GetConquests(DateTime $startDate, DateTime $endDate=null)
+
+    public function GetConquests(DateTime $startDate, DateTime $endDate = null)
     {
         $sql = 'SELECT c.id as conquest_id, c.commander_id, c.date, c.phase, ' .
-                    'u.id as user_id, u.name, u.vip ' .
+                'u.id as user_id, u.name, u.vip ' .
                 'FROM conquest c ' .
                 'LEFT JOIN users u ON u.id = c.commander_id ' .
                 "WHERE c.date >= '" . $startDate->format('Y-m-d') . "' ";
         if ($endDate != null)
         {
-            $sql .= "AND c.date <= '" . $endDate->format('Y-m-d') . "' "; 
+            $sql .= "AND c.date <= '" . $endDate->format('Y-m-d') . "' ";
         }
-        $results = $this->adapter->query($sql);        
+        $results = $this->adapter->query($sql);
         $toReturn = [];
         if ($results == null)
         {
@@ -80,14 +78,15 @@ class ConquestRepository {
         {
             $node = ModelBuildingHelper::BuildConquestModel($item);
             array_push($toReturn, $node);
-        }        
+        }
         return $toReturn;
     }
-    
-    private function GetConquest(DateTime $dateTime, $phase, UserModel $user=null)
+
+    private function GetConquest(DateTime $dateTime, $phase,
+            UserModel $user = null)
     {
         $sql = 'SELECT c.id as conquest_id, c.commander_id, c.date, c.phase, ' .
-                    'u.id as user_id, u.name, u.vip ' .
+                'u.id as user_id, u.name, u.vip ' .
                 'FROM conquest c ' .
                 'LEFT JOIN users u ON u.id = c.commander_id ' .
                 "WHERE c.date = '" . $dateTime->format('Y-m-d H:i:s') . "'";
@@ -96,16 +95,17 @@ class ConquestRepository {
         {
             $this->CreateConquest($dateTime, $phase, $user);
             $result = $this->adapter->query_single($sql);
-        }        
+        }
         $conquest = ModelBuildingHelper::BuildConquestModel($result);
         return $conquest;
     }
-    
-    private function CreateConquest(DateTime $dateTime, $phase, UserModel $user=null)
+
+    private function CreateConquest(DateTime $dateTime, $phase,
+            UserModel $user = null)
     {
         switch ($phase)
         {
-            case Phases::Phase1: 
+            case Phases::Phase1:
                 $phaseNumber = 1;
                 break;
             case Phases::Phase2:
@@ -113,14 +113,14 @@ class ConquestRepository {
                 break;
             default:
                 $phaseNumber = 3;
-                break;                
+                break;
         }
         $userId = $user == null ? 'null' : "'" . $user->id . "'";
         $sql = 'INSERT INTO conquest (commander_id, date, phase) ' .
                 'VALUES (' . $userId . ", '" . $dateTime->format('Y-m-d H:i:s') . "', " . $phaseNumber . ')';
         $this->adapter->query($sql);
     }
-    
+
     private function GetPhase(DateTime $dateTime)
     {
         $hour = $dateTime->format('H');
@@ -137,16 +137,16 @@ class ConquestRepository {
             return Phases::Phase3;
         }
     }
-    
+
     private function GetClosestDay(DateTime $dateTime)
     {
         $dayOfWeek = $dateTime->format('l');
         $hour = $dateTime->format('H');
-        
+
         $date = new DateTime($dateTime->format('m/d/Y'));
         switch ($dayOfWeek)
         {
-            case 'Tuesday':                
+            case 'Tuesday':
                 if ($hour <= Phases::Phase3 + Phases::PhaseLength)
                 {
                     $date->setTime(Phases::Phase3, 0, 0);
@@ -193,7 +193,8 @@ class ConquestRepository {
             default:
                 break;
         }
-        
+
         return $date;
     }
+
 }

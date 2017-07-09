@@ -4,32 +4,30 @@ require_once __DIR__.'/../AutoloadBootstrapper.php';
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use framework\CommandProcessorFactory;
 
 $app = new Silex\Application();
 $app['debug'] = true;
 
 $app->get('', function (Request $request)
 {
-    $conquestManager = new \framework\conquest\ConquestManager();
-    $conquestManager->GetLastPhaseStats();
-    echo var_dump($conquestManager);
     return new Response('', 200);
 });
 
 $app->post('', function(Request $request){
+    global $container;
     $data = json_decode($request->getContent(), true);
-    error_log(print_r($data, 1));
     if ($data['type'] == 'url_verification')
     {
         return HandleVerification($data);
-    }    
-    $commandProcessor = new CommandProcessorFactory();
-    $processor = $commandProcessor->CreateProcessor($request);
-    if ($processor != null)
+    }
+    
+    $container->get('CommandStrategyFactory');
+    $strategy = $container->get('CommandStrategyFactory')->GetCommandStrategy($request);
+    
+    if ($strategy != null)
     {
-        $processor->Process();
-        $processor->SendResponse();
+        $strategy->Process($data['event']);
+        $strategy->SendResponse();
     }
     return new Response('', 200);
 });

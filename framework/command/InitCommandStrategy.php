@@ -6,34 +6,40 @@
  * and open the template in the editor.
  */
 
-namespace framework;
+namespace framework\command;
 use dal\managers\CoreRepository;
-use framework\slack\SlackApi;
+use framework\slack\ISlackApi;
 use StateEnum;
 /**
- * Description of InitCommandProcessor
+ * Description of InitCommandStategy
  *
  * @author chris
  */
-class InitCommandProcessor implements ICommandProcessor {
-    private $eventData;
+class InitCommandStrategy implements ICommandStrategy
+{
+    private $InitiateRegex = '/(initiate|init|begin) (ASC)/i';
+
     private $coreRepository;
     private $slackApi;
-    
     private $response;
-    
-    public function __construct($data) {
-        $this->eventData = $data;        
-        $this->coreRepository = new CoreRepository();
-        $this->slackApi = new SlackApi();
-    }
-    
-    public function Process()
+
+    public function __construct(CoreRepository $coreRepository, ISlackApi $slackApi)
     {
-        error_log('icp: ' . $this->eventData['text']);
-        
+        $this->coreRepository = $coreRepository;
+        $this->slackApi = $slackApi;
+    }
+
+    public function IsSupportedRequest($text)
+    {
+        return preg_match($this->InitiateRegex, $text);
+    }
+
+    public function Process($payload)
+    {
+        error_log('icp: ' . $payload['text']);
+
         $stateModel = $this->coreRepository->GetState();
-        
+
         if ($stateModel->state == StateEnum::Sleeping)
         {
             $this->response = "Activating Advanced Strike Coordination Mode";
@@ -43,13 +49,16 @@ class InitCommandProcessor implements ICommandProcessor {
         {
             $this->response = "I am already assisting with the active conquest!";
         }
-        //error_log($test->state);
-        
     }
-    
+
     public function SendResponse()
     {
-       error_log('sending message');
-       $this->slackApi->SendMessage($this->response);
+        $this->slackApi->SendMessage($this->response);
     }
+
+    public function IsJarvisCommand()
+    {
+        return true;
+    }
+
 }

@@ -31,7 +31,7 @@ class LeadCommandStrategyTest extends TestCaseBase
                 ->getMock();
 
         $this->slackApiMock = $this->getMockBuilder(\framework\slack\SlackApi::class)
-                ->setMethods(['SendMessage'])
+                ->setMethods(['SendMessage', 'SetTopic'])
                 ->getMock();
 
         $this->channel = $this->container->get('ConquestChannel');
@@ -57,6 +57,9 @@ class LeadCommandStrategyTest extends TestCaseBase
             'text' => 'ill lead',
             'user' => $user->name,
         );
+        
+        $this->slackApiMock->expects($this->once())
+                ->method('SetTopic');
 
         $this->slackApiMock->expects($this->once())
                 ->method('SendMessage')
@@ -77,6 +80,9 @@ class LeadCommandStrategyTest extends TestCaseBase
             'text' => 'ill lead',
             'user' => 'TEST USER',
         );
+        
+        $this->slackApiMock->expects($this->once())
+                ->method('SetTopic');
 
         $this->slackApiMock->expects($this->once())
                 ->method('SendMessage')

@@ -4,8 +4,10 @@ namespace app;
 
 use DI;
 use framework\command\CommandStrategyFactory;
+use Config;
 
 return [
+    'ConquestChannel' => Config::$ConquestChannel,
     'IDataAccessAdapter' => DI\object('dal\DataAccessAdapter'),
     'CoreRepository' => DI\object('dal\managers\CoreRepository')
             ->constructor(DI\get('IDataAccessAdapter')),
@@ -44,6 +46,8 @@ return [
                 ->constructor(DI\get('ConquestManager'), DI\get('ISlackApi')),
                 DI\object('framework\command\SummaryCommandStrategy')
                 ->constructor(DI\get('ConquestManager'), DI\get('ISlackApi')),
+                DI\object('framework\command\LeadCommandStrategy')
+                ->constructor(DI\get('ConquestRepository'), DI\get('UserRepository'), DI\get('ISlackApi'), DI\get('ConquestChannel')),
     ],
     'CommandStrategyFactory' => DI\factory(function($strategies)
     {

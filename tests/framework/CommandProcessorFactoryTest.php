@@ -190,4 +190,17 @@ class CommandProcessorFactoryTest extends TestCaseBase
         $strategy = $this->factory->GetCommandStrategy($requestMock);
         $this->assertInstanceOf(\framework\command\SummaryCommandStrategy::class, $strategy);
     }
+    
+    public function testCreateLeadCommandStrategy()
+    {
+        $requestMock = $this->getMockBuilder(Request::class)
+                ->setMethods(['getContent'])
+                ->getMock();
+        $requestMock->expects($this->once())
+                ->method('getContent')
+                ->willReturn($this->BuildJarvisMessage('lead'));
+
+        $strategy = $this->factory->GetCommandStrategy($requestMock);
+        $this->assertInstanceOf(\framework\command\LeadCommandStrategy::class, $strategy);
+    }
 }

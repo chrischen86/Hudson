@@ -32,10 +32,6 @@ require_once __DIR__ . '/framework/donation' . '/DonationManager.php';
 require_once __DIR__ . '/framework/donation' . '/DonationMessageDto.php';
 require_once __DIR__ . '/framework/donation' . '/SheetManager.php';
 
-require_once __DIR__ . '/framework' . '/ICommandProcessor.php';
-require_once __DIR__ . '/framework' . '/CommandProcessorFactory.php';
-require_once __DIR__ . '/framework' . '/LeadCommandProcessor.php';
-
 require_once __DIR__ . '/framework' . '/slack' . '/ISlackApi.php';
 require_once __DIR__ . '/framework' . '/slack' . '/SlackApi.php';
 require_once __DIR__ . '/framework' . '/slack' . '/NullSlackApi.php';
@@ -53,3 +49,4 @@ require_once __DIR__ . '/framework' . '/command' . '/ClearCommandStrategy.php';
 require_once __DIR__ . '/framework' . '/command' . '/CancelCommandStrategy.php';
 require_once __DIR__ . '/framework' . '/command' . '/StatsCommandStrategy.php';
 require_once __DIR__ . '/framework' . '/command' . '/SummaryCommandStrategy.php';
+require_once __DIR__ . '/framework' . '/command' . '/LeadCommandStrategy.php';

@@ -41,6 +41,7 @@ class TestCaseBase extends TestCase
         $container = new ContainerBuilder();
 
         $container->addDefinitions([
+            'ConquestChannel' => Config::$ConquestChannel,
             'IDataAccessAdapter' => $this->CreateMockAdapter(),
             'CoreRepository' => DI\object('dal\managers\CoreRepository')
                     ->constructor(DI\get('IDataAccessAdapter')),
@@ -79,6 +80,8 @@ class TestCaseBase extends TestCase
                         ->constructor(DI\get('ConquestManager'), DI\get('ISlackApi')),
                         DI\object('framework\command\SummaryCommandStrategy')
                         ->constructor(DI\get('ConquestManager'), DI\get('ISlackApi')),
+                        DI\object('framework\command\LeadCommandStrategy')
+                        ->constructor(DI\get('ConquestRepository'), DI\get('UserRepository'), DI\get('ISlackApi'), DI\get('ConquestChannel')),
             ],
             'CommandStrategyFactory' => DI\factory(function($strategies)
             {

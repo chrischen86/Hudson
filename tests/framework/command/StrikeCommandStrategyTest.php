@@ -19,6 +19,7 @@ class StrikeCommandStrategyTest extends TestCaseBase
     private $nodeRepositoryMock;
     private $strikeRepositoryMock;
     private $slackApiMock;
+    private $statusCommandStrategyMock;
 
     protected function setUp()
     {
@@ -42,7 +43,11 @@ class StrikeCommandStrategyTest extends TestCaseBase
         $this->slackApiMock = $this->getMockBuilder(\framework\slack\SlackApi::class)
                 ->setMethods(['SendMessage'])
                 ->getMock();
-        $this->command = new StrikeCommandStrategy($this->conquestRepositoryMock, $this->zoneRepositoryMock, $this->nodeRepositoryMock, $this->strikeRepositoryMock, $this->slackApiMock);
+        $this->statusCommandStrategyMock = $this->getMockBuilder(\framework\command\StatusCommandStrategy::class)
+                ->setMethods(['Process', 'SendResponse'])
+                ->disableOriginalConstructor()
+                ->getMock();
+        $this->command = new StrikeCommandStrategy($this->conquestRepositoryMock, $this->zoneRepositoryMock, $this->nodeRepositoryMock, $this->strikeRepositoryMock, $this->slackApiMock, $this->statusCommandStrategyMock);
     }
 
     public function testZoneSetupSuccess()
@@ -62,7 +67,9 @@ class StrikeCommandStrategyTest extends TestCaseBase
         $this->slackApiMock->expects($this->once())
                 ->method('SendMessage')
                 ->with($this->equalTo('Strike map has been setup for zone ' . $zone->zone));
-
+        $this->statusCommandStrategyMock->expects($this->once())
+                ->method('SendResponse');
+        
         $payload = array(
             'channel' => 'ADFAS',
             'text' => 'setup zone ' . $zone->zone,

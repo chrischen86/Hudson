@@ -7,6 +7,7 @@ use dal\managers\ConquestRepository;
 use dal\managers\ZoneRepository;
 use dal\managers\NodeRepository;
 use dal\managers\StrikeRepository;
+use framework\command\StatusCommandStrategy;
 
 /**
  * Description of StrikeCommandStrategy
@@ -16,20 +17,25 @@ use dal\managers\StrikeRepository;
 class StrikeCommandStrategy implements ICommandStrategy
 {
     const Regex = '/(setup|start) (zone)/i';
+
     private $zoneRegex = '/(?:zone) (\d{1,2})/i';
     private $holdRegex = '/(?:hold)(?: on)?(?: node)? (\d{1,2})/i';
-
     private $conquestRepository;
     private $zoneRepository;
     private $nodeRepository;
     private $strikeRepository;
     private $slackApi;
+    private $statusCommandStrategy;
     private $response;
     private $channel;
+    private $eventData;
 
     public function __construct(ConquestRepository $conquestRepository,
-            ZoneRepository $zoneRepository, NodeRepository $nodeRepository,
-            StrikeRepository $strikeRepository, ISlackApi $slackApi)
+                                ZoneRepository $zoneRepository,
+                                NodeRepository $nodeRepository,
+                                StrikeRepository $strikeRepository,
+                                ISlackApi $slackApi,
+                                StatusCommandStrategy $statusCommandStrategy)
     {
         $this->slackApi = $slackApi;
 
@@ -37,6 +43,8 @@ class StrikeCommandStrategy implements ICommandStrategy
         $this->zoneRepository = $zoneRepository;
         $this->nodeRepository = $nodeRepository;
         $this->strikeRepository = $strikeRepository;
+
+        $this->statusCommandStrategy = $statusCommandStrategy;
     }
 
     public function IsSupportedRequest($text)
@@ -44,8 +52,14 @@ class StrikeCommandStrategy implements ICommandStrategy
         return preg_match(StrikeCommandStrategy::Regex, $text);
     }
 
+    public function IsJarvisCommand()
+    {
+        return true;
+    }
+
     public function Process($payload)
     {
+        $this->eventData = $payload;
         $this->channel = $payload['channel'];
         $data = $payload['text'];
 
@@ -81,7 +95,15 @@ class StrikeCommandStrategy implements ICommandStrategy
         $this->response = "Strike map has been setup for zone " . $zone->zone;
     }
 
-    public function CreateNodes($zone, $hold)
+    public function SendResponse()
+    {
+        $this->slackApi->SendMessage($this->response, null, $this->channel);
+        
+        $this->statusCommandStrategy->Process($this->eventData);
+        $this->statusCommandStrategy->SendResponse();
+    }
+
+    private function CreateNodes($zone, $hold)
     {
         for ($i = 1; $i <= 10; $i++)
         {
@@ -89,22 +111,12 @@ class StrikeCommandStrategy implements ICommandStrategy
         }
     }
 
-    public function CreateStrikes($nodes)
+    private function CreateStrikes($nodes)
     {
         foreach ($nodes as $node)
         {
             $this->strikeRepository->CreateStrike($node);
         }
-    }
-
-    public function SendResponse()
-    {
-        $this->slackApi->SendMessage($this->response, null, $this->channel);
-    }
-
-    public function IsJarvisCommand()
-    {
-        return true;
     }
 
 }

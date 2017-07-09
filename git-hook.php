@@ -8,11 +8,13 @@ $input = json_decode($inputJSON, TRUE); //convert JSON into array
 $array = preg_split('/\//', $input['ref']);
 $branch = array_values(array_slice($array, -1))[0];
 
-exec('git rev-parse --abbrev-ref HEAD', $output);
-$currentBranch = $output[0];
+//exec('git rev-parse --abbrev-ref HEAD', $output);
+//$currentBranch = $output[0];
+exec('pwd', $output);
+$currentDirectory = $output[0];
 
 exec('git fetch', $output);
-if ($currentBranch != 'master')
+if (preg_match('/(Friday)/i', $currentDirectory))
 {
     exec("git checkout $branch -f", $output);
 }

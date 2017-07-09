@@ -56,60 +56,34 @@ class TestCaseBase extends TestCase
                     ->constructor(DI\get('IDataAccessAdapter')),
             'ISlackApi' => DI\object('framework\slack\NullSlackApi'),
             'StatusCommandStrategy' => DI\object('framework\command\StatusCommandStrategy')
-                    ->constructor(DI\get('CoreRepository'),
-                            DI\get('ConquestRepository'),
-                            DI\get('ZoneRepository'),
-                            DI\get('StrikeRepository'), DI\get('ISlackApi')),
+                    ->constructor(DI\get('CoreRepository'), DI\get('ConquestRepository'), DI\get('ZoneRepository'), DI\get('StrikeRepository'), DI\get('ISlackApi')),
             'ConquestManager' => DI\object('framework\conquest\ConquestManager')
-                    ->constructor(DI\get('ConquestRepository'),
-                            DI\get('ZoneRepository'), DI\get('NodeRepository'),
-                            DI\get('StrikeRepository')),
+                    ->constructor(DI\get('ConquestRepository'), DI\get('ZoneRepository'), DI\get('NodeRepository'), DI\get('StrikeRepository')),
             'framework\command\ICommandStrategy' => [
-
                         DI\object('framework\command\InitCommandStrategy')
-                        ->constructor(DI\get('CoreRepository'),
-                                DI\get('ISlackApi')),
+                        ->constructor(DI\get('CoreRepository'), DI\get('ISlackApi')),
                         DI\object('framework\command\StrikeCommandStrategy')
-                        ->constructor(DI\get('ConquestRepository'),
-                                DI\get('ZoneRepository'),
-                                DI\get('NodeRepository'),
-                                DI\get('StrikeRepository'), DI\get('ISlackApi')),
+                        ->constructor(DI\get('ConquestRepository'), DI\get('ZoneRepository'), DI\get('NodeRepository'), DI\get('StrikeRepository'), DI\get('ISlackApi')),
                 DI\get('StatusCommandStrategy'),
                         DI\object('framework\command\NodeCallCommandStrategy')
-                        ->constructor(DI\get('ConquestRepository'),
-                                DI\get('ZoneRepository'),
-                                DI\get('NodeRepository'),
-                                DI\get('StrikeRepository'),
-                                DI\get('UserRepository'), DI\get('ISlackApi'),
-                                DI\get('StatusCommandStrategy')),
+                        ->constructor(DI\get('ConquestRepository'), DI\get('ZoneRepository'), DI\get('NodeRepository'), DI\get('StrikeRepository'), DI\get('UserRepository'), DI\get('ISlackApi'), DI\get('StatusCommandStrategy')),
                         DI\object('framework\command\HoldCommandStrategy')
-                        ->constructor(DI\get('ConquestRepository'),
-                                DI\get('ZoneRepository'),
-                                DI\get('NodeRepository'), DI\get('ISlackApi'),
-                                DI\get('StatusCommandStrategy')),
+                        ->constructor(DI\get('ConquestRepository'), DI\get('ZoneRepository'), DI\get('NodeRepository'), DI\get('ISlackApi'), DI\get('StatusCommandStrategy')),
                         DI\object('framework\command\ZoneCommandStrategy')
-                        ->constructor(DI\get('ConquestRepository'),
-                                DI\get('ZoneRepository'), DI\get('ISlackApi'),
-                                DI\get('StatusCommandStrategy')),
+                        ->constructor(DI\get('ConquestRepository'), DI\get('ZoneRepository'), DI\get('ISlackApi'), DI\get('StatusCommandStrategy')),
                         DI\object('framework\command\ClearCommandStrategy')
-                        ->constructor(DI\get('ConquestRepository'),
-                                DI\get('ZoneRepository'),
-                                DI\get('NodeRepository'),
-                                DI\get('StrikeRepository'), DI\get('ISlackApi'),
-                                DI\get('StatusCommandStrategy')),
+                        ->constructor(DI\get('ConquestRepository'), DI\get('ZoneRepository'), DI\get('NodeRepository'), DI\get('StrikeRepository'), DI\get('ISlackApi'), DI\get('StatusCommandStrategy')),
                         DI\object('framework\command\CancelCommandStrategy')
-                        ->constructor(DI\get('ConquestRepository'),
-                                DI\get('ZoneRepository'), DI\get('ISlackApi'),
-                                DI\get('StatusCommandStrategy')),
+                        ->constructor(DI\get('ConquestRepository'), DI\get('ZoneRepository'), DI\get('ISlackApi'), DI\get('StatusCommandStrategy')),
                         DI\object('framework\command\StatsCommandStrategy')
-                        ->constructor(DI\get('ConquestManager'),
-                                DI\get('ISlackApi')),
+                        ->constructor(DI\get('ConquestManager'), DI\get('ISlackApi')),
+                        DI\object('framework\command\SummaryCommandStrategy')
+                        ->constructor(DI\get('ConquestManager'), DI\get('ISlackApi')),
             ],
             'CommandStrategyFactory' => DI\factory(function($strategies)
             {
                 return new CommandStrategyFactory($strategies);
-            })->parameter('strategies',
-                    DI\get('framework\command\ICommandStrategy')),
+            })->parameter('strategies', DI\get('framework\command\ICommandStrategy')),
         ]);
 
         return $container->build();

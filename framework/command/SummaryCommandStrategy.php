@@ -22,6 +22,9 @@ class SummaryCommandStrategy implements ICommandStrategy
     private $conquestManager;
     private $response;
     private $attachments;
+    
+    private $forceSummary = false;
+    private $admin = 'U0KJBUYDC';
 
     public function __construct(ConquestManager $conquestManager,
                                 ISlackApi $slackApi)
@@ -44,6 +47,8 @@ class SummaryCommandStrategy implements ICommandStrategy
     public function Process($payload)
     {
         $this->channel = $payload['channel'];
+        $this->forceSummary = preg_match('/(!force)/i', $payload['text']) && $payload['user'] == $this->admin;
+        
         $stats = $this->conquestManager->GetSummaryStats();
 
         $this->BuildDateSummary($stats);
@@ -186,6 +191,11 @@ class SummaryCommandStrategy implements ICommandStrategy
 
     private function IsConquestOver()
     {
+        if ($this->forceSummary)
+        {
+            return true;
+        }
+        
         $now = new DateTime();
         $dayOfWeek = $now->format('l');
         $hour = $now->format('H');

@@ -57,4 +57,34 @@ class SummaryCommandStrategyTest extends TestCaseBase
         $this->command->Process($payload);
         $this->command->SendResponse();
     }
+    
+    
+    public function testGetSummaryStatsForceSuccess()
+    {
+        $stats = new \framework\conquest\StatsDto();
+        $stats->forDate = new \DateTime();
+        $stats->endDate = new \DateTime();
+        $conquest = new \dal\models\ConquestModel();
+        $conquest->date = new \DateTime();
+        $stats->conquests = [$conquest];
+        
+        $zone = new \dal\models\ZoneModel();
+        $stats->zones = [$zone];
+        
+        $strike = new \dal\models\StrikeModel();
+        $stats->strikes = [$strike];
+        
+        $this->conquestManagerMock->expects($this->once())
+                ->method('GetSummaryStats')
+                ->willReturn($stats);
+        
+        $payload = array(
+            'channel' => 'TESTCHANNEL',
+            'text' => 'summary !force',
+            'user' => 'U0KJBUYDC',
+        );
+
+        $this->command->Process($payload);
+        $this->command->SendResponse();
+    }    
 }

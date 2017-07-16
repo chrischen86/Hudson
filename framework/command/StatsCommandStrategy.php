@@ -48,6 +48,7 @@ class StatsCommandStrategy implements ICommandStrategy
         $this->BuildDateSummary($stats);
         $this->BuildZoneSummary($stats, $this->attachments);
         $this->BuildStrikeSummary($stats, $this->attachments);
+        $this->BuildAchievementsSummary($stats, $this->attachments);
     }
 
     public function SendResponse()
@@ -145,26 +146,63 @@ class StatsCommandStrategy implements ICommandStrategy
             'fields' => $fields,
             'mrkdwn_in' => ["fields"]
         ));
+    }
 
-        $first = $this->GetTopAttackerByLimit($attackDictionary);
-        if ($first[0] <= 0)
+    private function BuildAchievementsSummary(StatsDto $stats, &$attachments)
+    {
+        $attackDictionary = array();
+        foreach ($stats->strikes as $strike)
+        {
+            if ($strike->user_id != null)
+            {
+                $index = "<@" . $strike->user->name . ">";
+                if (array_key_exists($index, $attackDictionary))
+                {
+                    $attackDictionary[$index] ++;
+                }
+                else
+                {
+                    $attackDictionary[$index] = 1;
+                }
+            }
+        }
+
+        if (sizeof($attackDictionary) <= 0)
         {
             return;
         }
-        
-        if (sizeof($first[1]) > 0)
+        arsort($attackDictionary);
+        $achievementMessage = ['Smashing!', 'Amazing!', 'Spectacular!'];
+        $hitsArray = [0, 0, 0];
+        $hitsUsers = [[], [], []];
+
+        $currentAchievement = 0;
+        foreach ($attackDictionary as $key => $value)
         {
-            $message = implode(', ', $first[1]) . ': ' . $first[0] . " hits!  Smashing!\n";
+            if ($value < $hitsArray[$currentAchievement])
+            {
+                $currentAchievement++;
+            }
+            if ($currentAchievement >= 3)
+            {
+                continue;
+            }
+
+            if ($value >= $hitsArray[$currentAchievement])
+            {
+                $hitsArray[$currentAchievement] = $value;
+                array_push($hitsUsers[$currentAchievement], $key);
+            }
         }
-        $second = $this->GetTopAttackerByLimit($attackDictionary, $first[0]);
-        if (sizeof($second[1]) > 1)
+
+        $message = "";
+        for ($i = 0; $i < 3; $i++)
         {
-            $message .= implode(', ', $second[1]) . ': ' . $second[0] . " hits!  Amazing!\n";
-        }
-        $third = $this->GetTopAttackerByLimit($attackDictionary, $second[0]);
-        if (sizeof($third[1]) > 2)
-        {
-            $message .= implode(', ', $third[1]) . ': ' . $third[0] . ' hits!  Spectacular!';
+            if ($hitsArray[$i] <= 0)
+            {
+                continue;
+            }
+            $message .= implode(', ', $hitsUsers[$i]) . ': ' . $hitsArray[$i] . " hits!  " . $achievementMessage[$i] . "\n";
         }
 
         $achievements = array();
@@ -179,21 +217,6 @@ class StatsCommandStrategy implements ICommandStrategy
             'fields' => $achievements,
             'mrkdwn_in' => ["fields"]
         ));
-    }
-
-    private function GetTopAttackerByLimit($attackDictionary, $limit = 0)
-    {
-        $topAttackCount = 0;
-        $topAttackers = array();
-        foreach ($attackDictionary as $attacker => $attackCount)
-        {
-            if ($attackCount >= $topAttackCount && ($limit == 0 || $attackCount < $limit))
-            {
-                $topAttackCount = $attackCount;
-                array_push($topAttackers, $attacker);
-            }
-        }
-        return array($topAttackCount, $topAttackers);
     }
 
 }

@@ -125,4 +125,12 @@ class TestCaseBase extends TestCase
         return $message;
     }
 
+    protected function CreateUser($name, $id='', $vip='')
+    {
+        $user = new \dal\models\UserModel();
+        $user->name = $name;
+        $user->id = $id;
+        $user->vip = $vip;
+        return $user;
+    }
 }

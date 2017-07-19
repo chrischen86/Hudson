@@ -13,13 +13,13 @@ $app->get('', function (Request $request)
     return new Response('', 200);
 });
 
-$app->get('/activezones', function (Request $request)
+$app->get('/activezones', function (Request $request) use ($app)
 {
     global $container;
     $zoneManager = $container->get('ZoneManager');
     $result = $zoneManager->GetStrikeTable();
     
-    return new Response(json_encode($result), 200);
+    return $app->json($result);
 });
 
 $app->post('', function(Request $request){

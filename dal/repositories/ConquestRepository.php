@@ -43,7 +43,6 @@ class ConquestRepository
     public function GetCurrentConquest()
     {
         $today = new DateTime();
-        echo $today->format('Y-m-d H:i:s') . '<br/>';
         $day = $this->GetClosestDay($today);
         $phase = $this->GetPhase($day);
         return $this->GetConquest($day, $phase);
@@ -51,7 +50,6 @@ class ConquestRepository
 
     public function GetConquestByDate(DateTime $dateTime)
     {
-        echo $dateTime->format('Y-m-d H:i:s') . '<br/>';
         $day = $this->GetClosestDay($dateTime);
         $phase = $this->GetPhase($day);
         return $this->GetConquest($day, $phase);

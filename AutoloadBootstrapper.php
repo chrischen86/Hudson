@@ -26,6 +26,7 @@ require_once __DIR__ . '/dal/repositories' . '/StrikeRepository.php';
 
 require_once __DIR__ . '/framework/conquest' . '/ConquestManager.php';
 require_once __DIR__ . '/framework/conquest' . '/StatsDto.php';
+require_once __DIR__ . '/framework/conquest' . '/ZoneManager.php';
 
 require_once __DIR__ . '/framework/donation' . '/GoogleClientInstance.php';
 require_once __DIR__ . '/framework/donation' . '/DonationManager.php';

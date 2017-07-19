@@ -33,7 +33,8 @@ class SummaryCommandStrategyTest extends TestCaseBase
     public function testGetSummaryStatsSuccess()
     {
         $stats = new \framework\conquest\StatsDto();
-        
+        $stats->forDate = new \DateTime();
+        $stats->endDate = new \DateTime();
         $conquest = new \dal\models\ConquestModel();
         $conquest->date = new \DateTime();
         $stats->conquests = [$conquest];

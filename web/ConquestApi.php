@@ -13,6 +13,14 @@ $app->get('', function (Request $request)
     return new Response('', 200);
 });
 
+$app->get('/activezones', function (Request $request)
+{
+    $zoneManager = $container->get('ZoneManager');
+    $result = $zoneManager->GetStrikeTable();
+    
+    return new Response(json_encode($result), 200);
+});
+
 $app->post('', function(Request $request){
     global $container;
     $data = json_decode($request->getContent(), true);
@@ -21,9 +29,7 @@ $app->post('', function(Request $request){
         return HandleVerification($data);
     }
     
-    $container->get('CommandStrategyFactory');
-    $strategy = $container->get('CommandStrategyFactory')->GetCommandStrategy($request);
-    
+    $strategy = $container->get('CommandStrategyFactory')->GetCommandStrategy($request);    
     if ($strategy != null)
     {
         $strategy->Process($data['event']);

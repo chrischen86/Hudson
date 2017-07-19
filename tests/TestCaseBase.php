@@ -60,6 +60,8 @@ class TestCaseBase extends TestCase
                     ->constructor(DI\get('CoreRepository'), DI\get('ConquestRepository'), DI\get('ZoneRepository'), DI\get('StrikeRepository'), DI\get('ISlackApi')),
             'ConquestManager' => DI\object('framework\conquest\ConquestManager')
                     ->constructor(DI\get('ConquestRepository'), DI\get('ZoneRepository'), DI\get('NodeRepository'), DI\get('StrikeRepository')),
+            'ZoneManager' => DI\object('framework\conquest\ZoneManager')
+                    ->constructor(DI\get('ConquestRepository'), DI\get('ZoneRepository'), DI\get('StrikeRepository')),
             'framework\command\ICommandStrategy' => [
                         DI\object('framework\command\InitCommandStrategy')
                         ->constructor(DI\get('CoreRepository'), DI\get('ISlackApi')),
@@ -125,7 +127,7 @@ class TestCaseBase extends TestCase
         return $message;
     }
 
-    protected function CreateUser($name, $id='', $vip='')
+    protected function CreateUser($name, $id = '', $vip = '')
     {
         $user = new \dal\models\UserModel();
         $user->name = $name;
@@ -133,4 +135,5 @@ class TestCaseBase extends TestCase
         $user->vip = $vip;
         return $user;
     }
+
 }

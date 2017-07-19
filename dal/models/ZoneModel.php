@@ -20,4 +20,6 @@ class ZoneModel {
     public $zone;
     public $battle_count;
     public $is_owned;
+    
+    public $strikes;
 }

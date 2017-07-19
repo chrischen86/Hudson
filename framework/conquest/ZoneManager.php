@@ -30,9 +30,10 @@ class ZoneManager
     {
         $conquest = $this->conquestRepository->GetCurrentConquest();
         $zones = $this->zoneRepository->GetAllZones($conquest);
-
+        
         foreach ($zones as $zone)
         {
+            $zone->conquest = null; //Not important for the API
             $zone->strikes = $this->strikeRepository->GetStrikesByZone($zone);
         }
         

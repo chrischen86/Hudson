@@ -15,6 +15,7 @@ $app->get('', function (Request $request)
 
 $app->get('/activezones', function (Request $request)
 {
+    global $container;
     $zoneManager = $container->get('ZoneManager');
     $result = $zoneManager->GetStrikeTable();
     

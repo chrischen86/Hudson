@@ -34,7 +34,13 @@ class ZoneManager
         foreach ($zones as $zone)
         {
             $zone->conquest = null; //Not important for the API
-            $zone->strikes = $this->strikeRepository->GetStrikesByZone($zone);
+            $strikes = $this->strikeRepository->GetStrikesByZone($zone);
+            foreach ($strikes as $strike)
+            {
+                $strike->node->zone = null;  //Clean up response for API
+            }
+            
+            $zone->strikes = $strikes;
         }
         
         return $zones;

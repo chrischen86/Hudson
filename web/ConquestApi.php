@@ -25,11 +25,11 @@ $app->get('/activezones', function (Request $request) use ($app)
 $app->post('/attack', function (Request $request) use ($app)
 {
     global $container;
-    $zoneManager = $container->get('ZoneManager');
+    $strikeManager = $container->get('StrikeManager');
     $zone = $request->get("zone");
     $node = $request->get("node");
     $user = $request->get("user");    
-    $result = $zoneManager->ClaimNode($zone, $node, $user);
+    $result = $strikeManager->ClaimNode($zone, $node, $user);
     
     return $app->json($result);
 });

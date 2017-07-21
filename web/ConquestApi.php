@@ -28,7 +28,7 @@ $app->post('/attack', function (Request $request) use ($app)
     $zoneManager = $container->get('ZoneManager');
     $zone = $request->get("zone");
     $node = $request->get("node");
-    $user = $request->get("user");
+    $user = $request->get("user");    
     $result = $zoneManager->ClaimNode($zone, $node, $user);
     
     return $app->json($result);

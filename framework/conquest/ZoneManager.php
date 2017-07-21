@@ -46,27 +46,4 @@ class ZoneManager
         
         return $zones;
     }
-    
-    public function ClaimNode($zoneValue, $nodeValue, $userValue)
-    {
-        $conquest = $this->conquestRepository->GetCurrentConquest();
-        $zone = $this->zoneRepository->GetZone($conquest, $zoneValue);
-        if ($zone == null || $zone->is_owned)
-        {
-            throw new Exception("zone_not_active");
-        }
-
-        $node = $this->nodeRepository->GetNode($zone, $nodeValue);
-        $currentStrike = $this->strikeRepository->GetStrike($node);
-        if ($currentStrike->user_id != null)
-        {
-            throw new Exception("node_claimed_already");
-        }
-        $user = new \dal\models\UserModel();
-        $user->id = $userValue;
-        $this->strikeRepository->UpdateStrike($node, $user);
-        
-        $strike = $this->strikeRepository->GetStrike($node);
-        return $strike;
-    }
 }

@@ -26,7 +26,6 @@ $app->post('/attack', function (Request $request) use ($app)
 {
     global $container;
     $zoneManager = $container->get('ZoneManager');
-    error_log(print_r($request, 1));
     $zone = $request->get("zone");
     $node = $request->get("node");
     $user = $request->get("user");
@@ -63,6 +62,13 @@ $app->post('/slack/verify', function(Request $request){
         return new Response('Invalid token', 400);
     }    
     return new Response($data['challenge'], 200);
+});
+
+$app->before(function (Request $request) {
+    if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
+        $data = json_decode($request->getContent(), true);
+        $request->request->replace(is_array($data) ? $data : array());
+    }
 });
 
 $app->error(function(Exception $e, Request $request, $code) use ($app)

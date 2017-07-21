@@ -29,7 +29,7 @@ return [
     'ZoneManager' => DI\object('framework\conquest\ZoneManager')
             ->constructor(DI\get('ConquestRepository'), DI\get('ZoneRepository'), DI\get('StrikeRepository')),
     'StrikeManager' => DI\object('framework\conquest\StrikeManager')
-            ->constructor(DI\get('ConquestRepository'), DI\get('ZoneRepository'), DI\get('NodeRepository'), DI\get('StrikeRepository'), DI\get('StatusCommandStrategy')),
+            ->constructor(DI\get('CoreRepository'), DI\get('ConquestRepository'), DI\get('ZoneRepository'), DI\get('NodeRepository'), DI\get('StrikeRepository'), DI\get('StatusCommandStrategy')),
     'framework\command\ICommandStrategy' => [
                 DI\object('framework\command\InitCommandStrategy')
                 ->constructor(DI\get('CoreRepository'), DI\get('ISlackApi')),

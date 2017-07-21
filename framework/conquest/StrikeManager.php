@@ -2,6 +2,7 @@
 
 namespace framework\conquest;
 
+use dal\managers\CoreRepository;
 use dal\managers\ConquestRepository;
 use dal\managers\ZoneRepository;
 use dal\managers\NodeRepository;
@@ -16,18 +17,21 @@ use \Exception;
  */
 class StrikeManager
 {
+    private $coreRepository;
     private $conquestRepository;
     private $zoneRepository;
     private $nodeRepository;
     private $strikeRepository;
     private $statusCommandRepository;
 
-    public function __construct(ConquestRepository $conquestRepository,
+    public function __construct(CoreRepository $coreRepository,
+                                ConquestRepository $conquestRepository,
                                 ZoneRepository $zoneRepository,
                                 NodeRepository $nodeRepository,
                                 StrikeRepository $strikeRepository,
                                 StatusCommandStrategy $statusCommandStrategy)
     {
+        $this->coreRepository = $coreRepository;
         $this->conquestRepository = $conquestRepository;
         $this->zoneRepository = $zoneRepository;
         $this->nodeRepository = $nodeRepository;
@@ -55,8 +59,8 @@ class StrikeManager
         $this->strikeRepository->UpdateStrike($node, $user);
 
         $strike = $this->strikeRepository->GetStrike($node);
-        
-        $payload = array('channel' => '');
+
+        $payload = array('channel' => $this->coreRepository->GetMessageChannel());
         $this->statusCommandRepository->Process($payload);
         $this->statusCommandRepository->SendResponse();
         return $strike;

@@ -81,7 +81,7 @@ class ConquestRepository
     }
 
     private function GetConquest(DateTime $dateTime, $phase,
-            UserModel $user = null)
+                                 UserModel $user = null)
     {
         $sql = 'SELECT c.id as conquest_id, c.commander_id, c.date, c.phase, ' .
                 'u.id as user_id, u.name, u.vip ' .
@@ -99,7 +99,7 @@ class ConquestRepository
     }
 
     private function CreateConquest(DateTime $dateTime, $phase,
-            UserModel $user = null)
+                                    UserModel $user = null)
     {
         switch ($phase)
         {

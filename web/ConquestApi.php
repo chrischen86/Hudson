@@ -22,6 +22,19 @@ $app->get('/activezones', function (Request $request) use ($app)
     return $app->json($result);
 });
 
+$app->post('/attack', function (Request $request) use ($app)
+{
+    global $container;
+    $zoneManager = $container->get('ZoneManager');
+    error_log(print_r($request, 1));
+    $zone = $request->get("zone");
+    $node = $request->get("node");
+    $user = $request->get("user");
+    $result = $zoneManager->ClaimNode($zone, $node, $user);
+    
+    return $app->json($result);
+});
+
 $app->post('', function(Request $request){
     global $container;
     $data = json_decode($request->getContent(), true);
@@ -50,6 +63,12 @@ $app->post('/slack/verify', function(Request $request){
         return new Response('Invalid token', 400);
     }    
     return new Response($data['challenge'], 200);
+});
+
+$app->error(function(Exception $e, Request $request, $code) use ($app)
+{
+    $response = array("error" => true, "message" => $e->getMessage());
+    return $app->json($response);
 });
 
 function HandleVerification($data)

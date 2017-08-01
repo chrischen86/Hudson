@@ -82,6 +82,8 @@ class TestCaseBase extends TestCase
                         ->constructor(DI\get('ConquestManager'), DI\get('ISlackApi')),
                         DI\object('framework\command\LeadCommandStrategy')
                         ->constructor(DI\get('ConquestRepository'), DI\get('UserRepository'), DI\get('ISlackApi'), DI\get('ConquestChannel')),
+                        DI\object('framework\command\TrainingModeCommandStrategy')
+                        ->constructor(DI\get('CoreRepository'), DI\get('ISlackApi')),
             ],
             'CommandStrategyFactory' => DI\factory(function($strategies)
             {
@@ -125,7 +127,7 @@ class TestCaseBase extends TestCase
         return $message;
     }
 
-    protected function CreateUser($name, $id='', $vip='')
+    protected function CreateUser($name, $id = '', $vip = '')
     {
         $user = new \dal\models\UserModel();
         $user->name = $name;
@@ -133,4 +135,5 @@ class TestCaseBase extends TestCase
         $user->vip = $vip;
         return $user;
     }
+
 }

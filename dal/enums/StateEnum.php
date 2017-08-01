@@ -14,4 +14,5 @@
 abstract class StateEnum {
     const Sleeping = 0;
     const Coordinating = 1;
+    const Training = 2;
 }

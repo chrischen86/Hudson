@@ -14,6 +14,7 @@ class StrikeCommandStrategyTest extends TestCaseBase
 {
     /** @var StrikeCommandStrategy */
     private $command;
+    private $coreRepositoryMock;
     private $conquestRepositoryMock;
     private $zoneRepositoryMock;
     private $nodeRepositoryMock;
@@ -24,6 +25,10 @@ class StrikeCommandStrategyTest extends TestCaseBase
     protected function setUp()
     {
         $adapter = new \dal\NullDataAccessAdapter();
+        $this->coreRepositoryMock = $this->getMockBuilder(\dal\managers\CoreRepository::class)
+                ->setMethods(['GetState'])
+                ->setConstructorArgs([$adapter])
+                ->getMock();
         $this->conquestRepositoryMock = $this->getMockBuilder(\dal\managers\ConquestRepository::class)
                 ->setMethods(['GetCurrentConquest'])
                 ->setConstructorArgs([$adapter])
@@ -47,7 +52,7 @@ class StrikeCommandStrategyTest extends TestCaseBase
                 ->setMethods(['Process', 'SendResponse'])
                 ->disableOriginalConstructor()
                 ->getMock();
-        $this->command = new StrikeCommandStrategy($this->conquestRepositoryMock, $this->zoneRepositoryMock, $this->nodeRepositoryMock, $this->strikeRepositoryMock, $this->slackApiMock, $this->statusCommandStrategyMock);
+        $this->command = new StrikeCommandStrategy($this->coreRepositoryMock, $this->conquestRepositoryMock, $this->zoneRepositoryMock, $this->nodeRepositoryMock, $this->strikeRepositoryMock, $this->slackApiMock, $this->statusCommandStrategyMock);
     }
 
     public function testZoneSetupSuccess()

@@ -51,6 +51,7 @@ class ModelBuildingHelper {
         $toReturn->zone = $result['zone'];
         $toReturn->battle_count = $result['battle_count'];
         $toReturn->is_owned = $result['is_owned'];
+        $toReturn->is_training = $result['is_training'];
         return $toReturn;
     }
     

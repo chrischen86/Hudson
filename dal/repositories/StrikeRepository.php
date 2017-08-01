@@ -108,7 +108,8 @@ class StrikeRepository
                 'INNER JOIN conquest_zones z ON z.id = n.zone_id ' .
                 'INNER JOIN conquest c ON c.id = z.conquest_id ' .
                 'LEFT JOIN users u ON u.id = c.commander_id ' .
-                'WHERE c.id = ' . $conquest->id;
+                'WHERE c.id = ' . $conquest->id . ' ' . 
+                'AND z.is_training = 0';
         $results = $this->adapter->query($sql);
         $toReturn = [];
         if ($results == null)

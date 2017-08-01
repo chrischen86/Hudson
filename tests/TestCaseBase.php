@@ -64,7 +64,7 @@ class TestCaseBase extends TestCase
                         DI\object('framework\command\InitCommandStrategy')
                         ->constructor(DI\get('CoreRepository'), DI\get('ISlackApi')),
                         DI\object('framework\command\StrikeCommandStrategy')
-                        ->constructor(DI\get('ConquestRepository'), DI\get('ZoneRepository'), DI\get('NodeRepository'), DI\get('StrikeRepository'), DI\get('ISlackApi'), DI\get('StatusCommandStrategy')),
+                        ->constructor(DI\get('CoreRepository'), DI\get('ConquestRepository'), DI\get('ZoneRepository'), DI\get('NodeRepository'), DI\get('StrikeRepository'), DI\get('ISlackApi'), DI\get('StatusCommandStrategy')),
                 DI\get('StatusCommandStrategy'),
                         DI\object('framework\command\NodeCallCommandStrategy')
                         ->constructor(DI\get('ConquestRepository'), DI\get('ZoneRepository'), DI\get('NodeRepository'), DI\get('StrikeRepository'), DI\get('UserRepository'), DI\get('ISlackApi'), DI\get('StatusCommandStrategy')),
@@ -82,6 +82,8 @@ class TestCaseBase extends TestCase
                         ->constructor(DI\get('ConquestManager'), DI\get('ISlackApi')),
                         DI\object('framework\command\LeadCommandStrategy')
                         ->constructor(DI\get('ConquestRepository'), DI\get('UserRepository'), DI\get('ISlackApi'), DI\get('ConquestChannel')),
+                        DI\object('framework\command\TrainingModeCommandStrategy')
+                        ->constructor(DI\get('CoreRepository'), DI\get('ISlackApi')),
             ],
             'CommandStrategyFactory' => DI\factory(function($strategies)
             {
@@ -125,7 +127,7 @@ class TestCaseBase extends TestCase
         return $message;
     }
 
-    protected function CreateUser($name, $id='', $vip='')
+    protected function CreateUser($name, $id = '', $vip = '')
     {
         $user = new \dal\models\UserModel();
         $user->name = $name;
@@ -133,4 +135,5 @@ class TestCaseBase extends TestCase
         $user->vip = $vip;
         return $user;
     }
+
 }

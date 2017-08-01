@@ -61,7 +61,8 @@ class ZoneRepository
                 'c.date, c.phase, c.commander_id ' .
                 'FROM conquest_zones z ' .
                 'INNER JOIN conquest c ON c.id = z.conquest_id ' .
-                'WHERE conquest_id = ' . $conquest->id;
+                'WHERE conquest_id = ' . $conquest->id . ' ' .
+                'AND z.is_training = 0';
         $this->adapter->query($sql);
         $results = $this->adapter->query($sql);
         $toReturn = [];
@@ -98,7 +99,7 @@ class ZoneRepository
         return $zone;
     }
 
-    public function CreateZone(ConquestModel $conquest, $zone)
+    public function CreateZone(ConquestModel $conquest, $zone, $is_training = 0)
     {
         $battleCount = 1;
         $currentZone = $this->GetZone($conquest, $zone);
@@ -107,8 +108,8 @@ class ZoneRepository
             $battleCount = $currentZone->battle_count + 1;
             $this->UpdateZone($conquest, $zone, 1);
         }
-        $sql = 'INSERT INTO conquest_zones (conquest_id, zone, battle_count, is_owned) ' .
-                'VALUES (' . $conquest->id . ', ' . $zone . ', ' . $battleCount . ', 0)';
+        $sql = 'INSERT INTO conquest_zones (conquest_id, zone, battle_count, is_owned, is_training) ' .
+                'VALUES (' . $conquest->id . ', ' . $zone . ', ' . $battleCount . ', 0, ' . $is_training . ')';
         $this->adapter->query($sql);
     }
 

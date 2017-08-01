@@ -3,11 +3,13 @@
 namespace framework\command;
 
 use framework\slack\ISlackApi;
+use dal\managers\CoreRepository;
 use dal\managers\ConquestRepository;
 use dal\managers\ZoneRepository;
 use dal\managers\NodeRepository;
 use dal\managers\StrikeRepository;
 use framework\command\StatusCommandStrategy;
+use StateEnum;
 
 /**
  * Description of StrikeCommandStrategy
@@ -20,6 +22,7 @@ class StrikeCommandStrategy implements ICommandStrategy
 
     private $zoneRegex = '/(?:zone) (\d{1,2})/i';
     private $holdRegex = '/(?:hold)(?: on)?(?: node)? (\d{1,2})/i';
+    private $coreRepository;
     private $conquestRepository;
     private $zoneRepository;
     private $nodeRepository;
@@ -30,7 +33,8 @@ class StrikeCommandStrategy implements ICommandStrategy
     private $channel;
     private $eventData;
 
-    public function __construct(ConquestRepository $conquestRepository,
+    public function __construct(CoreRepository $coreRepository,
+                                ConquestRepository $conquestRepository,
                                 ZoneRepository $zoneRepository,
                                 NodeRepository $nodeRepository,
                                 StrikeRepository $strikeRepository,
@@ -39,6 +43,7 @@ class StrikeCommandStrategy implements ICommandStrategy
     {
         $this->slackApi = $slackApi;
 
+        $this->coreRepository = $coreRepository;
         $this->conquestRepository = $conquestRepository;
         $this->zoneRepository = $zoneRepository;
         $this->nodeRepository = $nodeRepository;
@@ -87,18 +92,22 @@ class StrikeCommandStrategy implements ICommandStrategy
                     "Hint: zone # (done|lost)";
             return;
         }
-        $this->zoneRepository->CreateZone($conquest, $zone);
+
+        $state = $this->coreRepository->GetState();
+        $isTraining = $state == StateEnum::Training;
+        $this->zoneRepository->CreateZone($conquest, $zone, $isTraining);
         $zone = $this->zoneRepository->GetZone($conquest, $zone);
         $this->CreateNodes($zone, $hold);
         $nodes = $this->nodeRepository->GetAllNodes($zone);
         $this->CreateStrikes($nodes);
-        $this->response = "Strike map has been setup for zone " . $zone->zone;
+        $this->response = $isTraining ? "Training zone " . $zone->zone . " has been setup"
+                    : "Strike map has been setup for zone " . $zone->zone;
     }
 
     public function SendResponse()
     {
         $this->slackApi->SendMessage($this->response, null, $this->channel);
-        
+
         $this->statusCommandStrategy->Process($this->eventData);
         $this->statusCommandStrategy->SendResponse();
     }

@@ -94,7 +94,7 @@ class StrikeCommandStrategy implements ICommandStrategy
         }
 
         $state = $this->coreRepository->GetState();
-        $isTraining = $state == StateEnum::Training;
+        $isTraining = $state == StateEnum::Training ? 1 : 0;
         $this->zoneRepository->CreateZone($conquest, $zone, $isTraining);
         $zone = $this->zoneRepository->GetZone($conquest, $zone);
         $this->CreateNodes($zone, $hold);

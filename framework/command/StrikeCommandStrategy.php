@@ -18,7 +18,7 @@ use StateEnum;
  */
 class StrikeCommandStrategy implements ICommandStrategy
 {
-    const Regex = '/(setup|start) (zone)/i';
+    const Regex = '/(setup|start|set up) (zone)/i';
 
     private $zoneRegex = '/(?:zone) (\d{1,2})/i';
     private $holdRegex = '/(?:hold)(?: on)?(?: node)? (\d{1,2})/i';

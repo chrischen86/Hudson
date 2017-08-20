@@ -15,7 +15,7 @@ use dal\Phases;
  */
 class SummaryCommandStrategy implements ICommandStrategy
 {
-    const Regex = '/(summary)/i';
+    const Regex = '/(summary)$/i';
 
     private $channel;
     private $slackApi;

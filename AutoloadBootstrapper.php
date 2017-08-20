@@ -51,3 +51,4 @@ require_once __DIR__ . '/framework' . '/command' . '/StatsCommandStrategy.php';
 require_once __DIR__ . '/framework' . '/command' . '/SummaryCommandStrategy.php';
 require_once __DIR__ . '/framework' . '/command' . '/LeadCommandStrategy.php';
 require_once __DIR__ . '/framework' . '/command' . '/TrainingModeCommandStrategy.php';
+require_once __DIR__ . '/framework' . '/command' . '/SummaryHistoryCommandStrategy.php';

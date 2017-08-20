@@ -71,7 +71,7 @@ class SummaryHistoryCommandStrategy implements ICommandStrategy
         {
             $dataArray[$stat->forDate->format('Y/m/d')] = $this->BuildDataPoint($stat);
         }
-        $chart = $this->imageChartApi->CreateLineChart($stats);
+        $chart = $this->imageChartApi->CreateLineChart($dataArray);
         $this->response = $chart;
     }
 

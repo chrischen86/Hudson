@@ -83,13 +83,11 @@ class SummaryHistoryCommandStrategy implements ICommandStrategy
     private function BuildDataPoint(StatsDto $stats)
     {
         $attackDictionary = array();
-        $totalNonemptyAttacks = 0;
         foreach ($stats->strikes as $strike)
         {
             if ($strike->user_id != null)
             {
                 $attackDictionary[$strike->user_id] ++;
-                $totalNonemptyAttacks++;
             }
         }
         return sizeof($attackDictionary);

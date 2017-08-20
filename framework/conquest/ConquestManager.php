@@ -37,28 +37,45 @@ class ConquestManager
         $this->nodeRepository = $nodeRepository;
         $this->strikeRepository = $strikeRepository;
     }
-
-    public function GetSummaryStats()
+    
+    public function GetHistorySince(DateTime $sinceDate)
     {
-        $now = new DateTime();
-        $lastStartDate = $this->GetLastStartDate($now);
+        return GetHistory($sinceDate, new DateTime());
+    }
+
+    public function GetHistory(DateTime $sinceDate, DateTime $tillDate)
+    {
+        $firstStartDate = $this->GetLastStartDate($sinceDate);
+        $currentDate = $firstStartDate;
+
+        $arr = [];
+        $count = 0;
+        do
+        {
+            $date = new DateTime($currentDate->format('Y-m-d'));
+            $arr[$count++] = $this->GetSummaryStatsByDate($date);
+            $endDate = $date->modify('+7 day');
+            $currentDate = new DateTime($endDate->format('Y-m-d'));
+        } while ($tillDate->diff($currentDate)->format('%a') > 7);
+        return $arr;
+    }
+
+    public function GetSummaryStatsByDate($date)
+    {
+        $lastStartDate = $this->GetLastStartDate($date);
         $endDate = new DateTime($lastStartDate->format('Y-m-d'));
         $lastEndDate = $endDate->modify('+5 day');
 
-        $conquests = $this->conquestRepository->GetConquests($lastStartDate,
-                $lastEndDate);
+        $conquests = $this->conquestRepository->GetConquests($lastStartDate, $lastEndDate);
 
         $zones = [];
         $nodes = [];
         $strikes = [];
         foreach ($conquests as $conquest)
         {
-            $zones = array_merge($zones,
-                    $this->zoneRepository->GetAllZonesByConquest($conquest));
-            $nodes = array_merge($nodes,
-                    $this->nodeRepository->GetAllNodesByConquest($conquest));
-            $strikes = array_merge($strikes,
-                    $this->strikeRepository->GetStrikesByConquest($conquest));
+            $zones = array_merge($zones, $this->zoneRepository->GetAllZonesByConquest($conquest));
+            $nodes = array_merge($nodes, $this->nodeRepository->GetAllNodesByConquest($conquest));
+            $strikes = array_merge($strikes, $this->strikeRepository->GetStrikesByConquest($conquest));
         }
 
         $toReturn = new StatsDto();
@@ -72,13 +89,19 @@ class ConquestManager
         return $toReturn;
     }
 
+    public function GetSummaryStats()
+    {
+        $now = new DateTime();
+        return $this->GetSummaryStatsByDate($now);
+    }
+
     public function GetLastPhaseStats()
     {
         $now = new DateTime();
-        //echo 'Now: ' . $now->format('Y-m-d h:i:s') . ' <br/>';
+//echo 'Now: ' . $now->format('Y-m-d h:i:s') . ' <br/>';
         $lastPhaseDate = $this->GetLastPhaseDate($now);
         $conquest = $this->conquestRepository->GetConquestByDate($lastPhaseDate);
-        //echo $lastPhaseDate->format('Y-m-d H:i:s');
+//echo $lastPhaseDate->format('Y-m-d H:i:s');
         if ($conquest == null || $conquest->id == null)
         {
             return null;
@@ -104,7 +127,6 @@ class ConquestManager
         $dayOfWeek = $dateTime->format('l');
         $hour = $dateTime->format('H');
         $date = new DateTime($dateTime->format('m/d/Y'));
-        error_log($date->format('m/d/Y'));
         switch ($dayOfWeek)
         {
             case 'Tuesday':
@@ -134,7 +156,6 @@ class ConquestManager
             default:
                 break;
         }
-        error_log($date->format('m/d/Y'));
         return $date;
     }
 

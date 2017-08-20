@@ -4,7 +4,7 @@ namespace tests\framework\conquest;
 
 use tests\TestCaseBase;
 use framework\conquest\ConquestManager;
-
+use DateTime;
 /**
  * Description of ConquestManagerTest
  *
@@ -22,7 +22,7 @@ class ConquestManagerTest extends TestCaseBase
     {
         $adapter = new \dal\NullDataAccessAdapter();
         $this->conquestRepositoryMock = $this->getMockBuilder(\dal\managers\ConquestRepository::class)
-                ->setMethods(['GetConquestByDate'])
+                ->setMethods(['GetConquestByDate', 'GetConquests'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();
         $this->zoneRepositoryMock = $this->getMockBuilder(\dal\managers\ZoneRepository::class)
@@ -55,4 +55,28 @@ class ConquestManagerTest extends TestCaseBase
         $this->manager->GetLastPhaseStats();
     }
 
+    public function testGetHistory()
+    {
+        $conquest = new \dal\models\ConquestModel();
+        $conquest->id = 1;
+        $this->conquestRepositoryMock->expects($this->exactly(3))
+                ->method('GetConquests')
+                ->willReturn([$conquest]);
+        
+        $this->zoneRepositoryMock->expects($this->exactly(3))
+                ->method('GetAllZonesByConquest')
+                ->with($conquest)
+                ->willReturn([]);
+        
+        $this->nodeRepositoryMock->expects($this->exactly(3))
+                ->method('GetAllNodesByConquest')
+                ->with($conquest)
+                ->willReturn([]);
+        
+        $this->strikeRepositoryMock->expects($this->exactly(3))
+                ->method('GetStrikesByConquest')
+                ->with($conquest)
+                ->willReturn([]);
+        $this->manager->GetHistory(new DateTime('07/28/2017'), new DateTime('08/17/2017'));
+    }
 }

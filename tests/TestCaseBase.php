@@ -56,6 +56,7 @@ class TestCaseBase extends TestCase
             'UserRepository' => DI\object('dal\managers\UserRepository')
                     ->constructor(DI\get('IDataAccessAdapter')),
             'ISlackApi' => DI\object('framework\slack\NullSlackApi'),
+            'ImageChartApi' => DI\object('framework\google\ImageChartApi'),
             'StatusCommandStrategy' => DI\object('framework\command\StatusCommandStrategy')
                     ->constructor(DI\get('CoreRepository'), DI\get('ConquestRepository'), DI\get('ZoneRepository'), DI\get('StrikeRepository'), DI\get('ISlackApi')),
             'ConquestManager' => DI\object('framework\conquest\ConquestManager')
@@ -84,6 +85,8 @@ class TestCaseBase extends TestCase
                         ->constructor(DI\get('ConquestRepository'), DI\get('UserRepository'), DI\get('ISlackApi'), DI\get('ConquestChannel')),
                         DI\object('framework\command\TrainingModeCommandStrategy')
                         ->constructor(DI\get('CoreRepository'), DI\get('ISlackApi')),
+                        DI\object('framework\command\SummaryHistoryCommandStrategy')
+                        ->constructor(DI\get('ConquestManager'), DI\get('ImageChartApi'), DI\get('ISlackApi')),
             ],
             'CommandStrategyFactory' => DI\factory(function($strategies)
             {

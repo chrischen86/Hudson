@@ -23,12 +23,28 @@ class ImageChartApi
         $queryString .= '&chs=400x250'; //Dimensions
         $queryString .= '&chds=a'; //Auto scale
         $queryString .= '&chls=3'; //Line width
-        $queryString .= '&chxs=1,FFFFFF,13,-1,_,FF0000'; //Hide y axis
+        $queryString .= '&chxs=1,000000,13,-1,_,FF0000'; //Hide y axis
         $queryString .= '&chma=30,30,20,20'; //Margins
         $queryString .= '&chco=2196F3'; //Line color
         $queryString .= '&chxt=x,y';
         $queryString .= '&chd=t:' . implode(',', $data);
-        $queryString .= '&chxl=0:|' . urlencode(implode('|', array_keys($data)));
+        
+        $keys = array_keys($data);
+        $length = sizeof($keys);
+        $chxl = "";
+        if ($length == 1)
+        {
+            $chxl = $keys[0];
+        }
+        else if ($length == 2 || $length == 3)
+        {
+            $chxl = $keys[0] . '|' . $keys[$length-1];
+        }
+        else
+        {
+            $chxl = $keys[0] . '|' . $keys[$length/2] . '|' . $keys[$length-1];
+        }
+        $queryString .= '&chxl=0:|' . urlencode($chxl);
         
         $uri = $this->GoogleChartApi . '?' . $queryString;        
         return $uri;

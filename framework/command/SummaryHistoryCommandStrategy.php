@@ -36,7 +36,7 @@ class SummaryHistoryCommandStrategy implements ICommandStrategy
 
     public function IsSupportedRequest($text)
     {
-        return preg_match(SummaryCommandStrategy::Regex, $text);
+        return preg_match(SummaryHistoryCommandStrategy::Regex, $text);
     }
 
     public function IsJarvisCommand()

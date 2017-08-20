@@ -53,6 +53,7 @@ class ConquestManager
         do
         {
             $date = new DateTime($currentDate->format('Y-m-d'));
+            $date->setTime(Phases::Phase1, 0);
             $arr[$count++] = $this->GetSummaryStatsByDate($date);
             $endDate = $date->modify('+7 day');
             $currentDate = new DateTime($endDate->format('Y-m-d'));

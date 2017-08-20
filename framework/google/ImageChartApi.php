@@ -23,7 +23,7 @@ class ImageChartApi
         $queryString .= '&chs=400x250'; //Dimensions
         $queryString .= '&chds=a'; //Auto scale
         $queryString .= '&chls=3'; //Line width
-        $queryString .= '&chxs=1,000000,13,-1,_,FF0000'; //Hide y axis
+        $queryString .= '&chxs=1,000000,0,-1,_,FF0000'; //Hide y axis
         $queryString .= '&chma=30,30,20,20'; //Margins
         $queryString .= '&chco=2196F3'; //Line color
         $queryString .= '&chxt=x,y';

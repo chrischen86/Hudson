@@ -19,7 +19,7 @@ class ImageChartApi
         }
         
         $queryString = 'cht=lc'; //Line chart
-        $queryString .= '&chtt=Participation History'; //Title
+        $queryString .= '&chtt=' . urlencode('Participation History'); //Title
         $queryString .= '&chs=400x250'; //Dimensions
         $queryString .= '&chds=a'; //Auto scale
         $queryString .= '&chls=3'; //Line width
@@ -27,7 +27,9 @@ class ImageChartApi
         $queryString .= '&chma=30,30,20,20'; //Margins
         $queryString .= '&chco=2196F3'; //Line color
         $queryString .= '&chxt=x,y';
-        $queryString .= '&';
+        $queryString .= '&chd=t:' . implode(',', $data);
+        $queryString .= '&chxl=0:|' . urlencode(implode('|', array_keys($data)));
+        
         $uri = $this->GoogleChartApi . '?' . $queryString;        
         return $uri;
     }

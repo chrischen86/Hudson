@@ -36,6 +36,8 @@ require_once __DIR__ . '/framework' . '/slack' . '/ISlackApi.php';
 require_once __DIR__ . '/framework' . '/slack' . '/SlackApi.php';
 require_once __DIR__ . '/framework' . '/slack' . '/NullSlackApi.php';
 
+require_once __DIR__ . '/framework' . '/google' . '/ImageChartApi.php';
+
 require_once __DIR__ . '/framework' . '/command' . '/ICommandStrategy.php';
 require_once __DIR__ . '/framework' . '/command' . '/ClearCommandStrategy.php';
 require_once __DIR__ . '/framework' . '/command' . '/CommandStrategyFactory.php';

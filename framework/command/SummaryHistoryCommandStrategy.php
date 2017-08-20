@@ -4,6 +4,7 @@ namespace framework\command;
 
 use framework\conquest\ConquestManager;
 use framework\slack\ISlackApi;
+use framework\google\ImageChartApi;
 use DateTime;
 use framework\conquest\StatsDto;
 
@@ -18,17 +19,18 @@ class SummaryHistoryCommandStrategy implements ICommandStrategy
 
     private $channel;
     private $slackApi;
+    private $imageChartApi;
     private $conquestManager;
     private $response;
     private $attachments;
-    private $forceSummary = false;
-    private $admin = 'U0KJBUYDC';
 
     public function __construct(ConquestManager $conquestManager,
+                                ImageChartApi $imageChartApi,
                                 ISlackApi $slackApi)
     {
         $this->slackApi = $slackApi;
         $this->conquestManager = $conquestManager;
+        $this->imageChartApi = $imageChartApi;
         $this->attachments = array();
     }
 
@@ -64,11 +66,13 @@ class SummaryHistoryCommandStrategy implements ICommandStrategy
         }
 
         $stats = $this->conquestManager->GetHistory($sinceDate, $endDate);
-
+        $dataArray = [];
         foreach ($stats as $stat)
         {
-            
+            $dataArray[$stat->forDate->format('Y/m/d')] = $this->BuildDataPoint($stat);
         }
+        $chart = $this->imageChartApi->CreateLineChart($stats);
+        $this->response = $chart;
     }
 
     public function SendResponse()
@@ -76,7 +80,7 @@ class SummaryHistoryCommandStrategy implements ICommandStrategy
         $this->slackApi->SendMessage($this->response, $this->attachments, $this->channel);
     }
 
-    private function BuildStrikeSummary(StatsDto $stats, &$attachments)
+    private function BuildDataPoint(StatsDto $stats)
     {
         $attackDictionary = array();
         $totalNonemptyAttacks = 0;
@@ -88,8 +92,7 @@ class SummaryHistoryCommandStrategy implements ICommandStrategy
                 $totalNonemptyAttacks++;
             }
         }
-        
-        
+        return sizeof($attackDictionary);
     }
 
 }

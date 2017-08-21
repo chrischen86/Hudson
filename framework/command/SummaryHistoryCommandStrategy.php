@@ -74,7 +74,6 @@ class SummaryHistoryCommandStrategy implements ICommandStrategy
             $dataArray[$stat->forDate->format('Y/m/d')] = $this->BuildBarDataPoint($stat);
         }
         $chart = $this->imageChartApi->CreateBarChart($dataArray);
-        $this->response = $chart;
 
         array_push($this->attachments, array(
             'color' => "#03A9F4",

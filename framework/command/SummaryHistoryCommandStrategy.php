@@ -75,6 +75,13 @@ class SummaryHistoryCommandStrategy implements ICommandStrategy
         }
         $chart = $this->imageChartApi->CreateBarChart($dataArray);
         $this->response = $chart;
+
+        array_push($this->attachments, array(
+            'color' => "#03A9F4",
+            'title' => 'Conquest History Breakdown',
+            'text' => 'Here is the requested chart that visualizes total participants and strikes per phase breakdown:',
+            'image_url' => $chart
+        ));
     }
 
     public function SendResponse()

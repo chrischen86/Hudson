@@ -7,6 +7,7 @@ use framework\slack\ISlackApi;
 use framework\google\ImageChartApi;
 use DateTime;
 use framework\conquest\StatsDto;
+use dal\Phases;
 
 /**
  * Description of SummaryHistoryCommandStrategy
@@ -69,15 +70,48 @@ class SummaryHistoryCommandStrategy implements ICommandStrategy
         $dataArray = [];
         foreach ($stats as $stat)
         {
-            $dataArray[$stat->forDate->format('Y/m/d')] = $this->BuildDataPoint($stat);
+            //$dataArray[$stat->forDate->format('Y/m/d')] = $this->BuildDataPoint($stat);
+            $dataArray[$stat->forDate->format('Y/m/d')] = $this->BuildBarDataPoint($stat);
         }
-        $chart = $this->imageChartApi->CreateLineChart($dataArray);
+        $chart = $this->imageChartApi->CreateBarChart($dataArray);
         $this->response = $chart;
     }
 
     public function SendResponse()
     {
         $this->slackApi->SendMessage($this->response, $this->attachments, $this->channel);
+    }
+
+    private function BuildBarDataPoint(StatsDto $stats)
+    {
+        $participants = array();
+        $phase1 = array();
+        $phase2 = array();
+        $phase3 = array();
+        foreach ($stats->strikes as $strike)
+        {
+            if ($strike->user_id == null)
+            {
+                continue;
+            }
+            $participants[$strike->user_id] ++;
+
+            $phase = $strike->node->zone->conquest->phase;
+            if ($phase == Phases::Phase1)
+            {
+                $phase1[$strike->user_id] ++;
+            }
+            else if ($phase == Phases::Phase2)
+            {
+                $phase2[$strike->user_id] ++;
+            }
+            else
+            {
+                $phase3[$strike->user_id] ++;
+            }
+        }
+
+        return array(0 => sizeof($participants), 1 => array_sum($phase1), 2 => array_sum($phase2), 3 => array_sum($phase3));
     }
 
     private function BuildDataPoint(StatsDto $stats)

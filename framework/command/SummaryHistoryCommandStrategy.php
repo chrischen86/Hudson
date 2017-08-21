@@ -97,11 +97,11 @@ class SummaryHistoryCommandStrategy implements ICommandStrategy
             $participants[$strike->user_id] ++;
 
             $phase = $strike->node->zone->conquest->phase;
-            if ($phase == Phases::Phase1)
+            if ($phase == 1)
             {
                 $phase1[$strike->user_id] ++;
             }
-            else if ($phase == Phases::Phase2)
+            else if ($phase == 2)
             {
                 $phase2[$strike->user_id] ++;
             }

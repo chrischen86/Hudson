@@ -58,7 +58,7 @@ class StrikeRepository
                 'u.id as user_id, u.name, u.vip ' .
                 'FROM conquest_strikes s ' .
                 'LEFT JOIN users a ON a.id = s.user_id ' .
-                'INNER JOIN conquest_nodes n ON n.id = s.id ' .
+                'INNER JOIN conquest_nodes n ON n.id = s.node_id ' .
                 'INNER JOIN conquest_zones z ON z.id = n.zone_id ' .
                 'INNER JOIN conquest c ON c.id = z.conquest_id ' .
                 'LEFT JOIN users u ON u.id = c.commander_id ' .
@@ -104,7 +104,7 @@ class StrikeRepository
                 'u.id as user_id, u.name, u.vip ' .
                 'FROM conquest_strikes s ' .
                 'LEFT JOIN users a ON a.id = s.user_id ' .
-                'INNER JOIN conquest_nodes n ON n.id = s.id ' .
+                'INNER JOIN conquest_nodes n ON n.id = s.node_id ' .
                 'INNER JOIN conquest_zones z ON z.id = n.zone_id ' .
                 'INNER JOIN conquest c ON c.id = z.conquest_id ' .
                 'LEFT JOIN users u ON u.id = c.commander_id ' .

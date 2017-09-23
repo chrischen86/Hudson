@@ -1,18 +1,20 @@
 <?php
 require_once __DIR__.'/../vendor/autoload.php';
-//require_once __DIR__.'/../AutoloadBootstrapper.php';
-// [1]
+require_once __DIR__.'/../AutoloadBootstrapper.php';
+
 $loop = React\EventLoop\Factory::create();
 
-// [2]
-$loop->addPeriodicTimer(1, function () {
-    echo "Tick\n";
+$client = new Slack\RealTimeClient($loop);
+$client->setToken(Config::$BotToken);
+
+// disconnect after first message
+$client->on('message', function ($data) use ($client) {
+    echo "Someone typed a message: ".$data['text']."\n";
+    $client->disconnect();
 });
 
-$stream = new React\Stream\ReadableResourceStream(
-    fopen('file.txt', 'r'),
-    $loop
-);
+$client->connect()->then(function () {
+    echo "Connected!\n";
+});
 
-// [3]
 $loop->run();

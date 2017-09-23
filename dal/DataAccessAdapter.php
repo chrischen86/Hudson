@@ -27,8 +27,10 @@ class DataAccessAdapter implements IDataAccessAdapter
             {
                 $data[] = $row;
             }
+            $connection->close();
             return $data;
         }
+        $connection->close();
         return null;
     }
 
@@ -43,14 +45,17 @@ class DataAccessAdapter implements IDataAccessAdapter
             {
                 $data[] = $row;
             }
+            $connection->close();
             return $data[0];
         }
+        $connection->close();
         return null;
     }
-    
+
     public function CreateRift()
     {
         $sql = "INSERT INTO test(`username`, `date_created`) VALUES ('test', UTC_TIMESTAMP())";
         $this->conn->query($sql);
     }
+
 }

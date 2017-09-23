@@ -11,5 +11,5 @@ interface ISlackApi
     public function UpdateMessage($ts, $channel, $message, $attachments = []);
     public function GetGroupMessagesSince($ts, $channel);
     public function SetTopic($topic, $channel);
-    public function CheckPrecense($user);
+    public function CheckPresence($user);
 }

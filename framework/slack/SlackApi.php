@@ -84,7 +84,7 @@ class SlackApi implements ISlackApi
         return $response;
     }
     
-    public function CheckPrecense($user)
+    public function CheckPresence($user)
     {
         $queryString = "token=" . \Config::$BotOAuthToken;
         $queryString .= "&user=" . $user;

@@ -70,7 +70,7 @@ class NullSlackApi implements ISlackApi
         return null;
     }
 
-    public function CheckPrecense($user)
+    public function CheckPresence($user)
     {
         $queryString = "token=" . \Config::$BotOAuthToken;
         $queryString .= "&user=" . $user;

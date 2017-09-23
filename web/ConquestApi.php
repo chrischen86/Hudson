@@ -24,7 +24,8 @@ $app->post('', function(Request $request){
     }
     else
     {
-        error_log("RTM deactivated, restart required");
+        exec('/opt/php56/bin/php ' . dirname(__FILE__) . '/testReact.php&');
+        return new Response("RTM deactivated, attempting to restart...", 200);
     }
     
     $data = json_decode($request->getContent(), true);

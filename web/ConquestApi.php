@@ -17,7 +17,11 @@ $app->post('', function(Request $request){
     global $container;
     $api = $container->get('ISlackApi');
     $result = $api->CheckPresence(Config::$BotId);
-    error_log(print_r($result,1));
+    if ($result->body->presence == "active")
+    {
+        error_log("RTM active, exiting");
+        return new Response('', 200);
+    }
     
     $data = json_decode($request->getContent(), true);
     if ($data['type'] == 'url_verification')

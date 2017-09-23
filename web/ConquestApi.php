@@ -15,13 +15,16 @@ $app->get('', function (Request $request)
 
 $app->post('', function(Request $request){
     global $container;
+    $api = $container->get('ISlackApi');
+    $result = $api->CheckPresence(Config::$BotId);
+    error_log(print_r($result,1));
+    
     $data = json_decode($request->getContent(), true);
     if ($data['type'] == 'url_verification')
     {
         return HandleVerification($data);
     }
     
-    $container->get('CommandStrategyFactory');
     $strategy = $container->get('CommandStrategyFactory')->GetCommandStrategy($data['event']);
     
     if ($strategy != null)

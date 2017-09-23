@@ -9,21 +9,19 @@ $client->setToken(Config::$BotUserOAuthToken);
 
 // disconnect after first message
 $client->on('message', function ($data) use ($client) {
-    error_log(print_r($data, true));
-    
     global $container;
     $container->get('CommandStrategyFactory');
-    $strategy = $container->get('CommandStrategyFactory')->GetCommandStrategy($request);
+    $strategy = $container->get('CommandStrategyFactory')->GetCommandStrategy($data);
     
     if ($strategy != null)
     {
-        $strategy->Process($data['event']);
+        $strategy->Process($data);
         $strategy->SendResponse();
     }
 });
 
 $client->connect()->then(function () {
-    echo "Connected!\n";
+    error_log("Connected!\n");
 });
 
 $loop->run();

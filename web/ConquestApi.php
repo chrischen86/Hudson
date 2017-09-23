@@ -22,6 +22,10 @@ $app->post('', function(Request $request){
         error_log("RTM active, exiting");
         return new Response('', 200);
     }
+    else
+    {
+        error_log("RTM deactivated, restart required");
+    }
     
     $data = json_decode($request->getContent(), true);
     if ($data['type'] == 'url_verification')

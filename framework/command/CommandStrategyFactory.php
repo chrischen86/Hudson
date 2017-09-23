@@ -7,7 +7,6 @@
  */
 
 namespace framework\command;
-use Symfony\Component\HttpFoundation\Request;
 use Config;
 /**
  * Description of CommandStrategyFactory
@@ -23,22 +22,20 @@ class CommandStrategyFactory
         $this->strategies = $strategies;
     }
     
-    public function GetCommandStrategy(Request $request)
+    public function GetCommandStrategy($data)
     {
         $botRegex = '/(' . Config::$BotId . '|' . Config::$BotName . ')/i';
-        $data = json_decode($request->getContent(), true);
-        $event = $data['event'];
-        if ($event['type'] != 'message' || $event['subtype'] == 'message_changed')
+        if ($data['type'] != 'message' || $data['subtype'] == 'message_changed')
         {
             return null;
         }
         
-        if (preg_match($botRegex, $event['user']))
+        if (preg_match($botRegex, $data['user']))
         {
             return;
         }
         
-        $text = $event['text'];
+        $text = $data['text'];
         $isJarvisCommand = preg_match($botRegex, $text);
         foreach ($this->strategies as $strategy)
         {

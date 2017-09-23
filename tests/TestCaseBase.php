@@ -101,33 +101,29 @@ class TestCaseBase extends TestCase
     {
         $user = Config::$BotId;
         $message = '{
-                        "event": {
-                                "type": "message",
-                                "subtype": null,
-                                "user": "U0KJBUYDC",
-                                "text": "<@' . $user . '> ' . $text . '",
-                                "channel": "C350WUH9R",
-                                "event_ts": 1497763686.985701
-                        }
+                        "type": "message",
+                        "subtype": null,
+                        "user": "U0KJBUYDC",
+                        "text": "<@' . $user . '> ' . $text . '",
+                        "channel": "C350WUH9R",
+                        "event_ts": 1497763686.985701
                     }';
 
-        return $message;
+        return json_decode($message, 1);
     }
 
     protected function BuildMessage($text)
     {
         $message = '{
-                        "event": {
-                                "type": "message",
-                                "subtype": null,
-                                "user": "U0KJBUYDC",
-                                "text": "' . $text . '",
-                                "channel": "C350WUH9R",
-                                "event_ts": 1497763686.985701
-                        }
+                        "type": "message",
+                        "subtype": null,
+                        "user": "U0KJBUYDC",
+                        "text": "' . $text . '",
+                        "channel": "C350WUH9R",
+                        "event_ts": 1497763686.985701
                     }';
 
-        return $message;
+        return json_decode($message, 1);
     }
 
     protected function CreateUser($name, $id = '', $vip = '')

@@ -22,7 +22,7 @@ $app->post('', function(Request $request){
     }
     
     $container->get('CommandStrategyFactory');
-    $strategy = $container->get('CommandStrategyFactory')->GetCommandStrategy($request);
+    $strategy = $container->get('CommandStrategyFactory')->GetCommandStrategy($data['event']);
     
     if ($strategy != null)
     {

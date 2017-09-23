@@ -25,196 +25,123 @@ class CommandProcessorFactoryTest extends TestCaseBase
 
     public function testNoMatchingStrategy()
     {
-        $requestMock = $this->getMockBuilder(Request::class)
-                ->setMethods(['getContent'])
-                ->getMock();
-        $requestMock->expects($this->once())
-                ->method('getContent')
-                ->willReturn($this->BuildJarvisMessage('asdfsdafas'));
-
-        $strategy = $this->factory->GetCommandStrategy($requestMock);
+        $message = $this->BuildJarvisMessage('asdfsdafas');
+        
+        print_r($message);
+        
+        $strategy = $this->factory->GetCommandStrategy($message);
         $this->assertNull($strategy);
     }
 
     public function testCreateClearStrategy()
     {
-        $requestMock = $this->getMockBuilder(Request::class)
-                ->setMethods(['getContent'])
-                ->getMock();
-        $requestMock->expects($this->once())
-                ->method('getContent')
-                ->willReturn($this->BuildJarvisMessage('clear 2.9'));
+        $message = $this->BuildJarvisMessage('clear 2.9');
 
-        $strategy = $this->factory->GetCommandStrategy($requestMock);
+        $strategy = $this->factory->GetCommandStrategy($message);
         $this->assertInstanceOf(\framework\command\ClearCommandStrategy::class, $strategy);
     }
 
     public function testCreateInitiateStrategy()
     {
-        $requestMock = $this->getMockBuilder(Request::class)
-                ->setMethods(['getContent'])
-                ->getMock();
-        $requestMock->expects($this->once())
-                ->method('getContent')
-                ->willReturn($this->BuildJarvisMessage('init ASC'));
+        $message = $this->BuildJarvisMessage('init ASC');
 
-        $strategy = $this->factory->GetCommandStrategy($requestMock);
+        $strategy = $this->factory->GetCommandStrategy($message);
         $this->assertInstanceOf(\framework\command\InitCommandStrategy::class, $strategy);
     }
 
     public function testCreateStrikeStrategy()
     {
-        $requestMock = $this->getMockBuilder(Request::class)
-                ->setMethods(['getContent'])
-                ->getMock();
-        $requestMock->expects($this->once())
-                ->method('getContent')
-                ->willReturn($this->BuildJarvisMessage('setup zone 9'));
+        $message = $this->BuildJarvisMessage('setup zone 9');
 
-        $strategy = $this->factory->GetCommandStrategy($requestMock);
+        $strategy = $this->factory->GetCommandStrategy($message);
         $this->assertInstanceOf(\framework\command\StrikeCommandStrategy::class, $strategy);
     }
 
     public function testRequireJarvisForStrategy()
     {
-        $requestMock = $this->getMockBuilder(Request::class)
-                ->setMethods(['getContent'])
-                ->getMock();
-        $requestMock->expects($this->once())
-                ->method('getContent')
-                ->willReturn($this->BuildMessage('setup zone 9'));
+        $message = $this->BuildMessage('setup zone 9');
 
-        $strategy = $this->factory->GetCommandStrategy($requestMock);
+        $strategy = $this->factory->GetCommandStrategy($message);
         $this->assertNull($strategy);
     }
 
     public function testCreateStatusStrategy()
     {
-        $requestMock = $this->getMockBuilder(Request::class)
-                ->setMethods(['getContent'])
-                ->getMock();
-        $requestMock->expects($this->once())
-                ->method('getContent')
-                ->willReturn($this->BuildJarvisMessage('status'));
+        $message = $this->BuildJarvisMessage('status');
 
-        $strategy = $this->factory->GetCommandStrategy($requestMock);
+        $strategy = $this->factory->GetCommandStrategy($message);
         $this->assertInstanceOf(\framework\command\StatusCommandStrategy::class, $strategy);
     }
 
     public function testCreateNodeCallStrategy()
     {
-        $requestMock = $this->getMockBuilder(Request::class)
-                ->setMethods(['getContent'])
-                ->getMock();
-        $requestMock->expects($this->once())
-                ->method('getContent')
-                ->willReturn($this->BuildMessage('1.1'));
+        $message = $this->BuildMessage('1.1');
 
-        $strategy = $this->factory->GetCommandStrategy($requestMock);
+        $strategy = $this->factory->GetCommandStrategy($message);
         $this->assertInstanceOf(\framework\command\NodeCallCommandStrategy::class, $strategy);
     }
 
     public function testCreateHoldCommandStrategy()
     {
-        $requestMock = $this->getMockBuilder(Request::class)
-                ->setMethods(['getContent'])
-                ->getMock();
-        $requestMock->expects($this->once())
-                ->method('getContent')
-                ->willReturn($this->BuildJarvisMessage('hold 1.5'));
+        $message = $this->BuildJarvisMessage('hold 1.5');
 
-        $strategy = $this->factory->GetCommandStrategy($requestMock);
+        $strategy = $this->factory->GetCommandStrategy($message);
         $this->assertInstanceOf(\framework\command\HoldCommandStrategy::class, $strategy);
     }
 
     public function testCreateZoneCommandStrategy()
     {
-        $requestMock = $this->getMockBuilder(Request::class)
-                ->setMethods(['getContent'])
-                ->getMock();
-        $requestMock->expects($this->once())
-                ->method('getContent')
-                ->willReturn($this->BuildMessage('zone 1 done'));
+        $message = $this->BuildMessage('zone 1 done');
 
-        $strategy = $this->factory->GetCommandStrategy($requestMock);
+        $strategy = $this->factory->GetCommandStrategy($message);
         $this->assertInstanceOf(\framework\command\ZoneCommandStrategy::class, $strategy);
     }
 
     public function testCreateClearCommandStrategy()
     {
-        $requestMock = $this->getMockBuilder(Request::class)
-                ->setMethods(['getContent'])
-                ->getMock();
-        $requestMock->expects($this->once())
-                ->method('getContent')
-                ->willReturn($this->BuildJarvisMessage('clear 2.3'));
+        $message = $this->BuildJarvisMessage('clear 2.3');
 
-        $strategy = $this->factory->GetCommandStrategy($requestMock);
+        $strategy = $this->factory->GetCommandStrategy($message);
         $this->assertInstanceOf(\framework\command\ClearCommandStrategy::class, $strategy);
     }
 
     public function testCreateCancelCommandStrategy()
     {
-        $requestMock = $this->getMockBuilder(Request::class)
-                ->setMethods(['getContent'])
-                ->getMock();
-        $requestMock->expects($this->once())
-                ->method('getContent')
-                ->willReturn($this->BuildJarvisMessage('cancel zone 1'));
+        $message = $this->BuildJarvisMessage('cancel zone 1');
 
-        $strategy = $this->factory->GetCommandStrategy($requestMock);
+        $strategy = $this->factory->GetCommandStrategy($message);
         $this->assertInstanceOf(\framework\command\CancelCommandStrategy::class, $strategy);
     }
 
     public function testCreateStatsCommandStrategy()
     {
-        $requestMock = $this->getMockBuilder(Request::class)
-                ->setMethods(['getContent'])
-                ->getMock();
-        $requestMock->expects($this->once())
-                ->method('getContent')
-                ->willReturn($this->BuildJarvisMessage('stats'));
+        $message = $this->BuildJarvisMessage('stats');
 
-        $strategy = $this->factory->GetCommandStrategy($requestMock);
+        $strategy = $this->factory->GetCommandStrategy($message);
         $this->assertInstanceOf(\framework\command\StatsCommandStrategy::class, $strategy);
     }
 
     public function testCreateSummaryCommandStrategy()
     {
-        $requestMock = $this->getMockBuilder(Request::class)
-                ->setMethods(['getContent'])
-                ->getMock();
-        $requestMock->expects($this->once())
-                ->method('getContent')
-                ->willReturn($this->BuildJarvisMessage('summary'));
+        $message = $this->BuildJarvisMessage('summary');
 
-        $strategy = $this->factory->GetCommandStrategy($requestMock);
+        $strategy = $this->factory->GetCommandStrategy($message);
         $this->assertInstanceOf(\framework\command\SummaryCommandStrategy::class, $strategy);
     }
 
     public function testCreateLeadCommandStrategy()
     {
-        $requestMock = $this->getMockBuilder(Request::class)
-                ->setMethods(['getContent'])
-                ->getMock();
-        $requestMock->expects($this->once())
-                ->method('getContent')
-                ->willReturn($this->BuildJarvisMessage('lead'));
+        $message = $this->BuildJarvisMessage('lead');
 
-        $strategy = $this->factory->GetCommandStrategy($requestMock);
+        $strategy = $this->factory->GetCommandStrategy($message);
         $this->assertInstanceOf(\framework\command\LeadCommandStrategy::class, $strategy);
     }
 
     public function testCreateSummaryHistoryCommandStrategy()
     {
-        $requestMock = $this->getMockBuilder(Request::class)
-                ->setMethods(['getContent'])
-                ->getMock();
-        $requestMock->expects($this->once())
-                ->method('getContent')
-                ->willReturn($this->BuildJarvisMessage('summary since 2017/08/20'));
-
-        $strategy = $this->factory->GetCommandStrategy($requestMock);
+        $message = $this->BuildJarvisMessage('summary since 2017/08/20');
+        
+        $strategy = $this->factory->GetCommandStrategy($message);
         $this->assertInstanceOf(\framework\command\SummaryHistoryCommandStrategy::class, $strategy);
     }
 

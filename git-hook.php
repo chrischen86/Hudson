@@ -1,6 +1,6 @@
 <?php
 
-echo "Begin: Pull code from GitHub<br/>";
+error_log("Begin: Pull code from GitHub");
 
 $inputJSON = file_get_contents('php://input');
 $input = json_decode($inputJSON, TRUE); //convert JSON into array
@@ -22,12 +22,40 @@ exec('git pull', $output);
 exec('/opt/php56/bin/php composer.phar install', $output);
 
 PrintOutput($output);
-echo "End: Pull code from Github<br/>";
+error_log("End: Pull code from Github");
 
+error_log("Restarting RTM Client");
+
+exec('ps ahxwwo pid,command', $out);
+$pid = getPid($currentDirectory, $out);
+shell_exec('kill -9 ' . $pid);
+
+exec('/opt/php56/bin/php ' . dirname(__FILE__) . '/rtmClient.php > /dev/null &');
+
+error_log("Completed restart process");
 function PrintOutput($output)
 {
     foreach ($output as $o)
     {
-        echo $o . '<br/>';
+        error_log($o);
     }
+}
+
+function getPid($currentDirectory, $out)
+{
+    foreach ($out as $item)
+    {
+        if (strpos($item, $currentDirectory . '/rtmClient.php') === false)
+        {
+            continue;
+        }
+        
+        $matches = [];
+        $re = '/(?:\s)(\d+)/';
+        if (preg_match($re, $item, $matches))
+        {
+            return $matches[1];
+        }		
+    }
+    return null;
 }

@@ -24,7 +24,7 @@ $app->post('', function(Request $request){
     }
     else
     {
-        exec('/opt/php56/bin/php ' . dirname(__FILE__) . '/testReact.php > /dev/null &');
+        exec('/opt/php56/bin/php ' . dirname(__FILE__) . '/rtmClient.php > /dev/null &');
         return new Response("RTM deactivated, attempting to restart...", 200);
     }
     

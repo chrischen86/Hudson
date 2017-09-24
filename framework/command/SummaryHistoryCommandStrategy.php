@@ -86,7 +86,7 @@ class SummaryHistoryCommandStrategy implements ICommandStrategy
     {
         $this->slackApi->SendMessage($this->response, $this->attachments, $this->channel);
         unset($this->response);
-        unset($this->attachments);
+        $this->attachments = array();
         unset($this->channel);
     }
 

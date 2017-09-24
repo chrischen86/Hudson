@@ -81,6 +81,9 @@ class HoldCommandStrategy implements ICommandStrategy
             $this->statusCommandStrategy->Process($this->eventData);
             $this->statusCommandStrategy->SendResponse();
         }
+        
+        unset($this->response);
+        unset($this->eventData);
     }
 
 }

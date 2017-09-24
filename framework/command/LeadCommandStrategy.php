@@ -77,6 +77,10 @@ class LeadCommandStrategy implements ICommandStrategy
             return;
         }
         $this->slackApi->SetTopic($this->topic, $this->channel);
+        
+        unset($this->response);
+        unset($this->topic);
+        unset($this->channel);
     }
 
 }

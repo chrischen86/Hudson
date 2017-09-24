@@ -61,5 +61,7 @@ class TrainingModeCommandStrategy implements ICommandStrategy
     public function SendResponse()
     {
         $this->slackApi->SendMessage($this->response, null, $this->eventData['channel']);
+        unset($this->response);
+        unset($this->eventData);
     }
 }

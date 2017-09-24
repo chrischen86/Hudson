@@ -112,6 +112,9 @@ class NodeCallCommandStrategy implements ICommandStrategy
             $this->statusCommand->Process($this->eventData);
             $this->statusCommand->SendResponse();
         }
+        
+        unset($this->response);
+        unset($this->eventData);
     }
 
     public function IsJarvisCommand()

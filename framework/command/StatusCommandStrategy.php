@@ -114,6 +114,11 @@ class StatusCommandStrategy implements ICommandStrategy
             $response = $this->slackApi->SendMessage($this->response, $this->attachments, $this->channel);
             $this->coreRepository->SetMessageProperties($response->body->ts, $response->body->channel);
         }
+        
+        unset($this->response);
+        unset($this->attachments);
+        unset($this->channel);
+        unset($this->forceMessage);
     }
 
 }

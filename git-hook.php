@@ -30,7 +30,7 @@ exec('ps ahxwwo pid,command', $out);
 $pid = getPid($currentDirectory, $out);
 shell_exec('kill -9 ' . $pid);
 
-exec('/opt/php56/bin/php ' . dirname(__FILE__) . '/rtmClient.php > /dev/null &');
+exec('/opt/php56/bin/php ' . dirname(__FILE__) . '/web/rtmClient.php > /dev/null &');
 
 error_log("Completed restart process");
 function PrintOutput($output)
@@ -45,7 +45,7 @@ function getPid($currentDirectory, $out)
 {
     foreach ($out as $item)
     {
-        if (strpos($item, $currentDirectory . '/rtmClient.php') === false)
+        if (strpos($item, $currentDirectory . '/web/rtmClient.php') === false)
         {
             continue;
         }

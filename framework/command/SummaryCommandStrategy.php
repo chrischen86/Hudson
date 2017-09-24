@@ -62,7 +62,7 @@ class SummaryCommandStrategy implements ICommandStrategy
                 $this->channel);
         
         unset($this->response);
-        unset($this->attachments);
+        $this->attachments = array();
         unset($this->channel);
     }
 

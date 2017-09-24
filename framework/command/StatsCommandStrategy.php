@@ -54,6 +54,10 @@ class StatsCommandStrategy implements ICommandStrategy
     public function SendResponse()
     {
         $this->slackApi->SendMessage($this->response, $this->attachments, $this->channel);
+        
+        unset($this->response);
+        unset($this->attachments);
+        unset($this->channel);
     }
 
     private function BuildDateSummary(StatsDto $stats)

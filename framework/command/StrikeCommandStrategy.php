@@ -30,7 +30,6 @@ class StrikeCommandStrategy implements ICommandStrategy
     private $slackApi;
     private $statusCommandStrategy;
     private $response;
-    private $channel;
     private $eventData;
 
     public function __construct(CoreRepository $coreRepository,
@@ -65,7 +64,6 @@ class StrikeCommandStrategy implements ICommandStrategy
     public function Process($payload)
     {
         $this->eventData = $payload;
-        $this->channel = $payload['channel'];
         $data = $payload['text'];
 
         $matches = [];
@@ -106,10 +104,13 @@ class StrikeCommandStrategy implements ICommandStrategy
 
     public function SendResponse()
     {
-        $this->slackApi->SendMessage($this->response, null, $this->channel);
+        $this->slackApi->SendMessage($this->response, null, $this->eventData['channel']);
 
         $this->statusCommandStrategy->Process($this->eventData);
         $this->statusCommandStrategy->SendResponse();
+        
+        unset($this->response);
+        unset($this->eventData);
     }
 
     private function CreateNodes($zone, $hold)

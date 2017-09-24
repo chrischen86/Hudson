@@ -15,14 +15,26 @@ $app->get('', function (Request $request)
 
 $app->post('', function(Request $request){
     global $container;
+    $api = $container->get('ISlackApi');
+    $result = $api->CheckPresence(Config::$BotId);
+    if ($result->body->presence == "active")
+    {
+        error_log("RTM active, exiting");
+        return new Response('', 200);
+    }
+    else
+    {
+        exec('/opt/php56/bin/php ' . dirname(__FILE__) . '/rtmClient.php > /dev/null &');
+        return new Response("RTM deactivated, attempting to restart...", 200);
+    }
+    
     $data = json_decode($request->getContent(), true);
     if ($data['type'] == 'url_verification')
     {
         return HandleVerification($data);
     }
     
-    $container->get('CommandStrategyFactory');
-    $strategy = $container->get('CommandStrategyFactory')->GetCommandStrategy($request);
+    $strategy = $container->get('CommandStrategyFactory')->GetCommandStrategy($data['event']);
     
     if ($strategy != null)
     {

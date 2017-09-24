@@ -76,6 +76,9 @@ class CancelCommandStrategy implements ICommandStrategy
                 $this->eventData['channel']);
         $this->statusCommandStrategy->Process($this->eventData);
         $this->statusCommandStrategy->SendResponse();
+        
+        unset($this->response);
+        unset($this->eventData);
     }
 
 }

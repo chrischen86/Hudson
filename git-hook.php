@@ -26,9 +26,21 @@ error_log("End: Pull code from Github");
 
 error_log("Restarting RTM Client");
 
+require_once __DIR__.'/framework/process/ProcessManager.php';
+
+/*
 exec('ps ahxwwo pid,command', $out);
 $pid = getPid($currentDirectory, $out);
 shell_exec('kill -9 ' . $pid);
+*/
+
+$processManager = new \framework\process\ProcessManager();
+$pids = $processManager->GetRtmProcesses($currentDirectory . '/web');
+
+foreach ($pids as $pid)
+{
+    shell_exec('kill -9 ' . $pid);
+}
 
 exec('/opt/php56/bin/php ' . dirname(__FILE__) . '/web/rtmClient.php > /dev/null &');
 

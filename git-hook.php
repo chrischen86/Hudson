@@ -12,7 +12,6 @@ error_log("Begin: Pull code from GitHub");
 
 $inputJSON = file_get_contents('php://input');
 $input = json_decode($inputJSON, TRUE); //convert JSON into array
-
 //Return resposne right away
 ignore_user_abort(true);
 set_time_limit(0);
@@ -21,7 +20,7 @@ ob_start();
 // do initial processing here
 echo $response; // send the response
 header('Connection: close');
-header('Content-Length: '.ob_get_length());
+header('Content-Length: ' . ob_get_length());
 ob_end_flush();
 ob_flush();
 flush();
@@ -86,5 +85,5 @@ function sendUpdate($json)
         'ts' => time()
     ));
 
-    $api->SendMessage("I am being taken offline for an update!", $attachment, "test2");
+    $api->SendMessage("I am being taken offline for an update!  Systems will be back online shortly.", $attachment, Config::$UpdateChannel);
 }

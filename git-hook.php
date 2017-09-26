@@ -1,9 +1,30 @@
 <?php
 
+require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/Config.php';
+require_once __DIR__ . '/framework/process/ProcessManager.php';
+require_once __DIR__ . '/framework/slack/ISlackApi.php';
+require_once __DIR__ . '/framework/slack/SlackApi.php';
+
+use framework\slack\SlackApi;
+
 error_log("Begin: Pull code from GitHub");
 
 $inputJSON = file_get_contents('php://input');
 $input = json_decode($inputJSON, TRUE); //convert JSON into array
+//Return resposne right away
+ignore_user_abort(true);
+set_time_limit(0);
+
+ob_start();
+// do initial processing here
+echo $response; // send the response
+header('Connection: close');
+header('Content-Length: ' . ob_get_length());
+ob_end_flush();
+ob_flush();
+flush();
+//
 
 $array = preg_split('/\//', $input['ref']);
 $branch = array_values(array_slice($array, -1))[0];
@@ -25,11 +46,8 @@ PrintOutput($output);
 error_log("End: Pull code from Github");
 
 error_log("Restarting RTM Client");
-
-exec('ps ahxwwo pid,command', $out);
-$pid = getPid($currentDirectory, $out);
-shell_exec('kill -9 ' . $pid);
-
+sendUpdate($input);
+killProcessess($currentDirectory);
 exec('/opt/php56/bin/php ' . dirname(__FILE__) . '/web/rtmClient.php > /dev/null &');
 
 error_log("Completed restart process");
@@ -41,21 +59,31 @@ function PrintOutput($output)
     }
 }
 
-function getPid($currentDirectory, $out)
+function killProcessess($currentDirectory)
 {
-    foreach ($out as $item)
+    $processManager = new \framework\process\ProcessManager();
+    $pids = $processManager->GetRtmProcesses($currentDirectory . '/web');
+
+    foreach ($pids as $pid)
     {
-        if (strpos($item, $currentDirectory . '/web/rtmClient.php') === false)
-        {
-            continue;
-        }
-        
-        $matches = [];
-        $re = '/(?:\s)(\d+)/';
-        if (preg_match($re, $item, $matches))
-        {
-            return $matches[1];
-        }		
+        shell_exec('kill -9 ' . $pid);
     }
-    return null;
+}
+
+function sendUpdate($json)
+{
+    $headCommit = $json['head_commit'];
+    $api = new SlackApi();
+
+    $attachment = array();
+    array_push($attachment, array(
+        'text' => $headCommit['message'],
+        'title' => 'Commit Reference',
+        'title_link' => $headCommit['url'],
+        'footer' => 'GitHub',
+        'footer_icon' => 'http://projectr.ca/images/seo-web-code-icon.png',
+        'ts' => time()
+    ));
+
+    $api->SendMessage("I am being taken offline for an update!  Systems will be back online shortly.", $attachment, Config::$UpdateChannel);
 }

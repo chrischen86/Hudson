@@ -15,16 +15,18 @@ $app->get('', function (Request $request)
 
 $app->post('', function(Request $request){
     global $container;
-    $api = $container->get('ISlackApi');
-    $result = $api->CheckPresence(Config::$BotId);
-    if ($result->body->presence == "active")
+    
+    $directory = dirname(__FILE__);
+    $processManager = new \framework\process\ProcessManager();
+    $pids = $processManager->GetRtmProcesses($directory);
+    if (sizeof($pids) > 0)
     {
         error_log("RTM active, exiting");
         return new Response('', 200);
     }
     else
     {
-        exec('/opt/php56/bin/php ' . dirname(__FILE__) . '/rtmClient.php > /dev/null &');
+        exec('/opt/php56/bin/php ' . $directory . '/rtmClient.php > /dev/null &');
         return new Response("RTM deactivated, attempting to restart...", 200);
     }
     

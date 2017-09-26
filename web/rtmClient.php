@@ -22,6 +22,9 @@ $client->on('message', function ($data) use ($client) {
 
 $client->connect()->then(function () {
     error_log("Connected!\n");
+    global $container;
+    $api = $container->get('ISlackApi');
+    $api->SendMessage("Systems back online!", null, "test2");
 });
 
 $loop->run();

@@ -1,5 +1,13 @@
 <?php
 
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/framework/process/ProcessManager.php';
+require_once __DIR__ . '/../framework/slack/ISlackApi.php';
+require_once __DIR__ . '/../framework/slack/SlackApi.php';
+require_once __DIR__ . '/../Config.php';
+
+use framework\slack\SlackApi;
+
 error_log("Begin: Pull code from GitHub");
 
 $inputJSON = file_get_contents('php://input');
@@ -25,23 +33,8 @@ PrintOutput($output);
 error_log("End: Pull code from Github");
 
 error_log("Restarting RTM Client");
-
-require_once __DIR__.'/framework/process/ProcessManager.php';
-
-/*
-exec('ps ahxwwo pid,command', $out);
-$pid = getPid($currentDirectory, $out);
-shell_exec('kill -9 ' . $pid);
-*/
-
-$processManager = new \framework\process\ProcessManager();
-$pids = $processManager->GetRtmProcesses($currentDirectory . '/web');
-
-foreach ($pids as $pid)
-{
-    shell_exec('kill -9 ' . $pid);
-}
-
+sendUpdate($input);
+killProcessess($currentDirectory);
 exec('/opt/php56/bin/php ' . dirname(__FILE__) . '/web/rtmClient.php > /dev/null &');
 
 error_log("Completed restart process");
@@ -53,21 +46,31 @@ function PrintOutput($output)
     }
 }
 
-function getPid($currentDirectory, $out)
+function killProcessess($currentDirectory)
 {
-    foreach ($out as $item)
+    $processManager = new \framework\process\ProcessManager();
+    $pids = $processManager->GetRtmProcesses($currentDirectory . '/web');
+
+    foreach ($pids as $pid)
     {
-        if (strpos($item, $currentDirectory . '/web/rtmClient.php') === false)
-        {
-            continue;
-        }
-        
-        $matches = [];
-        $re = '/(?:\s)(\d+)/';
-        if (preg_match($re, $item, $matches))
-        {
-            return $matches[1];
-        }		
+        shell_exec('kill -9 ' . $pid);
     }
-    return null;
+}
+
+function sendUpdate($json)
+{
+    $headCommit = $json['head_commit'];
+    $api = new SlackApi();
+
+    $attachment = array();
+    array_push($attachment, array(
+        'text' => $headCommit['message'],
+        'title' => 'Commit Reference',
+        'title_link' => $headCommit['url'],
+        'footer' => 'GitHub',
+        'footer_icon' => 'http://projectr.ca/images/seo-web-code-icon.png',
+        'ts' => time()
+    ));
+
+    $api->SendMessage("I am being taken offline for an update!", $attachment, "test2");
 }

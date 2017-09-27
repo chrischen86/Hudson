@@ -73,6 +73,11 @@ function killProcessess($currentDirectory)
 function sendUpdate($json)
 {
     $headCommit = $json['head_commit'];
+    if ($headCommit == null)
+    {
+        return;
+    }
+    
     $api = new SlackApi();
 
     $attachment = array();

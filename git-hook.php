@@ -34,6 +34,14 @@ $branch = array_values(array_slice($array, -1))[0];
 exec('pwd', $output);
 $currentDirectory = $output[0];
 
+//Do not update jarvis if changes aren't for master and conversly
+//do not update friday if changes are for master
+if ((preg_match('/(Hudson)/i', $currentDirectory) && $branch != 'master')
+        || (preg_match('/(Friday)/i', $currentDirectory) && $branch == 'master'))
+{
+    return;
+}
+
 exec('git fetch', $output);
 if (preg_match('/(Friday)/i', $currentDirectory))
 {

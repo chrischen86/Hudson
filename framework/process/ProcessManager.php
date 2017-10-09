@@ -26,7 +26,7 @@ class ProcessManager
             }
 
             $matches = [];
-            $re = '/(?:\s)(\d+)/';
+            $re = '/(?:\s)?(\d+)(?:\s)/';
             if (preg_match($re, $item, $matches))
             {
                 array_push($pids, $matches[1]);

@@ -17,7 +17,7 @@ use framework\command\StatusCommandStrategy;
  */
 class NodeCallCommandStrategy implements ICommandStrategy
 {
-    const Regex = '/^(\d{1,2})(?:\.|-)(\d{1,2})$|^(\d{1,2})(?:\.|-)(\d{1,2})((?:\s<@)([A-Z0-9]+)(?:>))$/i';
+    const Regex = '/^(\d{1,2})(?:\.|-)(\d{1,2}\s*)$|^(\d{1,2})(?:\.|-)(\d{1,2})((?:\s<@)([A-Z0-9]+)(?:>\s*))$/i';
     
     private $conquestRepository;
     private $zoneRepository;

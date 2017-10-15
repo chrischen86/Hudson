@@ -85,5 +85,88 @@ class NodeCallCommandStrategyTest extends TestCaseBase
         $this->command->Process($payload);
         $this->command->SendResponse();        
     }
+    
+    public function testNodeCallTrailingSpacesSuccess()
+    {
+        $conquest = new \dal\models\ConquestModel();
+        $this->conquestRepositoryMock->expects($this->once())
+                ->method('GetCurrentConquest')
+                ->willReturn($conquest);
+        $user = new \dal\models\UserModel();
+        $this->userRepositoryMock->expects($this->once())
+                ->method('GetUserById')
+                ->willReturn($user);
+        $zone = new \dal\models\ZoneModel();
+        $this->zoneRepositoryMock->expects($this->once())
+                ->method('GetZone')
+                ->willReturn($zone);
+        
+        $payload = array(
+            'channel' => 'TESTCHANNEL',
+            'text' => '1.2   ',
+            'user' => 'TEST USER',
+        );
 
+        $this->statusCommandMock->expects($this->once())
+                ->method('Process');
+        
+        $this->command->Process($payload);
+        $this->command->SendResponse();        
+    }
+    
+    public function testNodeCallAssignSuccess()
+    {
+        $conquest = new \dal\models\ConquestModel();
+        $this->conquestRepositoryMock->expects($this->once())
+                ->method('GetCurrentConquest')
+                ->willReturn($conquest);
+        $user = new \dal\models\UserModel();
+        $this->userRepositoryMock->expects($this->once())
+                ->method('GetUserById')
+                ->willReturn($user);
+        $zone = new \dal\models\ZoneModel();
+        $this->zoneRepositoryMock->expects($this->once())
+                ->method('GetZone')
+                ->willReturn($zone);
+        
+        $payload = array(
+            'channel' => 'TESTCHANNEL',
+            'text' => '1.2 <@UD1A3S>',
+            'user' => 'TEST USER',
+        );
+
+        $this->statusCommandMock->expects($this->once())
+                ->method('Process');
+        
+        $this->command->Process($payload);
+        $this->command->SendResponse();        
+    }
+
+    public function testNodeCallAssignTrailingSpacesSuccess()
+    {
+        $conquest = new \dal\models\ConquestModel();
+        $this->conquestRepositoryMock->expects($this->once())
+                ->method('GetCurrentConquest')
+                ->willReturn($conquest);
+        $user = new \dal\models\UserModel();
+        $this->userRepositoryMock->expects($this->once())
+                ->method('GetUserById')
+                ->willReturn($user);
+        $zone = new \dal\models\ZoneModel();
+        $this->zoneRepositoryMock->expects($this->once())
+                ->method('GetZone')
+                ->willReturn($zone);
+        
+        $payload = array(
+            'channel' => 'TESTCHANNEL',
+            'text' => '1.2 <@UD1A3S>    ',
+            'user' => 'TEST USER',
+        );
+
+        $this->statusCommandMock->expects($this->once())
+                ->method('Process');
+        
+        $this->command->Process($payload);
+        $this->command->SendResponse();        
+    }
 }

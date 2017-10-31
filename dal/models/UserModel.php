@@ -18,4 +18,5 @@ class UserModel {
     public $id;
     public $name;
     public $vip;
+    public $is_archived;
 }

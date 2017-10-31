@@ -50,6 +50,7 @@ class UserListCommandStrategy implements ICommandStrategy
             'value' => $message,
         ));
 
+        $this->attachments = array();
         array_push($this->attachments, array(
             'color' => "#FDC528",
             'text' => '',

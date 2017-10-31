@@ -53,6 +53,10 @@ return [
                 ->constructor(DI\get('CoreRepository'), DI\get('ISlackApi')),
                 DI\object('framework\command\SummaryHistoryCommandStrategy')
                 ->constructor(DI\get('ConquestManager'), DI\get('ImageChartApi'), DI\get('ISlackApi')),
+                DI\object('framework\command\ArchiveUserCommandStrategy')
+                ->constructor(DI\get('UserRepository'), DI\get('ISlackApi')),
+                DI\object('framework\command\UserListCommandStrategy')
+                ->constructor(DI\get('UserRepository'), DI\get('ISlackApi')),
     ],
     'CommandStrategyFactory' => DI\factory(function($strategies)
     {

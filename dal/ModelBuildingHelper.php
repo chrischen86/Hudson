@@ -26,6 +26,7 @@ class ModelBuildingHelper {
         $toReturn->id = $result['user_id'];
         $toReturn->name = $result['name'];
         $toReturn->vip = $result['vip'];
+        $toReturn->is_archived = $result['is_archived'];
         return $toReturn;
     }
     

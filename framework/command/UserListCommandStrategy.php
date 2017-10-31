@@ -29,7 +29,7 @@ class UserListCommandStrategy implements ICommandStrategy
 
     public function IsSupportedRequest($text)
     {
-        return preg_match(UsersInfoCommandStrategy::Regex, $text);
+        return preg_match(UserListCommandStrategy::Regex, $text);
     }
 
     public function Process($payload)

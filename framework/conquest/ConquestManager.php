@@ -127,6 +127,10 @@ class ConquestManager
     {
         $dayOfWeek = $dateTime->format('l');
         $hour = $dateTime->format('H');
+        if (!date('I'))
+        {
+            $hour++;
+        }
         $date = new DateTime($dateTime->format('m/d/Y'));
         switch ($dayOfWeek)
         {
@@ -164,6 +168,10 @@ class ConquestManager
     {
         $dayOfWeek = $dateTime->format('l');
         $hour = $dateTime->format('H');
+        if (!date('I'))
+        {
+            $hour++;
+        }
 
         $date = new DateTime($dateTime->format('m/d/Y'));
         switch ($dayOfWeek)

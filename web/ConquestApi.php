@@ -27,7 +27,6 @@ $app->post('', function(Request $request){
     else
     {
         exec('/opt/php56/bin/php ' . $directory . '/rtmClient.php > /dev/null &');
-        return new Response("RTM deactivated, attempting to restart...", 200);
     }
     
     $data = json_decode($request->getContent(), true);

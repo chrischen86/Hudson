@@ -105,15 +105,13 @@ class SlackApi implements ISlackApi
 
     public function DeleteMessage($timestamp, $channel)
     {
-        $queryString = "token=" . \Config::$BotUserOAuthToken;
+        $queryString = "token=" . \Config::$BotOAuthToken;
         $queryString .= "&channel=" . $channel;
         $queryString .= "&ts=" . $timestamp;
         $uri = $this->DeleteMessageApiUri . "?" . $queryString;
-        error_log($uri);
         $response = \Httpful\Request::post($uri)
                 ->addHeader('Content-Type', 'text/plain; charset=utf-8')
                 ->send();
-        error_log($response);
         return $response;
     }
 

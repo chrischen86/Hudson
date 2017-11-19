@@ -12,4 +12,5 @@ interface ISlackApi
     public function GetGroupMessagesSince($ts, $channel);
     public function SetTopic($topic, $channel);
     public function CheckPresence($user);
+    public function DeleteMessage($timestamp, $channel);
 }

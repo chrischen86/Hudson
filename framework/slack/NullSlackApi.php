@@ -20,6 +20,7 @@ class NullSlackApi implements ISlackApi
     private $GroupHistoryApiUri = 'https://slack.com/api/channels.history';
     private $TopicApiUri = 'https://slack.com/api/channels.setTopic';
     private $CheckPresenceUri = 'https://slack.com/api/users.getPresence';
+    private $DeleteMessageApiUri = 'https://slack.com/api/chat.delete';
 
     public function SendMessage($message, $attachments = null, $channel = 'test2')
     {
@@ -75,6 +76,16 @@ class NullSlackApi implements ISlackApi
         $queryString = "token=" . \Config::$BotOAuthToken;
         $queryString .= "&user=" . $user;
         $uri = $this->CheckPresenceUri . "?" . $queryString;
+        var_dump($uri);
+        return null;
+    }
+    
+    public function DeleteMessage($timestamp, $channel)
+    {
+        $queryString = "token=" . \Config::$BotUserOAuthToken;
+        $queryString .= "&channel=" . $channel;
+        $queryString .= "&ts=" . $timestamp;
+        $uri = $this->DeleteMessageApiUri . "?" . $queryString;
         var_dump($uri);
         return null;
     }

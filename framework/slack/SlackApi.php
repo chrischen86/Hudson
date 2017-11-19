@@ -20,8 +20,10 @@ class SlackApi implements ISlackApi
     private $GroupHistoryApiUri = 'https://slack.com/api/channels.history';
     private $TopicApiUri = 'https://slack.com/api/channels.setTopic';
     private $CheckPresenceUri = 'https://slack.com/api/users.getPresence';
+    private $DeleteMessageApiUri = 'https://slack.com/api/chat.delete';
 
-    public function SendMessage($message, $attachments = null, $channel = 'test2')
+    public function SendMessage($message, $attachments = null,
+                                $channel = 'test2')
     {
         $queryString = "token=" . \Config::$BotUserOAuthToken;
         $queryString .= "&channel=" . $channel;
@@ -83,7 +85,7 @@ class SlackApi implements ISlackApi
 
         return $response;
     }
-    
+
     public function CheckPresence($user)
     {
         $queryString = "token=" . \Config::$BotOAuthToken;
@@ -101,9 +103,17 @@ class SlackApi implements ISlackApi
         
     }
 
-    public function DeleteMessage()
+    public function DeleteMessage($timestamp, $channel)
     {
-        
+        $queryString = "token=" . \Config::$BotUserOAuthToken;
+        $queryString .= "&channel=" . $channel;
+        $queryString .= "&ts=" . $timestamp;
+        $uri = $this->DeleteMessageApiUri . "?" . $queryString;
+        $response = \Httpful\Request::post($uri)
+                ->addHeader('Content-Type', 'text/plain; charset=utf-8')
+                ->send();
+
+        return $response;
     }
 
 }

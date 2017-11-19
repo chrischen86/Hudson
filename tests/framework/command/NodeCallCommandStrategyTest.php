@@ -77,6 +77,7 @@ class NodeCallCommandStrategyTest extends TestCaseBase
             'channel' => 'TESTCHANNEL',
             'text' => '1.2',
             'user' => 'TEST USER',
+            'ts' => 123.123123,
         );
 
         $this->statusCommandMock->expects($this->once())
@@ -105,6 +106,7 @@ class NodeCallCommandStrategyTest extends TestCaseBase
             'channel' => 'TESTCHANNEL',
             'text' => '1.2   ',
             'user' => 'TEST USER',
+            'ts' => 123.123123,
         );
 
         $this->statusCommandMock->expects($this->once())
@@ -133,6 +135,7 @@ class NodeCallCommandStrategyTest extends TestCaseBase
             'channel' => 'TESTCHANNEL',
             'text' => '1.2 <@UD1A3S>',
             'user' => 'TEST USER',
+            'ts' => 123.123123,
         );
 
         $this->statusCommandMock->expects($this->once())
@@ -161,6 +164,7 @@ class NodeCallCommandStrategyTest extends TestCaseBase
             'channel' => 'TESTCHANNEL',
             'text' => '1.2 <@UD1A3S>    ',
             'user' => 'TEST USER',
+            'ts' => 123.123123,
         );
 
         $this->statusCommandMock->expects($this->once())

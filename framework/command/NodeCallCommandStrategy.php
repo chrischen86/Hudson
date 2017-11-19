@@ -111,6 +111,8 @@ class NodeCallCommandStrategy implements ICommandStrategy
         {
             $this->statusCommand->Process($this->eventData);
             $this->statusCommand->SendResponse();
+            
+            $this->slackApi->DeleteMessage($this->eventData['ts'], $this->eventData['channel']);
         }
         
         unset($this->response);

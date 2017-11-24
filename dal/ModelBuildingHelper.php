@@ -12,6 +12,7 @@ use dal\models\ConquestModel;
 use dal\models\ZoneModel;
 use dal\models\NodeModel;
 use dal\models\StrikeModel;
+use dal\models\CoreModel;
 use DateTime;
 /**
  * Description of ModelBuildingHelper
@@ -89,5 +90,14 @@ class ModelBuildingHelper {
         $toReturn->name = $result['a_name'];
         $toReturn->vip = $result['a_vip'];
         return $toReturn;
+    }
+    
+    public static function BuildCoreModel($result)
+    {
+        $toReturn = new CoreModel();
+        $toReturn->state = $result['state'];
+        $toReturn->message_channel = $result['message_channel'];
+        $toReturn->message_ts = $result['message_ts'];               
+        return $toReturn;        
     }
 }

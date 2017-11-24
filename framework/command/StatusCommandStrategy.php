@@ -79,8 +79,9 @@ class StatusCommandStrategy implements ICommandStrategy
                 }
                 $response .= "\n";
             }
+            $color = $zone->is_training ? "#BBD9B4" : "#FDC528"; 
             array_push($attachments, array(
-                'color' => "#FDC528",
+                'color' => $color,
                 'text' => '',
                 'fields' => array(
                     array(

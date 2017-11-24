@@ -31,7 +31,7 @@ class ZoneRepository
 
     public function GetAllZones(ConquestModel $conquest)
     {
-        $sql = 'SELECT z.id as zone_id, z.conquest_id, z.zone, z.battle_count, z.is_owned, ' .
+        $sql = 'SELECT z.id as zone_id, z.conquest_id, z.zone, z.battle_count, z.is_owned, z.is_training, ' .
                 'c.date, c.phase, c.commander_id, ' .
                 'u.id as user_id, u.name, u.vip ' .
                 'FROM conquest_zones z ' .

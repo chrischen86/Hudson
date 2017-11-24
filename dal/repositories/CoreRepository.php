@@ -3,7 +3,7 @@
 namespace dal\managers;
 
 use dal\IDataAccessAdapter;
-use dal\models\CoreModel;
+use dal\ModelBuildingHelper;
 use StateEnum;
 
 /**
@@ -43,15 +43,15 @@ class CoreRepository
 
     public function GetState()
     {
-        $sql = 'SELECT state FROM core';
+        $sql = 'SELECT state, message_ts, message_channel FROM core';
         $result = $this->adapter->query_single($sql);
         if ($result == null)
         {
             $this->initializeState();
+            $result = $this->adapter->query_single($sql);
         }
-        $toReturn = new CoreModel();
-        $toReturn->state = $result['state'];
-        return $toReturn;
+        $core = ModelBuildingHelper::BuildCoreModel($result);
+        return $core;
     }
 
     public function SetState($state)

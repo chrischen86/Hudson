@@ -31,7 +31,7 @@ class FileListCommandStrategy implements ICommandStrategy
 
     public function IsSupportedRequest($text)
     {
-        return preg_match(UserListCommandStrategy::Regex, $text);
+        return preg_match(FileListCommandStrategy::Regex, $text);
     }
 
     public function Process($payload)

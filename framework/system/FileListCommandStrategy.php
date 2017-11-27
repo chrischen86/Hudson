@@ -43,7 +43,8 @@ class FileListCommandStrategy implements ICommandStrategy
         $fileList = $this->fileManager->GetImagesListBefore($dateTime);
 
         $fields = array();
-        $message = "Slack contains " . $fileList->paging->total . " images older than " . $dateTime->format('Y/m/d') . "\n";
+        $message = "Slack contains " . $fileList->paging->total . " images older than *" . $dateTime->format('Y/m/d') . "*. "
+                . "I have not counted any pinned or starred items.\n";
 
         $size = 0;
         foreach ($fileList->files as $file)
@@ -51,7 +52,7 @@ class FileListCommandStrategy implements ICommandStrategy
             $size = $size + $file->size;
         }
 
-        $message .= "This represents a total of  " . $this->FormatBytes($size);
+        $message .= "This represents a total of *" . $this->FormatBytes($size) . "*";
 
         array_push($fields, array(
             'title' => 'File Summary',

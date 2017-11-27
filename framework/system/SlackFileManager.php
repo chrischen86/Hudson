@@ -40,6 +40,12 @@ class SlackFileManager
         
         $toReturn->files = $this->ParseFiles($response->body);
         $toReturn->paging = $this->ParsePaging($response->body);
+        
+        for ($i=2; $i <= $toReturn->paging->pages; $i++)
+        {
+            $response = $this->slackApi->GetFileList(null, $i, 0, $dateTime->getTimestamp(), 'images');
+            array_merge($toReturn->files, $this->ParseFiles($response->body));
+        }        
         return $toReturn;
     }
 

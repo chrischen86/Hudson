@@ -127,6 +127,7 @@ class SlackApi implements ISlackApi
         $queryString .= "&ts_from=" . $ts_from;
         $queryString .= "&ts_to=" . $ts_to;
         $queryString .= "&types=" . $types;
+        $queryString .= "&count=1000";
         if ($user != null)
         {
             $queryString .= "&user=" . $user;

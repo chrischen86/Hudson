@@ -1,6 +1,6 @@
 <?php
 
-namespace framework\command;
+namespace framework\system;
 
 use framework\system\SlackFileManager;
 use framework\slack\ISlackApi;

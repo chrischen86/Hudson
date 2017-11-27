@@ -56,7 +56,7 @@ require_once __DIR__ . '/framework' . '/command' . '/TrainingModeCommandStrategy
 require_once __DIR__ . '/framework' . '/command' . '/SummaryHistoryCommandStrategy.php';
 require_once __DIR__ . '/framework' . '/command' . '/ArchiveUserCommandStrategy.php';
 require_once __DIR__ . '/framework' . '/command' . '/UserListCommandStrategy.php';
-require_once __DIR__ . '/framework' . '/command' . '/FileListCommandStrategy.php';
+require_once __DIR__ . '/framework' . '/system' . '/FileListCommandStrategy.php';
 
 require_once __DIR__ . '/framework' . '/process' . '/ProcessManager.php';
 

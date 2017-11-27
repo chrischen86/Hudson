@@ -21,6 +21,8 @@ class SlackApi implements ISlackApi
     private $TopicApiUri = 'https://slack.com/api/channels.setTopic';
     private $CheckPresenceUri = 'https://slack.com/api/users.getPresence';
     private $DeleteMessageApiUri = 'https://slack.com/api/chat.delete';
+    private $FileListApiUri = 'https://slack.com/api/files.list';
+    private $FileDeleteApiUri = 'https://slack.com/api/files.delete';
 
     public function SendMessage($message, $attachments = null,
                                 $channel = 'test2')
@@ -114,5 +116,44 @@ class SlackApi implements ISlackApi
                 ->send();
         return $response;
     }
+    
+    public function GetFileList($channel=null, $page=1, $ts_from=0, $ts_to='now', $types='all', $count=100, $user=null)
+    {
+        $queryString = "token=" . \Config::$BotOAuthToken;
+        if ($channel != null)
+        {
+            $queryString .= "&channel=" . $channel;
+        }
+        $queryString .= "&page=" . $page;
+        $queryString .= "&ts_from=" . $ts_from;
+        $queryString .= "&ts_to=" . $ts_to;
+        $queryString .= "&types=" . $types;
+        $queryString .= "&count=" . $count;
+        if ($user != null)
+        {
+            $queryString .= "&user=" . $user;
+        }
+        
+        $uri = $this->FileListApiUri . "?" . $queryString;
+        $response = \Httpful\Request::get($uri)
+                ->expectsJson()
+                ->addHeader('Content-Type', 'text/plain; charset=utf-8')
+                ->send();
 
+        return $response;
+    }
+
+    public function DeleteFile($file)
+    {
+        $queryString = "token=" . \Config::$BotOAuthToken;
+        $queryString .= "&file=" . $file;
+        
+        $uri = $this->FileDeleteApiUri . "?" . $queryString;
+        $response = \Httpful\Request::get($uri)
+                ->expectsJson()
+                ->addHeader('Content-Type', 'text/plain; charset=utf-8')
+                ->send();
+
+        return $response;
+    }
 }

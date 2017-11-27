@@ -145,4 +145,11 @@ class CommandProcessorFactoryTest extends TestCaseBase
         $this->assertInstanceOf(\framework\command\SummaryHistoryCommandStrategy::class, $strategy);
     }
 
+    public function testDeleteFileCommandStrategy()
+    {
+        $message = $this->BuildJarvisMessage('file delete oldest 20');
+        
+        $strategy = $this->factory->GetCommandStrategy($message);
+        $this->assertInstanceOf(\framework\system\DeleteFileCommandStrategy::class, $strategy);
+    }
 }

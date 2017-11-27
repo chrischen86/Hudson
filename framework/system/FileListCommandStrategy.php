@@ -2,6 +2,7 @@
 
 namespace framework\system;
 
+use framework\command\ICommandStrategy;
 use framework\system\SlackFileManager;
 use framework\slack\ISlackApi;
 use DateTime;

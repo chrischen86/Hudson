@@ -13,4 +13,5 @@ interface ISlackApi
     public function SetTopic($topic, $channel);
     public function CheckPresence($user);
     public function DeleteMessage($timestamp, $channel);
+    public function GetFileList($channel=null, $page=1, $ts_from=0, $ts_to='now', $types='all', $user=null);
 }

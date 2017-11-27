@@ -27,6 +27,8 @@ return [
             ->constructor(DI\get('CoreRepository'), DI\get('ConquestRepository'), DI\get('ZoneRepository'), DI\get('StrikeRepository'), DI\get('ISlackApi')),
     'ConquestManager' => DI\object('framework\conquest\ConquestManager')
             ->constructor(DI\get('ConquestRepository'), DI\get('ZoneRepository'), DI\get('NodeRepository'), DI\get('StrikeRepository')),
+    'SlackFileManager' => DI\object('framework\system\SlackFileManager')
+            ->constructor(DI\get('ISlackApi')),
     'framework\command\ICommandStrategy' => [
                 DI\object('framework\command\InitCommandStrategy')
                 ->constructor(DI\get('CoreRepository'), DI\get('ISlackApi')),

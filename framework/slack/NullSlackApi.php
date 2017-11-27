@@ -90,4 +90,10 @@ class NullSlackApi implements ISlackApi
         return null;
     }
 
+    public function GetFileList($channel = null, $page = 1, $ts_from = 0,
+                             $ts_to = 'now', $types = 'all', $user = null)
+    {
+        return null;
+    }
+
 }

@@ -22,6 +22,17 @@ class SlackFileManager
     {
         $this->slackApi = $slackApi;
     }
+    
+    public function DeleteOldImages(DateTime $dateTime, $amount)
+    {
+        $response = $this->slackApi->GetFileList(null, 1, 0, $dateTime->getTimestamp(), 'images', $amount);
+        $files = $this->ParseFiles($response->body);
+        
+        foreach ($files as $file)
+        {
+            $this->slackApi->DeleteFile($file->id);
+        }
+    }
 
     public function GetFileList()
     {

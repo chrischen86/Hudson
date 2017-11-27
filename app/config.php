@@ -61,6 +61,8 @@ return [
                 ->constructor(DI\get('UserRepository'), DI\get('ISlackApi')),
                 DI\object('framework\system\FileListCommandStrategy')
                 ->constructor(DI\get('SlackFileManager'), DI\get('ISlackApi')),
+                DI\object('framework\system\DeleteFileCommandStrategy')
+                ->constructor(DI\get('SlackFileManager'), DI\get('ISlackApi')),
     ],
     'CommandStrategyFactory' => DI\factory(function($strategies)
     {

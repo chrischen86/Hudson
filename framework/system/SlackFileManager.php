@@ -47,14 +47,14 @@ class SlackFileManager
     public function GetImagesListBefore(DateTime $dateTime)
     {
         $toReturn = new FileListModel();
-        $response = $this->slackApi->GetFileList(null, 1, 0, $dateTime->getTimestamp(), 'images');
+        $response = $this->slackApi->GetFileList(null, 1, 0, $dateTime->getTimestamp(), 'images', 1000);
         
         $toReturn->files = $this->ParseFiles($response->body);
         $toReturn->paging = $this->ParsePaging($response->body);
         
         for ($i=2; $i <= $toReturn->paging->pages; $i++)
         {
-            $response = $this->slackApi->GetFileList(null, $i, 0, $dateTime->getTimestamp(), 'images');
+            $response = $this->slackApi->GetFileList(null, $i, 0, $dateTime->getTimestamp(), 'images', 1000);
             array_merge($toReturn->files, $this->ParseFiles($response->body));
         }        
         return $toReturn;

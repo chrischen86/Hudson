@@ -40,7 +40,7 @@ class FileListCommandStrategy implements ICommandStrategy
 
         $dateTime = new DateTime();
         $dateTime->modify('-3 month');
-        $fileList = $this->fileManager->GetFileListBefore($dateTime);
+        $fileList = $this->fileManager->GetImagesListBefore($dateTime);
 
         $fields = array();
         $message = "Slack contains " . $fileList->paging->total . " images older than " . $dateTime->format('Y/m/d') . "\n";

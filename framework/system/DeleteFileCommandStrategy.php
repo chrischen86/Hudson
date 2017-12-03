@@ -49,9 +49,9 @@ class DeleteFileCommandStrategy implements ICommandStrategy
         }
 
         $amount = $matches[2];
-        if ($amount > 100)
+        if ($amount > 1000)
         {
-            $this->response = "To prevent systems locking up, I must insist file deletion be less than 100 at a time.";
+            $this->response = "To prevent systems locking up, I must insist file deletion be less than 1000 at a time.";
             return;
         }
         

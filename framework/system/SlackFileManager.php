@@ -39,9 +39,9 @@ class SlackFileManager
         $response = $this->slackApi->GetFileList(null, 1, 0, $dateTime->getTimestamp(), 'images', $amount);
         $files = $this->ParseFiles($response->body);
 
-        $count = 1;
+        $count = 0;
         $total = sizeof($files);
-        $progressResponse = $this->slackApi->SendMessage("*Progress:* " . $count . "/" . $total . ".");
+        $progressResponse = $this->slackApi->SendMessage("*Progress:* " . $count . "/" . $total . ".", null, $channel);
         foreach ($files as $file)
         {
             $this->slackApi->DeleteFile($file->id);
@@ -49,7 +49,7 @@ class SlackFileManager
 
             $progress = "*Progress:* " . $count . "/" . $total . $this->BuildTrailingDots($count);
             $progressResponse = $this->slackApi->UpdateMessage($progressResponse->body->ts, $progressResponse->body->channel, $progress);
-        }
+        }   
     }
 
     public function GetFileList()

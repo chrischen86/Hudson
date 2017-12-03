@@ -49,9 +49,9 @@ class DeleteFileCommandStrategy implements ICommandStrategy
         }
 
         $amount = $matches[2];
-        if ($amount > 100)
+        if ($amount > 1000)
         {
-            $this->response = "To prevent systems locking up, I must insist file deletion be less than 100 at a time.";
+            $this->response = "To prevent systems locking up, I must insist file deletion be less than 1000 at a time.";
             return;
         }
         
@@ -61,8 +61,8 @@ class DeleteFileCommandStrategy implements ICommandStrategy
         $warningMessage = "Attempting to delete *" . $amount . "* images.  This may take some time during which I will be unresponsive.";
         $this->slackApi->SendMessage($warningMessage, null, $this->eventData['channel']);
         
-        $this->fileManager->DeleteOldImages($dateTime, $amount);        
-        $this->response = "I have succesfully removed *" . $amount . "* files!  Pinned or starred items have not been affected.";
+        $deleted = $this->fileManager->DeleteOldImagesVerbose($dateTime, $amount, $this->eventData['channel']);        
+        $this->response = "I have succesfully removed *" . $deleted . "* files!  Pinned or starred items have not been affected.";
     }
 
     public function SendResponse()

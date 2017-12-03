@@ -61,8 +61,8 @@ class DeleteFileCommandStrategy implements ICommandStrategy
         $warningMessage = "Attempting to delete *" . $amount . "* images.  This may take some time during which I will be unresponsive.";
         $this->slackApi->SendMessage($warningMessage, null, $this->eventData['channel']);
         
-        $this->fileManager->DeleteOldImagesVerbose($dateTime, $amount, $this->eventData['channel']);        
-        $this->response = "I have succesfully removed *" . $amount . "* files!  Pinned or starred items have not been affected.";
+        $deleted = $this->fileManager->DeleteOldImagesVerbose($dateTime, $amount, $this->eventData['channel']);        
+        $this->response = "I have succesfully removed *" . $deleted . "* files!  Pinned or starred items have not been affected.";
     }
 
     public function SendResponse()

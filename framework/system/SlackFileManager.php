@@ -22,15 +22,33 @@ class SlackFileManager
     {
         $this->slackApi = $slackApi;
     }
-    
+
     public function DeleteOldImages(DateTime $dateTime, $amount)
     {
         $response = $this->slackApi->GetFileList(null, 1, 0, $dateTime->getTimestamp(), 'images', $amount);
         $files = $this->ParseFiles($response->body);
-        
+
         foreach ($files as $file)
         {
             $this->slackApi->DeleteFile($file->id);
+        }
+    }
+
+    public function DeleteOldImagesVerbose(DateTime $dateTime, $amount, $channel)
+    {
+        $response = $this->slackApi->GetFileList(null, 1, 0, $dateTime->getTimestamp(), 'images', $amount);
+        $files = $this->ParseFiles($response->body);
+
+        $count = 1;
+        $total = sizeof($files);
+        $progressResponse = $this->slackApi->SendMessage("*Progress:* " . $count . "/" . $total . ".");
+        foreach ($files as $file)
+        {
+            $this->slackApi->DeleteFile($file->id);
+            $count++;
+
+            $progress = "*Progress:* " . $count . "/" . $total . $this->BuildTrailingDots($count);
+            $progressResponse = $this->slackApi->UpdateMessage($progressResponse->body->ts, $progressResponse->body->channel, $progress);
         }
     }
 
@@ -38,25 +56,25 @@ class SlackFileManager
     {
         $toReturn = new FileListModel();
         $response = $this->slackApi->GetFileList();
-        
+
         $toReturn->files = $this->ParseFiles($response->body);
         $toReturn->paging = $this->ParsePaging($response->body);
         return $toReturn;
     }
-    
+
     public function GetImagesListBefore(DateTime $dateTime)
     {
         $toReturn = new FileListModel();
         $response = $this->slackApi->GetFileList(null, 1, 0, $dateTime->getTimestamp(), 'images', 1000);
-        
+
         $toReturn->files = $this->ParseFiles($response->body);
         $toReturn->paging = $this->ParsePaging($response->body);
-        
-        for ($i=2; $i <= $toReturn->paging->pages; $i++)
+
+        for ($i = 2; $i <= $toReturn->paging->pages; $i++)
         {
             $response = $this->slackApi->GetFileList(null, $i, 0, $dateTime->getTimestamp(), 'images', 1000);
             array_merge($toReturn->files, $this->ParseFiles($response->body));
-        }        
+        }
         return $toReturn;
     }
 
@@ -72,19 +90,19 @@ class SlackFileManager
             {
                 continue;
             }
-            
+
             $fileInfo->id = $file->id;
             $fileInfo->name = $file->name;
             $fileInfo->timestamp = $file->timestamp;
             $fileInfo->filetype = $file->filetype;
             $fileInfo->size = $file->size;
             $fileInfo->url_private = $file->url_private;
-            $fileInfo->user = $file->user;            
+            $fileInfo->user = $file->user;
             array_push($toReturn, $fileInfo);
         }
         return $toReturn;
     }
-    
+
     private function ParsePaging($body)
     {
         $toReturn = new PagingModel();
@@ -94,4 +112,19 @@ class SlackFileManager
         $toReturn->pages = $body->paging->pages;
         return $toReturn;
     }
+
+    private function BuildTrailingDots($count)
+    {
+        $value = $count % 3;
+        switch ($value)
+        {
+            case 1:
+                return ".";
+            case 2:
+                return "..";
+            default:
+                return "...";
+        }
+    }
+
 }

@@ -49,7 +49,8 @@ class SlackFileManager
 
             $progress = "*Progress:* " . $count . "/" . $total . $this->BuildTrailingDots($count);
             $progressResponse = $this->slackApi->UpdateMessage($progressResponse->body->ts, $progressResponse->body->channel, $progress);
-        }   
+        }
+        return $total;
     }
 
     public function GetFileList()

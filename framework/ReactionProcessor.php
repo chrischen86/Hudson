@@ -23,6 +23,7 @@ class ReactionProcessor
     private $conquestManager;
     private $statusCommandStrategy;
     private $slackApi;
+    public static $VOTE_THRESHOLD = 1;
 
     public function __construct(ConquestManager $conquestManager,
                                 StatusCommandStrategy $statusCommandStrategy,
@@ -52,7 +53,7 @@ class ReactionProcessor
         if ($type == 'reaction_added')
         {
             $consensus = $this->conquestManager->ReactionAdded($item['ts'], $data['reaction']);
-            if ($consensus != null && $consensus->votes >= 1)
+            if ($consensus != null && $consensus->votes >= ReactionProcessor::$VOTE_THRESHOLD)
             {
                 $this->conquestManager->SetupZone($consensus->zone, null);
                 $this->conquestManager->DeleteConsensus($item['ts']);
@@ -62,6 +63,14 @@ class ReactionProcessor
                 $this->slackApi->DeleteMessage($item['ts'], $item['channel']);
                 $this->statusCommandStrategy->Process($payload);
                 $this->statusCommandStrategy->SendResponse();
+            }
+            if ($consensus != null && $consensus->vetoes >= ReactionProcessor::$VOTE_THRESHOLD)
+            {
+                $this->conquestManager->DeleteConsensus($item['ts']);
+                $payload = array('channel' => $item['channel']);
+
+                $this->slackApi->SendMessage("Motion to attack zone *" . $consensus->zone . "* has failed.", null, $item['channel']);
+                $this->slackApi->DeleteMessage($item['ts'], $item['channel']);
             }
         }
         else

@@ -164,7 +164,7 @@ class SlackApi implements ISlackApi
     {
         $queryString = "token=" . \Config::$BotOAuthToken;
         $queryString .= "&channel=" . $channel;
-        $queryString .= "&ts=" . $ts;
+        $queryString .= "&timestamp=" . $ts;
         $queryString .= "&name=" . $reaction;
         $uri = $this->AddReactionsApiUri . "?" . $queryString;
         $response = \Httpful\Request::post($uri)

@@ -54,8 +54,7 @@ class ConsensusRepository
 
     public function GetConsensus(ConquestModel $conquest, $zone)
     {
-        $sql = 'SELECT z.id as zone_id, z.conquest_id, z.zone, z.votes, z.vetoes, ' .
-                'u.id as user_id, u.name, u.vip ' .
+        $sql = 'SELECT z.id as zone_id, z.conquest_id, z.zone, z.votes, z.vetoes ' .
                 'FROM conquest_consensus z ' .
                 'INNER JOIN conquest c ON c.id = z.conquest_id ' .
                 'WHERE conquest_id = ' . $conquest->id . ' ' .

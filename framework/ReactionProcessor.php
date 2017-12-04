@@ -41,7 +41,7 @@ class ReactionProcessor
         if ($type == 'reaction_added')
         {
             $consensus = $this->conquestManager->ReactionAdded($item['ts'], $data['reaction']);
-            if ($consensus != null && $consensus->votes >= 2)
+            if ($consensus != null && $consensus->votes >= 1)
             {
                 $this->conquestManager->SetupZone($consensus->zone);
             }

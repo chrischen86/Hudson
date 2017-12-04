@@ -69,8 +69,8 @@ class ConsensusRepository
                 'FROM conquest_consensus z ' .
                 'INNER JOIN conquest c ON c.id = z.conquest_id ' .
                 'WHERE conquest_id = ' . $conquest->id . ' ' .
-                'AND zone = ' . $zone . ' ' .
-                $result = $this->adapter->query_single($sql);
+                'AND zone = ' . $zone . ' ';
+        $result = $this->adapter->query_single($sql);
         if ($result == null)
         {
             return null;

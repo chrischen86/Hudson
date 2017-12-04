@@ -84,7 +84,7 @@ class StrikeCommandStrategy implements ICommandStrategy
                 break;
             case StateEnum::Consensus:
                 $result = $this->conquestManager->SetupConsensus($zone);
-                $this->handleSetupConsensus($result);
+                $this->handleSetupConsensus($result, $zone);
                 break;
             default:
                 $this->response = "Could not setup zone due to unhandled state";

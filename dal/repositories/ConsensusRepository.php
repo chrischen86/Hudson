@@ -33,7 +33,7 @@ class ConsensusRepository
     {
         $sql = 'SELECT z.id as zone_id, z.conquest_id, z.zone, z.votes, z.vetoes, ' .
                 'c.date, c.phase, c.commander_id ' .
-                'FROM conquest_zones z ' .
+                'FROM conquest_consensus z ' .
                 'INNER JOIN conquest c ON c.id = z.conquest_id ' .
                 'WHERE conquest_id = ' . $conquest->id . ' ';
         $this->adapter->query($sql);

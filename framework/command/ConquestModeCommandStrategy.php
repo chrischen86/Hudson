@@ -49,7 +49,7 @@ class ConquestModeCommandStrategy implements ICommandStrategy
         }
         else
         {
-            $this->response = "Could not modify consensus mode status.";
+            $this->response = "Could not modify conquest mode status.";
             return;
         }
         

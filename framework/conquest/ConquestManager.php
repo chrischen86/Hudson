@@ -68,6 +68,56 @@ class ConquestManager
         return $result == null ? SetupResultEnum::Unchanged : SetupResultEnum::Success;
     }
 
+    public function SetConsensusTimestamp($zone, $timestamp)
+    {
+        $conquest = $this->conquestRepository->GetCurrentConquest();
+        $this->consensusRepository->SetConsensusTimestamp($conquest, $zone, $timestamp);
+    }
+
+    public function ReactionAdded($timestamp, $reaction)
+    {
+        $consensus = $this->consensusRepository->GetConsensusByTimestamp($timestamp);
+        if ($consensus == null)
+        {
+            return null;
+        }
+        switch ($reaction)
+        {
+            case "+1":
+                $consensus->votes = $consensus->votes + 1;
+                break;
+            case "-1":
+                $consensus->vetoes = $consensus->vetoes + 1;
+                break;
+            default:
+                return;
+        }
+        $this->consensusRepository->UpdateConsensus($consensus);
+        return $consensus;
+    }
+
+    public function ReactionRemoved($timestamp, $reaction)
+    {
+        $consensus = $this->consensusRepository->GetConsensusByTimestamp($timestamp);
+        if ($consensus == null)
+        {
+            return null;
+        }
+        switch ($reaction)
+        {
+            case "+1":
+                $consensus->votes = $consensus->votes == 0 ? 0 : $consensus->votes - 1;
+                break;
+            case "-1":
+                $consensus->vetoes =$consensus->vetoes == 0 ? 0 : $consensus->vetoes - 1;
+                break;
+            default:
+                return;
+        }
+        $this->consensusRepository->UpdateConsensus($consensus);
+        return $consensus;
+    }
+
     public function GetHistorySince(DateTime $sinceDate)
     {
         return GetHistory($sinceDate, new DateTime());

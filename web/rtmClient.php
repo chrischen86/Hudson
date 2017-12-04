@@ -1,10 +1,12 @@
 <?php
-require_once __DIR__.'/../vendor/autoload.php';
-require_once __DIR__.'/../AutoloadBootstrapper.php';
+
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../AutoloadBootstrapper.php';
 
 $lock = './client.lock';
-$f = fopen($lock, 'r') or die ('Cannot create lock file');
-if (!flock($f, LOCK_EX | LOCK_NB)) {
+$f = fopen($lock, 'r') or die('Cannot create lock file');
+if (!flock($f, LOCK_EX | LOCK_NB))
+{
     die("\nRTM client is already running.\n");
 }
 
@@ -14,11 +16,12 @@ $client = new Slack\RealTimeClient($loop);
 $client->setToken(Config::$BotUserOAuthToken);
 
 // disconnect after first message
-$client->on('message', function ($data) use ($client) {
+$client->on('message', function ($data) use ($client)
+{
     global $container;
     $container->get('CommandStrategyFactory');
     $strategy = $container->get('CommandStrategyFactory')->GetCommandStrategy($data);
-    
+
     if ($strategy != null)
     {
         $strategy->Process($data);
@@ -26,7 +29,21 @@ $client->on('message', function ($data) use ($client) {
     }
 });
 
-$client->connect()->then(function () {
+$client->on('reaction_added', function ($data) use ($client)
+{
+    global $container;
+    $processor = $container->get('ReactionProcessor');
+    $processor->Process($data);
+});
+$client->on('reaction_removed', function ($data) use ($client)
+{
+    global $container;
+    $processor = $container->get('ReactionProcessor');
+    $processor->Process($data);
+});
+
+$client->connect()->then(function ()
+{
     error_log("Connected!\n");
 });
 

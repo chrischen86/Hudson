@@ -72,4 +72,5 @@ return [
     {
         return new CommandStrategyFactory($strategies);
     })->parameter('strategies', DI\get('framework\command\ICommandStrategy')),
+    'ReactionProcessor' => DI\object('framework\ReactionProcessor')->constructor(DI\get('ConquestManager')),
 ];

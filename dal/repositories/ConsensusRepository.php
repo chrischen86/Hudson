@@ -5,6 +5,7 @@ namespace dal\managers;
 use dal\models\ConquestModel;
 use dal\IDataAccessAdapter;
 use dal\ModelBuildingHelper;
+use dal\models\ConsensusModel;
 
 /**
  * Description of ConsensusRepository
@@ -20,18 +21,28 @@ class ConsensusRepository
         $this->adapter = $adapter;
     }
 
-    public function UpdateConsensus(ConquestModel $conquest, $zone, $votes, $vetoes)
+    public function SetConsensusTimestamp(ConquestModel $conquest, $zone,
+                                          $timestamp)
     {
         $sql = 'UPDATE conquest_consensus ' .
-                'SET votes = ' . $votes . ', vetoes = ' . $vetoes . ' ' .
+                'SET message_ts = ' . $timestamp . ' ' .
                 'WHERE zone = ' . $zone . ' ' .
                 'AND conquest_id = ' . $conquest->id;
         $this->adapter->query($sql);
     }
 
+    public function UpdateConsensus(ConsensusModel $consensus)
+    {
+        $sql = 'UPDATE conquest_consensus ' .
+                'SET votes = ' . $consensus->votes . ', vetoes = ' . $consensus->vetoes . ' ' .
+                'WHERE zone = ' . $consensus->zone . ' ' .
+                'AND conquest_id = ' . $consensus->conquest_id;
+        $this->adapter->query($sql);
+    }
+
     public function GetAllConsensusByConquest(ConquestModel $conquest)
     {
-        $sql = 'SELECT z.id as zone_id, z.conquest_id, z.zone, z.votes, z.vetoes, ' .
+        $sql = 'SELECT z.id as zone_id, z.conquest_id, z.zone, z.votes, z.vetoes, z.message_ts, ' .
                 'c.date, c.phase, c.commander_id ' .
                 'FROM conquest_consensus z ' .
                 'INNER JOIN conquest c ON c.id = z.conquest_id ' .
@@ -54,11 +65,25 @@ class ConsensusRepository
 
     public function GetConsensus(ConquestModel $conquest, $zone)
     {
-        $sql = 'SELECT z.id as zone_id, z.conquest_id, z.zone, z.votes, z.vetoes ' .
+        $sql = 'SELECT z.id as zone_id, z.conquest_id, z.zone, z.votes, z.vetoes, z.message_ts ' .
                 'FROM conquest_consensus z ' .
                 'INNER JOIN conquest c ON c.id = z.conquest_id ' .
                 'WHERE conquest_id = ' . $conquest->id . ' ' .
                 'AND zone = ' . $zone . ' ' .
+                $result = $this->adapter->query_single($sql);
+        if ($result == null)
+        {
+            return null;
+        }
+        $consensus = ModelBuildingHelper::BuildConsensusModel($result);
+        return $consensus;
+    }
+
+    public function GetConsensusByTimestamp($timestamp)
+    {
+        $sql = 'SELECT z.id as zone_id, z.conquest_id, z.zone, z.votes, z.vetoes, z.message_ts ' .
+                'FROM conquest_consensus z ' .
+                "WHERE z.message_ts = '" . $timestamp . "'";
         $result = $this->adapter->query_single($sql);
         if ($result == null)
         {

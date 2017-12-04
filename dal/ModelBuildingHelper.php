@@ -112,6 +112,7 @@ class ModelBuildingHelper {
         $toReturn->zone = $result['zone'];
         $toReturn->votes = $result['votes'];
         $toReturn->vetoes = $result['vetoes'];
+        $toReturn->message_ts = $result['message_ts'];
         return $toReturn;
     }
 }

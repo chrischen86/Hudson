@@ -27,6 +27,7 @@ class StrikeCommandStrategy implements ICommandStrategy
     private $response;
     private $eventData;
     private $reactions;
+    private $zone;
 
     public function __construct(CoreRepository $coreRepository,
                                 ConquestManager $conquestManager,
@@ -58,7 +59,7 @@ class StrikeCommandStrategy implements ICommandStrategy
         $matches = [];
         if (preg_match($this->zoneRegex, $data, $matches))
         {
-            $zone = $matches[1];
+            $this->zone = $matches[1];
         }
         else
         {
@@ -79,12 +80,12 @@ class StrikeCommandStrategy implements ICommandStrategy
         {
             case StateEnum::Coordinating:
             case StateEnum::Training:
-                $result = $this->conquestManager->SetupZone($zone, $hold);
-                $this->handleSetupZone($result, $zone, $isTraining);
+                $result = $this->conquestManager->SetupZone($this->zone, $hold);
+                $this->handleSetupZone($result, $this->zone, $isTraining);
                 break;
             case StateEnum::Consensus:
-                $result = $this->conquestManager->SetupConsensus($zone);
-                $this->handleSetupConsensus($result, $zone);
+                $result = $this->conquestManager->SetupConsensus($this->zone);
+                $this->handleSetupConsensus($result, $this->zone);
                 break;
             default:
                 $this->response = "Could not setup zone due to unhandled state";
@@ -129,6 +130,7 @@ class StrikeCommandStrategy implements ICommandStrategy
             {
                 $this->slackApi->AddReaction($response->body->ts, $response->body->channel, $reaction);
             }
+            $this->conquestManager->SetConsensusTimestamp($this->zone, $response->body->ts);
         }
         else
         {
@@ -138,6 +140,7 @@ class StrikeCommandStrategy implements ICommandStrategy
         unset($this->response);
         unset($this->eventData);
         unset($this->reactions);
+        unset($this->zone);
     }
 
 }

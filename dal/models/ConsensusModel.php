@@ -20,4 +20,5 @@ class ConsensusModel {
     public $zone;
     public $votes;
     public $vetoes;
+    public $message_ts;
 }

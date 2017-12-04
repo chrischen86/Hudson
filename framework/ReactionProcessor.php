@@ -23,7 +23,7 @@ class ReactionProcessor
     private $conquestManager;
     private $statusCommandStrategy;
     private $slackApi;
-    public static $VOTE_THRESHOLD = 1;
+    public static $VOTE_THRESHOLD = 4;
 
     public function __construct(ConquestManager $conquestManager,
                                 StatusCommandStrategy $statusCommandStrategy,

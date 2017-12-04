@@ -13,6 +13,7 @@ use dal\models\ZoneModel;
 use dal\models\NodeModel;
 use dal\models\StrikeModel;
 use dal\models\CoreModel;
+use dal\models\ConsensusModel;
 use DateTime;
 /**
  * Description of ModelBuildingHelper
@@ -99,5 +100,19 @@ class ModelBuildingHelper {
         $toReturn->message_channel = $result['message_channel'];
         $toReturn->message_ts = $result['message_ts'];               
         return $toReturn;        
+    }
+    
+    public static function BuildConsensusModel($result)
+    {
+        $toReturn = new ConsensusModel();
+        $toReturn->id = $result['zone_id'];
+        $toReturn->conquest_id = $result['conquest_id'];
+        $conquest = ModelBuildingHelper::BuildConquestModel($result);
+        $toReturn->conquest = $conquest;
+        $toReturn->zone = $result['zone'];
+        $toReturn->votes = $result['votes'];
+        $toReturn->vetoes = $result['vetoes'];
+        $toReturn->message_ts = $result['message_ts'];
+        return $toReturn;
     }
 }

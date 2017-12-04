@@ -16,6 +16,7 @@ require_once __DIR__ . '/dal/models' . '/UserModel.php';
 require_once __DIR__ . '/dal/models' . '/ZoneModel.php';
 require_once __DIR__ . '/dal/models' . '/NodeModel.php';
 require_once __DIR__ . '/dal/models' . '/StrikeModel.php';
+require_once __DIR__ . '/dal/models' . '/ConsensusModel.php';
 
 require_once __DIR__ . '/dal/repositories' . '/CoreRepository.php';
 require_once __DIR__ . '/dal/repositories' . '/ConquestRepository.php';
@@ -23,9 +24,13 @@ require_once __DIR__ . '/dal/repositories' . '/UserRepository.php';
 require_once __DIR__ . '/dal/repositories' . '/ZoneRepository.php';
 require_once __DIR__ . '/dal/repositories' . '/NodeRepository.php';
 require_once __DIR__ . '/dal/repositories' . '/StrikeRepository.php';
+require_once __DIR__ . '/dal/repositories' . '/ConsensusRepository.php';
+
+require_once __DIR__ . '/framework' . '/ReactionProcessor.php';
 
 require_once __DIR__ . '/framework/conquest' . '/ConquestManager.php';
 require_once __DIR__ . '/framework/conquest' . '/StatsDto.php';
+require_once __DIR__ . '/framework/conquest' . '/SetupResultEnum.php';
 
 require_once __DIR__ . '/framework/donation' . '/GoogleClientInstance.php';
 require_once __DIR__ . '/framework/donation' . '/DonationManager.php';
@@ -58,6 +63,7 @@ require_once __DIR__ . '/framework' . '/command' . '/ArchiveUserCommandStrategy.
 require_once __DIR__ . '/framework' . '/command' . '/UserListCommandStrategy.php';
 require_once __DIR__ . '/framework' . '/system' . '/FileListCommandStrategy.php';
 require_once __DIR__ . '/framework' . '/system' . '/DeleteFileCommandStrategy.php';
+require_once __DIR__ . '/framework' . '/command' . '/ConquestModeCommandStrategy.php';
 
 require_once __DIR__ . '/framework' . '/process' . '/ProcessManager.php';
 

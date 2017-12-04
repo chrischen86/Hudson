@@ -6,14 +6,19 @@
  * and open the template in the editor.
  */
 
+namespace dal\models;
+
 /**
- * Description of StatusEnum
+ * Description of ZoneModel
  *
  * @author chris
  */
-abstract class StateEnum {
-    const Sleeping = 0;
-    const Coordinating = 1;
-    const Training = 2;
-    const Consensus = 3;
+class ConsensusModel {
+    public $id;
+    public $conquest_id;
+    public $conquest;
+    public $zone;
+    public $votes;
+    public $vetoes;
+    public $message_ts;
 }

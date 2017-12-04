@@ -4,6 +4,7 @@ namespace tests\framework\command;
 
 use tests\TestCaseBase;
 use framework\command\StrikeCommandStrategy;
+use framework\conquest\ConquestManager;
 
 /**
  * Description of StrikeCommandStrategyTest
@@ -19,6 +20,7 @@ class StrikeCommandStrategyTest extends TestCaseBase
     private $zoneRepositoryMock;
     private $nodeRepositoryMock;
     private $strikeRepositoryMock;
+    private $consensusRepositoryMock;
     private $slackApiMock;
     private $statusCommandStrategyMock;
 
@@ -45,6 +47,12 @@ class StrikeCommandStrategyTest extends TestCaseBase
                 ->setMethods(['CreateStrike'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();
+        $this->consensusRepositoryMock = $this->getMockBuilder(\dal\managers\ConsensusRepository::class)
+                ->setMethods(['CreateStrike'])
+                ->setConstructorArgs([$adapter])
+                ->getMock();
+
+        $conquestManager = new ConquestManager($this->conquestRepositoryMock, $this->zoneRepositoryMock, $this->nodeRepositoryMock, $this->strikeRepositoryMock, $this->consensusRepositoryMock);
         $this->slackApiMock = $this->getMockBuilder(\framework\slack\SlackApi::class)
                 ->setMethods(['SendMessage'])
                 ->getMock();
@@ -52,7 +60,7 @@ class StrikeCommandStrategyTest extends TestCaseBase
                 ->setMethods(['Process', 'SendResponse'])
                 ->disableOriginalConstructor()
                 ->getMock();
-        $this->command = new StrikeCommandStrategy($this->coreRepositoryMock, $this->conquestRepositoryMock, $this->zoneRepositoryMock, $this->nodeRepositoryMock, $this->strikeRepositoryMock, $this->slackApiMock, $this->statusCommandStrategyMock);
+        $this->command = new StrikeCommandStrategy($this->coreRepositoryMock, $conquestManager, $this->slackApiMock, $this->statusCommandStrategyMock);
     }
 
     public function testZoneSetupSuccess()
@@ -74,7 +82,13 @@ class StrikeCommandStrategyTest extends TestCaseBase
                 ->with($this->equalTo('Strike map has been setup for zone ' . $zone->zone));
         $this->statusCommandStrategyMock->expects($this->once())
                 ->method('SendResponse');
-        
+
+        $coreState = new \dal\models\CoreModel();
+        $coreState->state = \StateEnum::Coordinating;
+        $this->coreRepositoryMock->expects($this->once())
+                ->method('GetState')
+                ->willReturn($coreState);
+
         $payload = array(
             'channel' => 'ADFAS',
             'text' => 'setup zone ' . $zone->zone,
@@ -103,7 +117,11 @@ class StrikeCommandStrategyTest extends TestCaseBase
                 ->method('SendMessage')
                 ->with($this->equalTo('Zone *' . $zone->zone . "* has not yet been completed/removed.  Please mark it as done or lost before trying again.\n" .
                                 "Hint: zone # (done|lost)"));
-
+        $coreState = new \dal\models\CoreModel();
+        $coreState->state = \StateEnum::Coordinating;
+        $this->coreRepositoryMock->expects($this->once())
+                ->method('GetState')
+                ->willReturn($coreState);
         $payload = array(
             'channel' => 'ADFAS',
             'text' => 'setup zone ' . $zone->zone,

@@ -19,4 +19,5 @@ interface ISlackApi
                                 $ts_to = 'now', $types = 'all', $count=100,
                                 $user = null);
     public function DeleteFile($file);
+    public function AddReaction($ts, $channel, $reaction);
 }

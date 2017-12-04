@@ -1,5 +1,5 @@
 <?php
-
+namespace framework\conquest;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -11,9 +11,8 @@
  *
  * @author chris
  */
-abstract class StateEnum {
-    const Sleeping = 0;
-    const Coordinating = 1;
-    const Training = 2;
-    const Consensus = 3;
+abstract class SetupResultEnum {
+    const Error = -1;
+    const Success = 1;
+    const Unchanged = 0;
 }

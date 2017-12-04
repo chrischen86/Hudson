@@ -4,12 +4,10 @@ namespace framework\command;
 
 use framework\slack\ISlackApi;
 use dal\managers\CoreRepository;
-use dal\managers\ConquestRepository;
-use dal\managers\ZoneRepository;
-use dal\managers\NodeRepository;
-use dal\managers\StrikeRepository;
+use framework\conquest\ConquestManager;
 use framework\command\StatusCommandStrategy;
 use StateEnum;
+use framework\conquest\SetupResultEnum;
 
 /**
  * Description of StrikeCommandStrategy
@@ -23,31 +21,22 @@ class StrikeCommandStrategy implements ICommandStrategy
     private $zoneRegex = '/(?:zone) (\d{1,2})/i';
     private $holdRegex = '/(?:hold)(?: on)?(?: node)? (\d{1,2})/i';
     private $coreRepository;
-    private $conquestRepository;
-    private $zoneRepository;
-    private $nodeRepository;
-    private $strikeRepository;
+    private $conquestManager;
     private $slackApi;
     private $statusCommandStrategy;
     private $response;
     private $eventData;
+    private $reactions;
 
     public function __construct(CoreRepository $coreRepository,
-                                ConquestRepository $conquestRepository,
-                                ZoneRepository $zoneRepository,
-                                NodeRepository $nodeRepository,
-                                StrikeRepository $strikeRepository,
+                                ConquestManager $conquestManager,
                                 ISlackApi $slackApi,
                                 StatusCommandStrategy $statusCommandStrategy)
     {
         $this->slackApi = $slackApi;
 
         $this->coreRepository = $coreRepository;
-        $this->conquestRepository = $conquestRepository;
-        $this->zoneRepository = $zoneRepository;
-        $this->nodeRepository = $nodeRepository;
-        $this->strikeRepository = $strikeRepository;
-
+        $this->conquestManager = $conquestManager;
         $this->statusCommandStrategy = $statusCommandStrategy;
     }
 
@@ -82,51 +71,73 @@ class StrikeCommandStrategy implements ICommandStrategy
             $hold = $matches[1];
         }
 
-        $conquest = $this->conquestRepository->GetCurrentConquest();
-        $check = $this->zoneRepository->GetZone($conquest, $zone);
-        if ($check != null && !$check->is_owned)
+        $coreState = $this->coreRepository->GetState();
+        $isTraining = $coreState->state == StateEnum::Training ? 1 : 0;
+
+        $result = null;
+        switch ($coreState->state)
+        {
+            case StateEnum::Coordinating:
+            case StateEnum::Training:
+                $result = $this->conquestManager->SetupZone($zone, $hold);
+                $this->handleSetupZone($result, $zone, $isTraining);
+                break;
+            case StateEnum::Consensus:
+                $result = $this->conquestManager->SetupConsensus($zone);
+                $this->handleSetupConsensus($result);
+                break;
+            default:
+                $this->response = "Could not setup zone due to unhandled state";
+                return;
+        }
+    }
+
+    private function handleSetupConsensus($result, $zone)
+    {
+        if ($result == SetupResultEnum::Unchanged)
+        {
+            $this->response = "Zone *$zone* is already up for vote";
+        }
+        else
+        {
+            $this->response = "`Zone *$zone* Vote`";
+            $this->reactions = ["thumbsup", "thumbsdown"];
+        }
+    }
+
+    private function handleSetupZone($result, $zone, $isTraining)
+    {
+        if ($result == SetupResultEnum::Error)
         {
             $this->response = "Zone *$zone* has not yet been completed/removed.  Please mark it as done or lost before trying again.\n" .
                     "Hint: zone # (done|lost)";
-            return;
         }
-
-        $coreState = $this->coreRepository->GetState();
-        $isTraining = $coreState->state == StateEnum::Training ? 1 : 0;
-        $this->zoneRepository->CreateZone($conquest, $zone, $isTraining);
-        $zone = $this->zoneRepository->GetZone($conquest, $zone);
-        $this->CreateNodes($zone, $hold);
-        $nodes = $this->nodeRepository->GetAllNodes($zone);
-        $this->CreateStrikes($nodes);
-        $this->response = $isTraining ? "Training zone " . $zone->zone . " has been setup"
-                    : "Strike map has been setup for zone " . $zone->zone;
+        else
+        {
+            $this->response = $isTraining ? "Training zone " . $zone . " has been setup"
+                        : "Strike map has been setup for zone " . $zone;
+        }
     }
 
     public function SendResponse()
     {
-        $this->slackApi->SendMessage($this->response, null, $this->eventData['channel']);
+        $response = $this->slackApi->SendMessage($this->response, null, $this->eventData['channel']);
 
-        $this->statusCommandStrategy->Process($this->eventData);
-        $this->statusCommandStrategy->SendResponse();
-        
+        if ($this->reactions != null)
+        {
+            foreach ($this->reactions as $reaction)
+            {
+                $this->slackApi->AddReaction($response->body->ts, $response->body->channel, $reaction);
+            }
+        }
+        else
+        {
+            $this->statusCommandStrategy->Process($this->eventData);
+            $this->statusCommandStrategy->SendResponse();
+        }
         unset($this->response);
         unset($this->eventData);
-    }
-
-    private function CreateNodes($zone, $hold)
-    {
-        for ($i = 1; $i <= 10; $i++)
-        {
-            $this->nodeRepository->CreateNode($zone, $i, $hold == $i ? 1 : 0);
-        }
-    }
-
-    private function CreateStrikes($nodes)
-    {
-        foreach ($nodes as $node)
-        {
-            $this->strikeRepository->CreateStrike($node);
-        }
+        unset($this->reactions);
     }
 
 }

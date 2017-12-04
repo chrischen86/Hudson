@@ -21,19 +21,21 @@ return [
             ->constructor(DI\get('IDataAccessAdapter')),
     'UserRepository' => DI\object('dal\managers\UserRepository')
             ->constructor(DI\get('IDataAccessAdapter')),
+    'ConsensusRepository' => DI\object('dal\managers\ConsensusRepository')
+            ->constructor(DI\get('IDataAccessAdapter')),
     'ISlackApi' => DI\object('framework\slack\SlackApi'),
     'ImageChartApi' => DI\object('framework\google\ImageChartApi'),
     'StatusCommandStrategy' => DI\object('framework\command\StatusCommandStrategy')
             ->constructor(DI\get('CoreRepository'), DI\get('ConquestRepository'), DI\get('ZoneRepository'), DI\get('StrikeRepository'), DI\get('ISlackApi')),
     'ConquestManager' => DI\object('framework\conquest\ConquestManager')
-            ->constructor(DI\get('ConquestRepository'), DI\get('ZoneRepository'), DI\get('NodeRepository'), DI\get('StrikeRepository')),
+            ->constructor(DI\get('ConquestRepository'), DI\get('ZoneRepository'), DI\get('NodeRepository'), DI\get('StrikeRepository'), DI\get('ConsensusRepository')),
     'SlackFileManager' => DI\object('framework\system\SlackFileManager')
             ->constructor(DI\get('ISlackApi')),
     'framework\command\ICommandStrategy' => [
                 DI\object('framework\command\InitCommandStrategy')
                 ->constructor(DI\get('CoreRepository'), DI\get('ISlackApi')),
                 DI\object('framework\command\StrikeCommandStrategy')
-                ->constructor(DI\get('CoreRepository'), DI\get('ConquestRepository'), DI\get('ZoneRepository'), DI\get('NodeRepository'), DI\get('StrikeRepository'), DI\get('ISlackApi'), DI\get('StatusCommandStrategy')),
+                ->constructor(DI\get('CoreRepository'), DI\get('ConquestManager'), DI\get('ISlackApi'), DI\get('StatusCommandStrategy')),
         DI\get('StatusCommandStrategy'),
                 DI\object('framework\command\NodeCallCommandStrategy')
                 ->constructor(DI\get('ConquestRepository'), DI\get('ZoneRepository'), DI\get('NodeRepository'), DI\get('StrikeRepository'), DI\get('UserRepository'), DI\get('ISlackApi'), DI\get('StatusCommandStrategy')),

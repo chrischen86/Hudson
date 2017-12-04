@@ -14,6 +14,8 @@ use dal\managers\ConquestRepository;
 use dal\managers\ZoneRepository;
 use dal\managers\NodeRepository;
 use dal\managers\StrikeRepository;
+use dal\managers\ConsensusRepository;
+use framework\conquest\SetupResultEnum;
 
 /**
  * Description of ConquestManager
@@ -26,18 +28,46 @@ class ConquestManager
     private $zoneRepository;
     private $nodeRepository;
     private $strikeRepository;
+    private $consensusRepository;
 
     public function __construct(ConquestRepository $conquestRepository,
                                 ZoneRepository $zoneRepository,
                                 NodeRepository $nodeRepository,
-                                StrikeRepository $strikeRepository)
+                                StrikeRepository $strikeRepository,
+                                ConsensusRepository $consensusRepository)
     {
         $this->conquestRepository = $conquestRepository;
         $this->zoneRepository = $zoneRepository;
         $this->nodeRepository = $nodeRepository;
         $this->strikeRepository = $strikeRepository;
+        $this->consensusRepository = $consensusRepository;
     }
-    
+
+    public function SetupZone($zone, $holds, $isTraining = 0)
+    {
+        $conquest = $this->conquestRepository->GetCurrentConquest();
+        $check = $this->zoneRepository->GetZone($conquest, $zone);
+        if ($check != null && !$check->is_owned)
+        {
+            return SetupResultEnum::Error;
+        }
+
+        $this->zoneRepository->CreateZone($conquest, $zone, $isTraining);
+        $resultZone = $this->zoneRepository->GetZone($conquest, $zone);
+        $this->CreateNodes($resultZone, $holds);
+        $nodes = $this->nodeRepository->GetAllNodes($resultZone);
+        $this->CreateStrikes($nodes);
+
+        return $resultZone == null ? SetupResultEnum::Unchanged : SetupResultEnum::Success;
+    }
+
+    public function SetupConsensus($zone)
+    {
+        $conquest = $this->conquestRepository->GetCurrentConquest();
+        $result = $this->consensusRepository->CreateConsensus($conquest, $zone);
+        return $result == null ? SetupResultEnum::Unchanged : SetupResultEnum::Success;
+    }
+
     public function GetHistorySince(DateTime $sinceDate)
     {
         return GetHistory($sinceDate, new DateTime());
@@ -235,6 +265,22 @@ class ConquestManager
         }
 
         return $date;
+    }
+
+    private function CreateNodes($zone, $hold)
+    {
+        for ($i = 1; $i <= 10; $i++)
+        {
+            $this->nodeRepository->CreateNode($zone, $i, $hold == $i ? 1 : 0);
+        }
+    }
+
+    private function CreateStrikes($nodes)
+    {
+        foreach ($nodes as $node)
+        {
+            $this->strikeRepository->CreateStrike($node);
+        }
     }
 
 }

@@ -23,6 +23,7 @@ class SlackApi implements ISlackApi
     private $DeleteMessageApiUri = 'https://slack.com/api/chat.delete';
     private $FileListApiUri = 'https://slack.com/api/files.list';
     private $FileDeleteApiUri = 'https://slack.com/api/files.delete';
+    private $AddReactionsApiUri = 'https://slack.com/api/reactions.add';
 
     public function SendMessage($message, $attachments = null,
                                 $channel = 'test2')
@@ -116,8 +117,10 @@ class SlackApi implements ISlackApi
                 ->send();
         return $response;
     }
-    
-    public function GetFileList($channel=null, $page=1, $ts_from=0, $ts_to='now', $types='all', $count=100, $user=null)
+
+    public function GetFileList($channel = null, $page = 1, $ts_from = 0,
+                                $ts_to = 'now', $types = 'all', $count = 100,
+                                $user = null)
     {
         $queryString = "token=" . \Config::$BotOAuthToken;
         if ($channel != null)
@@ -133,7 +136,7 @@ class SlackApi implements ISlackApi
         {
             $queryString .= "&user=" . $user;
         }
-        
+
         $uri = $this->FileListApiUri . "?" . $queryString;
         $response = \Httpful\Request::get($uri)
                 ->expectsJson()
@@ -147,7 +150,7 @@ class SlackApi implements ISlackApi
     {
         $queryString = "token=" . \Config::$BotOAuthToken;
         $queryString .= "&file=" . $file;
-        
+
         $uri = $this->FileDeleteApiUri . "?" . $queryString;
         $response = \Httpful\Request::get($uri)
                 ->expectsJson()
@@ -156,4 +159,18 @@ class SlackApi implements ISlackApi
 
         return $response;
     }
+
+    public function AddReaction($ts, $channel, $reaction)
+    {
+        $queryString = "token=" . \Config::$BotOAuthToken;
+        $queryString .= "&channel=" . $channel;
+        $queryString .= "&ts=" . $ts;
+        $queryString .= "&name=" . $reaction;
+        $uri = $this->AddReactionsApiUri . "?" . $queryString;
+        $response = \Httpful\Request::post($uri)
+                ->addHeader('Content-Type', 'text/plain; charset=utf-8')
+                ->send();
+        return $response;
+    }
+
 }

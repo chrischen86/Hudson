@@ -103,4 +103,9 @@ class NullSlackApi implements ISlackApi
         return null;
     }
 
+    public function AddReaction($ts, $channel, $reaction)
+    {
+        return null;
+    }
+
 }

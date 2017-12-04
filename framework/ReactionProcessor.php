@@ -27,7 +27,7 @@ class ReactionProcessor
     {
         $botRegex = '/(' . Config::$BotId . '|' . Config::$BotName . ')/i';
         $type = $data['type'];
-        if ($type != 'reaction_added' || $type != 'reaction_removed' || $data['item_user'] != Config::$BotId)
+        if (!($type == 'reaction_added' || $type == 'reaction_removed') || $data['item_user'] != Config::$BotId)
         {
             return null;
         }
@@ -43,7 +43,7 @@ class ReactionProcessor
             $consensus = $this->conquestManager->ReactionAdded($item['ts'], $data['reaction']);
             if ($consensus != null && $consensus->votes >= 1)
             {
-                $this->conquestManager->SetupZone($consensus->zone);
+                $this->conquestManager->SetupZone($consensus->zone, null);
             }
         }
         else 

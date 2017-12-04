@@ -106,7 +106,7 @@ class TestCaseBase extends TestCase
             {
                 return new CommandStrategyFactory($strategies);
             })->parameter('strategies', DI\get('framework\command\ICommandStrategy')),
-            'ReactionProcessor' => DI\object('framework\ReactionProcessor')->constructor(DI\get('ConquestManager')),
+            'ReactionProcessor' => DI\object('framework\ReactionProcessor')->constructor(DI\get('ConquestManager'), DI\get('StatusCommandStrategy'), DI\get('ISlackApi')),
         ]);
 
         return $container->build();

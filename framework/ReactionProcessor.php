@@ -7,8 +7,12 @@
  */
 
 namespace framework;
+
 use framework\conquest\ConquestManager;
+use framework\command\StatusCommandStrategy;
+use framework\slack\ISlackApi;
 use Config;
+
 /**
  * Description of CommandStrategyFactory
  *
@@ -17,12 +21,19 @@ use Config;
 class ReactionProcessor
 {
     private $conquestManager;
-    
-    public function __construct(ConquestManager $conquestManager)
+    private $statusCommandStrategy;
+    private $slackApi;
+
+    public function __construct(ConquestManager $conquestManager,
+                                StatusCommandStrategy $statusCommandStrategy,
+                                ISlackApi $slackApi)
     {
         $this->conquestManager = $conquestManager;
+        $this->statusCommandStrategy = $statusCommandStrategy;
+
+        $this->slackApi = $slackApi;
     }
-    
+
     public function Process($data)
     {
         $botRegex = '/(' . Config::$BotId . '|' . Config::$BotName . ')/i';
@@ -31,12 +42,12 @@ class ReactionProcessor
         {
             return null;
         }
-        
+
         if (preg_match($botRegex, $data['user']))
         {
             return;
         }
-        
+
         $item = $data['item'];
         if ($type == 'reaction_added')
         {
@@ -44,11 +55,18 @@ class ReactionProcessor
             if ($consensus != null && $consensus->votes >= 1)
             {
                 $this->conquestManager->SetupZone($consensus->zone, null);
+                $payload = array('channel' => $item['channel']);
+
+                $this->slackApi->SendMessage("Enough votes has been achieved, setting up zone *" . $consensus->zone . "*", null, $item['channel']);
+                $this->slackApi->DeleteMessage($item['ts'], $item['channel']);
+                $this->statusCommandStrategy->Process($payload);
+                $this->statusCommandStrategy->SendResponse();
             }
         }
-        else 
+        else
         {
             $this->conquestManager->ReactionRemoved($item['ts'], $data['reaction']);
         }
     }
+
 }

@@ -55,6 +55,8 @@ return [
                 ->constructor(DI\get('ConquestRepository'), DI\get('UserRepository'), DI\get('ISlackApi'), DI\get('ConquestChannel')),
                 DI\object('framework\command\TrainingModeCommandStrategy')
                 ->constructor(DI\get('CoreRepository'), DI\get('ISlackApi')),
+                DI\object('framework\command\ConquestModeCommandStrategy')
+                ->constructor(DI\get('CoreRepository'), DI\get('ISlackApi')),
                 DI\object('framework\command\SummaryHistoryCommandStrategy')
                 ->constructor(DI\get('ConquestManager'), DI\get('ImageChartApi'), DI\get('ISlackApi')),
                 DI\object('framework\command\ArchiveUserCommandStrategy')

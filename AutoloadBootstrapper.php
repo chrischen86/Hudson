@@ -61,6 +61,7 @@ require_once __DIR__ . '/framework' . '/command' . '/ArchiveUserCommandStrategy.
 require_once __DIR__ . '/framework' . '/command' . '/UserListCommandStrategy.php';
 require_once __DIR__ . '/framework' . '/system' . '/FileListCommandStrategy.php';
 require_once __DIR__ . '/framework' . '/system' . '/DeleteFileCommandStrategy.php';
+require_once __DIR__ . '/framework' . '/command' . '/ConquestModeCommandStrategy.php';
 
 require_once __DIR__ . '/framework' . '/process' . '/ProcessManager.php';
 

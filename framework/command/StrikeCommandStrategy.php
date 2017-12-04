@@ -100,7 +100,7 @@ class StrikeCommandStrategy implements ICommandStrategy
         }
         else
         {
-            $this->response = "`Zone *$zone* Vote`";
+            $this->response = "`Zone $zone Vote`";
             $this->reactions = ["thumbsup", "thumbsdown"];
         }
     }
@@ -123,7 +123,7 @@ class StrikeCommandStrategy implements ICommandStrategy
     {
         $response = $this->slackApi->SendMessage($this->response, null, $this->eventData['channel']);
 
-        if ($this->reactions != null)
+        if (sizeof($this->reactions) > 0)
         {
             foreach ($this->reactions as $reaction)
             {

@@ -13,7 +13,7 @@ use framework\slack\ISlackApi;
  */
 class LeadCommandStrategy implements ICommandStrategy
 {
-    const Regex = '/(?<!conquest mode ) (command|take control|lead)/i';
+    const Regex = '/(?<!conquest mode )(command|take control|lead)/i';
 
     private $channel;
     private $conquestChannel;

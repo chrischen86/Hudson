@@ -60,6 +60,11 @@ class ConquestManager
 
         return $resultZone == null ? SetupResultEnum::Unchanged : SetupResultEnum::Success;
     }
+    
+    public function DeleteConsensus($timestamp)
+    {
+        $this->consensusRepository->DeleteConsensusByTimestamp($timestamp);
+    }
 
     public function SetupConsensus($zone)
     {

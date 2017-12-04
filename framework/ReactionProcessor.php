@@ -55,6 +55,7 @@ class ReactionProcessor
             if ($consensus != null && $consensus->votes >= 1)
             {
                 $this->conquestManager->SetupZone($consensus->zone, null);
+                $this->conquestManager->DeleteConsensus($item['ts']);
                 $payload = array('channel' => $item['channel']);
 
                 $this->slackApi->SendMessage("Enough votes has been achieved, setting up zone *" . $consensus->zone . "*", null, $item['channel']);

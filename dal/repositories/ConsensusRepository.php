@@ -106,12 +106,10 @@ class ConsensusRepository
         return 1;
     }
 
-    public function DeleteConsensus(ConquestModel $conquest, $zone)
+    public function DeleteConsensusByTimestamp($timestamp)
     {
         $sql = 'DELETE FROM conquest_consensus ' .
-                'WHERE zone = ' . $zone . ' ' .
-                'AND conquest_id = ' . $conquest->id . ' ' .
-                'AND is_owned = 0';
+                "WHERE message_ts = '$timestamp'";
         $this->adapter->query($sql);
     }
 

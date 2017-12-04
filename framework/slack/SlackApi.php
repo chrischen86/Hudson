@@ -162,7 +162,7 @@ class SlackApi implements ISlackApi
 
     public function AddReaction($ts, $channel, $reaction)
     {
-        $queryString = "token=" . \Config::$BotOAuthToken;
+        $queryString = "token=" . \Config::$BotUserOAuthToken;
         $queryString .= "&channel=" . $channel;
         $queryString .= "&timestamp=" . $ts;
         $queryString .= "&name=" . $reaction;

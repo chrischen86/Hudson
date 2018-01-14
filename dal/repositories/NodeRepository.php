@@ -25,7 +25,7 @@ class NodeRepository
     public function UpdateNode(NodeModel $node)
     {
         $sql = 'UPDATE conquest_nodes ' .
-                'SET is_reserved = ' . $node->is_reserved . ' ' .
+                'SET is_reserved = ' . ($node->is_reserved ? 1 : 0) . ' ' .
                 'WHERE id = ' . $node->id;
         $this->adapter->query($sql);
     }

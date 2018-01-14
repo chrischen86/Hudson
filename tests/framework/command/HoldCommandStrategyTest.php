@@ -104,7 +104,7 @@ class HoldCommandStrategyTest extends TestCaseBase
 
         $payload = array(
             'channel' => 'TESTCHANNEL',
-            'text' => 'hold 1.2 off',
+            'text' => 'remove hold 1.2',
             'user' => 'TEST USER',
         );
 

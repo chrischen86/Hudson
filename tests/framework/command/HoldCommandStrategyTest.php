@@ -79,6 +79,45 @@ class HoldCommandStrategyTest extends TestCaseBase
                 ->method('Process');
 
         $this->command->Process($payload);
+        
+        $this->assertTrue($node->is_reserved, "Node should be reserved");
+        
+        $this->command->SendResponse();
+    }
+    
+    public function testHoldCallOffSuccess()
+    {
+        $conquest = new \dal\models\ConquestModel();
+        $this->conquestRepositoryMock->expects($this->once())
+                ->method('GetCurrentConquest')
+                ->willReturn($conquest);
+        
+        $zone = new \dal\models\ZoneModel();
+        $this->zoneRepositoryMock->expects($this->once())
+                ->method('GetZone')
+                ->willReturn($zone);
+        
+        $node = new \dal\models\NodeModel();
+        $this->nodeRepositoryMock->expects($this->once())
+                ->method('GetNode')
+                ->willReturn($node);
+
+        $payload = array(
+            'channel' => 'TESTCHANNEL',
+            'text' => 'hold 1.2 off',
+            'user' => 'TEST USER',
+        );
+
+        $this->nodeRepositoryMock->expects($this->once())
+                ->method('UpdateNode')
+                ->with($node);
+        $this->statusCommandMock->expects($this->once())
+                ->method('Process');
+
+        $this->command->Process($payload);
+        
+        $this->assertFalse($node->is_reserved, "Node should be released");
+        
         $this->command->SendResponse();
     }
 

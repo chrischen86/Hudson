@@ -15,7 +15,7 @@ use framework\command\StatusCommandStrategy;
  */
 class HoldCommandStrategy implements ICommandStrategy
 {
-    const Regex = '/(?:hold) (\d{1,2})(\.|-)(\d{1,2})/i';
+    const Regex = '/(?:hold) (\d{1,2})(\.|-)(\d{1,2})( off)?/i';
 
     private $conquestRepository;
     private $zoneRepository;
@@ -62,10 +62,13 @@ class HoldCommandStrategy implements ICommandStrategy
         }
         $zoneValue = $matches[1];
         $nodeValue = $matches[3];
+        
+        $isReserved = sizeof($matches) <= 4;
+        
         $conquest = $this->conquestRepository->GetCurrentConquest();
         $zone = $this->zoneRepository->GetZone($conquest, $zoneValue);
         $node = $this->nodeRepository->GetNode($zone, $nodeValue);
-        $node->is_reserved = true;
+        $node->is_reserved = $isReserved;
         $this->nodeRepository->UpdateNode($node);
     }
 

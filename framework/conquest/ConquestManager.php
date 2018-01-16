@@ -207,6 +207,23 @@ class ConquestManager
 
         return $toReturn;
     }
+    
+    public function GetPersonalStats($date, $user)
+    {
+        $lastStartDate = $this->GetLastStartDate($date);
+        $endDate = new DateTime($lastStartDate->format('Y-m-d'));
+        $lastEndDate = $endDate->modify('+5 day');
+
+        $conquests = $this->conquestRepository->GetConquests($lastStartDate, $lastEndDate);
+        
+        $count = 0;
+        foreach ($conquests as $conquest)
+        {
+            $count .= sizeof($this->strikeRepository->GetStrikesByUserConquest($conquest, $user));
+        }
+        
+        return $count;
+    }
 
     private function GetLastStartDate(DateTime $dateTime)
     {

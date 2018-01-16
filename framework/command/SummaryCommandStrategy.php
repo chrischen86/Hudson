@@ -15,7 +15,7 @@ use dal\Phases;
  */
 class SummaryCommandStrategy implements ICommandStrategy
 {
-    const Regex = '/(summary)$/i';
+    const Regex = '/(summary( !force)?)$/i';
 
     private $channel;
     private $slackApi;
@@ -24,7 +24,7 @@ class SummaryCommandStrategy implements ICommandStrategy
     private $attachments;
     
     private $forceSummary = false;
-    private $admin = 'U0KJBUYDC';
+    //private $admin = 'U0KJBUYDC';
 
     public function __construct(ConquestManager $conquestManager,
                                 ISlackApi $slackApi)
@@ -47,8 +47,7 @@ class SummaryCommandStrategy implements ICommandStrategy
     public function Process($payload)
     {
         $this->channel = $payload['channel'];
-        $this->forceSummary = preg_match('/(!force)/i', $payload['text']) && $payload['user'] == $this->admin;
-        
+        $this->forceSummary = preg_match('/(!force)/i', $payload['text']);// && $payload['user'] == $this->admin;
         $stats = $this->conquestManager->GetSummaryStats();
 
         $this->BuildDateSummary($stats);

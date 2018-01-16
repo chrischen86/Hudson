@@ -13,7 +13,7 @@ use framework\conquest\StatsDto;
  */
 class StatsCommandStrategy implements ICommandStrategy
 {
-    const Regex = '/(stats)/i';
+    const Regex = '/((?<!my )stats)/i';
 
     private $channel;
     private $slackApi;

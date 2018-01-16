@@ -219,7 +219,7 @@ class ConquestManager
         $count = 0;
         foreach ($conquests as $conquest)
         {
-            $count .= sizeof($this->strikeRepository->GetStrikesByUserConquest($conquest, $user));
+            $count += sizeof($this->strikeRepository->GetStrikesByUserConquest($conquest, $user));
         }
         
         return $count;

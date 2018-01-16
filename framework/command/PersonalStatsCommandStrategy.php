@@ -65,19 +65,19 @@ class PersonalStatsCommandStrategy implements ICommandStrategy
         {
             $response .= "Amazing job <@" . $user->name . ">!  You have defeated and claimed *"
                     . $count . "* nodes for the glory of the alliance!  _You need *" . (30 - $count)
-                    . " more hits for a mythic reward._";
+                    . "* more hits for a mythic reward._";
         }
         else if ($count >= 10)
         {
             $response .= "Great work <@" . $user->name . ">!  You have defeated and claimed *"
                     . $count . "* nodes for the glory of the alliance!  _You need *" . (30 - $count)
-                    . " more hits for a mythic reward.  Keep at it!_";
+                    . "* more hits for a mythic reward.  Keep at it!_";
         }
         else if ($count > 0)
         {
             $response .= "Good effort <@" . $user->name . ">!  You have defeated and claimed *"
                     . $count . "* nodes for the glory of the alliance!  _You need *" . (30 - $count)
-                    . " more hits for a mythic reward.  Don't be a slacker now :)_";
+                    . "* more hits for a mythic reward.  Don't be a slacker now :)_";
         }
         else
         {

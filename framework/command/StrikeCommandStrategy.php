@@ -80,7 +80,7 @@ class StrikeCommandStrategy implements ICommandStrategy
         {
             case StateEnum::Coordinating:
             case StateEnum::Training:
-                $result = $this->conquestManager->SetupZone($this->zone, $hold);
+                $result = $this->conquestManager->SetupZone($this->zone, $hold, $isTraining);
                 $this->handleSetupZone($result, $this->zone, $isTraining);
                 break;
             case StateEnum::Consensus:

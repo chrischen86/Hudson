@@ -130,4 +130,37 @@ class StrikeCommandStrategyTest extends TestCaseBase
         $this->command->SendResponse();
     }
 
+    public function testTrainingZoneSetupSuccess()
+    {
+        $conquest = new \dal\models\ConquestModel();
+        $conquest->id = 1;
+        $this->conquestRepositoryMock->expects($this->once())
+                ->method('GetCurrentConquest')
+                ->willReturn($conquest);
+        $zone = new \dal\models\ZoneModel();
+        $zone->conquest = $conquest;
+        $zone->zone = 9;
+        $this->zoneRepositoryMock->method('GetZone')
+                ->will($this->onConsecutiveCalls(null, $zone));
+        $this->nodeRepositoryMock->expects($this->exactly(10))
+                ->method('CreateNode');
+        $this->slackApiMock->expects($this->once())
+                ->method('SendMessage')
+                ->with($this->equalTo('Training zone ' . $zone->zone . ' has been setup'));
+        $this->statusCommandStrategyMock->expects($this->once())
+                ->method('SendResponse');
+
+        $coreState = new \dal\models\CoreModel();
+        $coreState->state = \StateEnum::Training;
+        $this->coreRepositoryMock->expects($this->once())
+                ->method('GetState')
+                ->willReturn($coreState);
+
+        $payload = array(
+            'channel' => 'ADFAS',
+            'text' => 'setup zone ' . $zone->zone,
+        );
+        $this->command->Process($payload);
+        $this->command->SendResponse();
+    }
 }

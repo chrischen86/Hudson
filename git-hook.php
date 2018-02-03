@@ -92,7 +92,7 @@ function sendUpdate($json)
     array_push($attachment, array(
         'text' => $headCommit['message'],
         'title' => 'Commit Reference',
-        'title_link' => $headCommit['url'],
+        //'title_link' => $headCommit['url'],
         'footer' => 'GitHub',
         'footer_icon' => 'http://projectr.ca/images/seo-web-code-icon.png',
         'ts' => time()

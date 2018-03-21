@@ -80,7 +80,7 @@ class RiftProcessor implements ICommandStrategy
         ));
 
         $this->attachments = $attachments;
-        $this->channel = $payload('channel_id');
+        $this->channel = $payload['channel_id'];
     }
 
     public function SendResponse()

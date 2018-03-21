@@ -102,6 +102,6 @@ function sendUpdate($json)
     }
     else
     {
-      $api->PostEphemeral("I am being taken offline for an update!  Systems will be back online shortly.", Config::$Admin, Config::$UpdateChannel, $attachment);  
+      $api->SendEphemeral("I am being taken offline for an update!  Systems will be back online shortly.", Config::$Admin, Config::$UpdateChannel, $attachment);  
     }
 }

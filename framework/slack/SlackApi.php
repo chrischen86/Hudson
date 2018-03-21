@@ -45,7 +45,7 @@ class SlackApi implements ISlackApi
         return $response;
     }
 
-    public function PostEphemeral($message, $user, $channel = 'general',
+    public function SendEphemeral($message, $user, $channel = 'general',
                                   $attachments = null)
     {
         $queryString = "token=" . \Config::$BotUserOAuthToken;

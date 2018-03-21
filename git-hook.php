@@ -36,8 +36,7 @@ $currentDirectory = $output[0];
 
 //Do not update jarvis if changes aren't for master and conversly
 //do not update friday if changes are for master
-if ((preg_match('/(Hudson)/i', $currentDirectory) && $branch != 'master')
-        || (preg_match('/(Friday)/i', $currentDirectory) && $branch == 'master'))
+if ((preg_match('/(Hudson)/i', $currentDirectory) && $branch != 'master') || (preg_match('/(Friday)/i', $currentDirectory) && $branch == 'master'))
 {
     return;
 }
@@ -85,7 +84,7 @@ function sendUpdate($json)
     {
         return;
     }
-    
+
     $api = new SlackApi();
 
     $attachment = array();
@@ -97,6 +96,12 @@ function sendUpdate($json)
         'footer_icon' => 'http://projectr.ca/images/seo-web-code-icon.png',
         'ts' => time()
     ));
-
-    $api->SendMessage("I am being taken offline for an update!  Systems will be back online shortly.", $attachment, Config::$UpdateChannel);
+    if (Config::$UpdateVerbosity > 0)
+    {
+        $api->SendMessage("I am being taken offline for an update!  Systems will be back online shortly.", $attachment, Config::$UpdateChannel);
+    }
+    else
+    {
+      $api->PostEphemeral("I am being taken offline for an update!  Systems will be back online shortly.", Config::$Admin, Config::$UpdateChannel, $attachment);  
+    }
 }

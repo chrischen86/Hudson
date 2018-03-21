@@ -78,7 +78,8 @@ class RiftProcessor implements ICommandStrategy
             ),
             'thumb_url' => $riftType->thumbnail,
         ));
-
+        
+        $this->response = "*************** *Scheduled Rift* ***************";
         $this->attachments = $attachments;
         $this->channel = $payload['channel_id'];
     }

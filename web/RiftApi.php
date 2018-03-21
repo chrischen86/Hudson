@@ -16,7 +16,15 @@ $app->get('', function (Request $request)
 
 $app->post('/rift', function(Request $request){
     $data = json_decode($request->getContent(), true);
-    error_log($data);
+    error_log(print_r($data, 1));
+    global $container;
+    
+    $processor = $container->get('RiftProcessor');    
+    if ($processor != null)
+    {
+        $processor->Process($data);
+        $processor->SendResponse();
+    }
 
     return new Response('', 200);
 });

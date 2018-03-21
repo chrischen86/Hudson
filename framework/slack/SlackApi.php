@@ -16,6 +16,7 @@ namespace framework\slack;
 class SlackApi implements ISlackApi
 {
     private $PostMessageApiUri = 'https://slack.com/api/chat.postMessage';
+    private $PostEphemeralApiUri = 'https://slack.com/api/chat.postEphemeral';
     private $UpdateMessageApiUri = 'https://slack.com/api/chat.update';
     private $GroupHistoryApiUri = 'https://slack.com/api/channels.history';
     private $TopicApiUri = 'https://slack.com/api/channels.setTopic';
@@ -57,7 +58,7 @@ class SlackApi implements ISlackApi
         {
             $queryString .= "&attachments=" . urlencode(json_encode($attachments));
         }
-        $uri = $this->PostMessageApiUri . "?" . $queryString;
+        $uri = $this->PostEphemeralApiUri . "?" . $queryString;
         $response = \Httpful\Request::post($uri)
                 ->addHeader('Content-Type', 'text/plain; charset=utf-8')
                 ->body($message)

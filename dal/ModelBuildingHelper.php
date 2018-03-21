@@ -14,6 +14,7 @@ use dal\models\NodeModel;
 use dal\models\StrikeModel;
 use dal\models\CoreModel;
 use dal\models\ConsensusModel;
+use dal\models\RiftTypeModel;
 use DateTime;
 /**
  * Description of ModelBuildingHelper
@@ -114,5 +115,13 @@ class ModelBuildingHelper {
         $toReturn->vetoes = $result['vetoes'];
         $toReturn->message_ts = $result['message_ts'];
         return $toReturn;
+    }
+    
+    public static function BuildRiftTypeModel($result)
+    {
+        $toReturn = new RiftTypeModel();
+        $toReturn->name = $result['name'];
+        $toReturn->thumbnail = $result['thumbnail'];
+        return $toReturn;        
     }
 }

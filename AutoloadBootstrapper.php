@@ -17,6 +17,7 @@ require_once __DIR__ . '/dal/models' . '/ZoneModel.php';
 require_once __DIR__ . '/dal/models' . '/NodeModel.php';
 require_once __DIR__ . '/dal/models' . '/StrikeModel.php';
 require_once __DIR__ . '/dal/models' . '/ConsensusModel.php';
+require_once __DIR__ . '/dal/models' . '/RiftTypeModel.php';
 
 require_once __DIR__ . '/dal/repositories' . '/CoreRepository.php';
 require_once __DIR__ . '/dal/repositories' . '/ConquestRepository.php';
@@ -25,6 +26,7 @@ require_once __DIR__ . '/dal/repositories' . '/ZoneRepository.php';
 require_once __DIR__ . '/dal/repositories' . '/NodeRepository.php';
 require_once __DIR__ . '/dal/repositories' . '/StrikeRepository.php';
 require_once __DIR__ . '/dal/repositories' . '/ConsensusRepository.php';
+require_once __DIR__ . '/dal/repositories' . '/RiftTypeRepository.php';
 
 require_once __DIR__ . '/framework' . '/ReactionProcessor.php';
 
@@ -67,6 +69,9 @@ require_once __DIR__ . '/framework' . '/command' . '/ConquestModeCommandStrategy
 require_once __DIR__ . '/framework' . '/command' . '/PersonalStatsCommandStrategy.php';
 
 require_once __DIR__ . '/framework' . '/process' . '/ProcessManager.php';
+
+require_once __DIR__ . '/framework' . '/rift' . '/RiftProcessor.php';
+require_once __DIR__ . '/framework' . '/rift' . '/RiftLevel.php';
 
 require_once __DIR__ . '/framework' . '/system' . '/SlackFileManager.php';
 require_once __DIR__ . '/framework' . '/system' . '/models' . '/FileInfoModel.php';

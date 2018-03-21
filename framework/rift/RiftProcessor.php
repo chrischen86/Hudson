@@ -66,14 +66,17 @@ class RiftProcessor implements ICommandStrategy
                 array(
                     'title' => 'Owner',
                     'value' => "<@" . $owner . ">",
+                    'short' => true,
                 ),
                 array(
                     'title' => 'Type',
                     'value' => $riftType->name,
+                    'short' => true,
                 ),
                 array(
                     'title' => 'Time',
                     'value' => $time,
+                    'short' => false
                 ),
             ),
             'thumb_url' => $riftType->thumbnail,

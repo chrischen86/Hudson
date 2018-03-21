@@ -68,7 +68,7 @@ class RiftProcessor implements ICommandStrategy
                     'value' => "<@" . $owner . ">",
                 ),
                 array(
-                    'title' => 'Rift Type',
+                    'title' => 'Type',
                     'value' => $riftType->name,
                 ),
                 array(

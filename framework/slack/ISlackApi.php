@@ -10,6 +10,7 @@ interface ISlackApi
 {
     public function SendMessage($message, $attachments = null,
                                 $channel = 'test2');
+    public function SendEphemeral($message, $user, $channel = 'general', $attachments = null);
     public function UpdateMessage($ts, $channel, $message, $attachments = []);
     public function GetGroupMessagesSince($ts, $channel);
     public function SetTopic($topic, $channel);

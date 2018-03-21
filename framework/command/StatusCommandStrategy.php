@@ -75,7 +75,7 @@ class StatusCommandStrategy implements ICommandStrategy
                 }
                 if ($strike->user != null)
                 {
-                    $response .= "<@" . $strike->user->name . ">";
+                    $response .= "<@" . $strike->user->id . ">";
                 }
                 $response .= "\n";
             }

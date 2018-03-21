@@ -16,6 +16,7 @@ namespace framework\slack;
 class SlackApi implements ISlackApi
 {
     private $PostMessageApiUri = 'https://slack.com/api/chat.postMessage';
+    private $PostEphemeralApiUri = 'https://slack.com/api/chat.postEphemeral';
     private $UpdateMessageApiUri = 'https://slack.com/api/chat.update';
     private $GroupHistoryApiUri = 'https://slack.com/api/channels.history';
     private $TopicApiUri = 'https://slack.com/api/channels.setTopic';
@@ -37,6 +38,27 @@ class SlackApi implements ISlackApi
             $queryString .= "&attachments=" . urlencode(json_encode($attachments));
         }
         $uri = $this->PostMessageApiUri . "?" . $queryString;
+        $response = \Httpful\Request::post($uri)
+                ->addHeader('Content-Type', 'text/plain; charset=utf-8')
+                ->body($message)
+                ->send();
+
+        return $response;
+    }
+
+    public function SendEphemeral($message, $user, $channel = 'general',
+                                  $attachments = null)
+    {
+        $queryString = "token=" . \Config::$BotUserOAuthToken;
+        $queryString .= "&channel=" . $channel;
+        $queryString .= "&user=" . $user;
+        $queryString .= "&as_user=" . "false";
+        $queryString .= "&text=" . urlencode($message);
+        if ($attachments != null)
+        {
+            $queryString .= "&attachments=" . urlencode(json_encode($attachments));
+        }
+        $uri = $this->PostEphemeralApiUri . "?" . $queryString;
         $response = \Httpful\Request::post($uri)
                 ->addHeader('Content-Type', 'text/plain; charset=utf-8')
                 ->body($message)

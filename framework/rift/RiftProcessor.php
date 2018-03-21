@@ -38,8 +38,11 @@ class RiftProcessor implements ICommandStrategy
     public function Process($payload)
     {
         $message = $payload['text'];
-        $owner = $payload['user'];
+        $owner = $payload['user_id'];
         $riftType = $this->ProcessType($message);
+        
+        error_log($owner);
+        error_log(print_r($riftType, 1));
         //$this->ProcessTime($message, $toReturn);
         //$this->ProcessThumbUri($toReturn);
     }
@@ -62,7 +65,8 @@ class RiftProcessor implements ICommandStrategy
 
     private function ProcessType($message)
     {
-        
+        $type = explode(' ', $message)[0];
+        return $this->riftTypeRepository->GetRiftType($type);
     }
 
 }

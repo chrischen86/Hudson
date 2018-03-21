@@ -15,9 +15,7 @@ $app->get('', function (Request $request)
 });
 
 $app->post('/rift', function(Request $request){
-    $data = json_decode($request->getContent(), true);
-    error_log(print_r($data, 1));
-    error_log(print_r($request, 1));
+    $data = $request->request->all();
     global $container;
     
     $processor = $container->get('RiftProcessor');    

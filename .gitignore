@@ -1,4 +1,4 @@
 /vendor/*
 /client_secret.json
-/Config*
-/nbproject/private/
+/Config.php
+/nbproject

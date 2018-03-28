@@ -56,22 +56,83 @@ class RiftProcessorTest extends TestCaseBase
             'text' => 'Angel ND+1',
             'user_id' => 'Test User'
         );
-
+        $this->slackApiMock->expects($this->once())
+             ->method('SendMessage')
+             ->with($this->equalTo("*************** *Scheduled Rift* ***************"),
+                    $this->callback(function($attachments) {
+                            $colorCorrect = $attachments[0]['color'] === \framework\rift\RiftLevel::$Legendary;
+                            $typeCorrect = $attachments[0]['fields'][1]['value'] === 'Angel';
+                            $timeCorrect = $attachments[0]['fields'][2]['value'] === 'ND+1';
+                        return $colorCorrect && $typeCorrect && $timeCorrect;
+                    }));
         $this->command->Process($payload);        
-        //TODO: test the output of the process function.
-        //$this->assertEqual($this->attachments['color'], RiftLevel::$Legendary);
-        //$this->assertEqual($this->attachments['fields'][1].value, 'Angel');
-        //$this->assertEqual($this->attachments['fields'][2].value, 'ND+1');
-        //assert type is angel, time is ND+1, and the owner is 'Test User'
-        //Also figure out what color the test user should be.
-        $this->command->SendResponse();
-        
+        $this->command->SendResponse();        
+    }
+
+    public function testRiftCreateLongDateSuccess()
+    {
+        $rift = new \dal\models\RiftTypeModel();  
+        $rift->name = 'Angel';          
+        $user = new \dal\models\UserModel();
+        $user->vip = 19;
+        $user->id = 'Test User';   
+        $this->userRepositoryMock->expects($this->once())
+                ->method('GetUserById')
+                ->willReturn($user);
+        $this->riftTypeRepositoryMock->expects($this->once())
+                ->method('GetRiftType')
+                ->willReturn($rift);
+        $payload = array(            
+            'channel_id' => 'TESTCHANNEL',
+            'text' => 'Angel After New Day',
+            'user_id' => 'Test User'
+        );
+        $this->slackApiMock->expects($this->once())
+             ->method('SendMessage')
+             ->with($this->equalTo("*************** *Scheduled Rift* ***************"),
+                    $this->callback(function($attachments) {
+                            $colorCorrect = $attachments[0]['color'] === \framework\rift\RiftLevel::$Legendary;
+                            $typeCorrect = $attachments[0]['fields'][1]['value'] === 'Angel';
+                            $timeCorrect = $attachments[0]['fields'][2]['value'] === 'After New Day';
+                        return $colorCorrect && $typeCorrect && $timeCorrect;
+                    }));
+        $this->command->Process($payload);        
+        $this->command->SendResponse();        
+    }
+
+    public function testRiftCreateNoTypeSuccess()
+    {
+        $rift = new \dal\models\RiftTypeModel();                  
+        $user = new \dal\models\UserModel();
+        $user->vip = 19;
+        $user->id = 'Test User';   
+        $this->userRepositoryMock->expects($this->once())
+                ->method('GetUserById')
+                ->willReturn($user);
+        $this->riftTypeRepositoryMock->expects($this->once())
+                ->method('GetRiftType')
+                ->willReturn($rift);
+        $payload = array(            
+            'channel_id' => 'TESTCHANNEL',
+            'text' => 'ND+1',
+            'user_id' => 'Test User'
+        );
+        $this->slackApiMock->expects($this->once())
+             ->method('SendMessage')
+             ->with($this->equalTo("*************** *Scheduled Rift* ***************"),
+                    $this->callback(function($attachments) {
+                            $colorCorrect = $attachments[0]['color'] === \framework\rift\RiftLevel::$Legendary;
+                            $typeCorrect = $attachments[0]['fields'][1]['value'] === null;
+                            $timeCorrect = $attachments[0]['fields'][2]['value'] === 'ND+1';
+                        return $colorCorrect && $typeCorrect && $timeCorrect;
+                    }));
+        $this->command->Process($payload);        
+        $this->command->SendResponse();        
     }
 
     public function testRiftCreateFailure()
     {
         $rift = new \dal\models\RiftTypeModel();  
-        $rift->name = 'Angel';          
         $user = new \dal\models\UserModel();
         $user->vip = 19;
         $user->id = 'Test User';   
@@ -87,7 +148,16 @@ class RiftProcessorTest extends TestCaseBase
             'user_id' => 'Test User'
         );
 
-        $this->command->Process($payload);
+        $this->slackApiMock->expects($this->once())
+             ->method('SendMessage')
+             ->with($this->equalTo("*************** *Scheduled Rift* ***************"),
+                    $this->callback(function($attachments) {
+                            $colorCorrect = $attachments[0]['color'] === \framework\rift\RiftLevel::$Legendary;
+                            $typeCorrect = $attachments[0]['fields'][1]['value'] === null;
+                            $timeCorrect = $attachments[0]['fields'][2]['value'] === 'Nagel';
+                        return $colorCorrect && $typeCorrect && $timeCorrect;
+                    }));
+        $this->command->Process($payload);   
         $this->command->SendResponse();        
     }
 }

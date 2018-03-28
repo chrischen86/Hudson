@@ -103,7 +103,7 @@ class RiftProcessor implements ICommandStrategy
             return $explodedMessage[0];
         }
         $type = $explodedMessage[0];
-        $time = str_ireplace($type, '', $message);
+        $time = trim(str_ireplace($type, '', $message));        
         return $time;
     }
 

@@ -97,8 +97,13 @@ class RiftProcessor implements ICommandStrategy
     
     private function ProcessTime($message)
     {
-        $type = explode(' ', $message)[0];
-        $time = str_ireplace($type, '', $message);
+        $explodedMessage = explode(' ', $message);
+        //if there aren't more than 1 parameters, the time is the first value.
+        if(count($explodedMessage) === 1){
+            return $explodedMessage[0];
+        }
+        $type = $explodedMessage[0];
+        $time = trim(str_ireplace($type, '', $message));        
         return $time;
     }
 

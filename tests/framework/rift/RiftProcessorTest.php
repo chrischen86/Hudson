@@ -56,6 +56,13 @@ class RiftProcessorTest extends TestCaseBase
             'text' => 'Angel ND+1',
             'user_id' => 'Test User'
         );
+        
+        $this->slackApiMock->expects($this->once())
+                ->method('SendMessage')
+                ->with($this->equalTo("*************** *Scheduled Rift* ***************"),
+                        $this->callback(function($attachments) {
+                            return $attachments[0]['color'] == \framework\rift\RiftLevel::$Legendary;
+                        }));
 
         $this->command->Process($payload);        
         //TODO: test the output of the process function.

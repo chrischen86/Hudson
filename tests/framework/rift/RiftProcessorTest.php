@@ -5,6 +5,7 @@ namespace tests\framework\rift;
 use tests\TestCaseBase;
 use framework\rift\RiftProcessor;
 use dal\models\RiftHistoryModel;
+use Httpful\Response;
 
 /**
  * Description of ClearCommandStrategyTest
@@ -18,10 +19,15 @@ class RiftProcessorTest extends TestCaseBase
     private $userRepositoryMock;
     private $riftTypeRepositoryMock;
     private $riftHistoryRepositoryMock;
+    private $slackMessageHistoryRepositoryMock;
+    private $responseMock;
 
     protected function setUp()
     {
         $adapter = new \dal\NullDataAccessAdapter();
+        $this->responseMock = $this->getMockBuilder(Response::class)
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->slackApiMock = $this->getMockBuilder(\framework\slack\SlackApi::class)
                 ->setMethods(['SendMessage'])
                 ->getMock();
@@ -33,12 +39,16 @@ class RiftProcessorTest extends TestCaseBase
                 ->setMethods(['CreateRiftHistory'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();
+        $this->slackMessageHistoryRepositoryMock = $this->getMockBuilder(\dal\managers\SlackMessageHistoryRepository::class)
+                ->setMethods(['CreateSlackMessageHistory'])
+                ->setConstructorArgs([$adapter])
+                ->getMock();
         $this->userRepositoryMock = $this->getMockBuilder(\dal\managers\UserRepository::class)
                 ->setMethods(['GetUserById'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();
 
-        $this->command = new RiftProcessor($this->riftTypeRepositoryMock, $this->riftHistoryRepositoryMock, $this->userRepositoryMock, $this->slackApiMock);
+        $this->command = new RiftProcessor($this->riftTypeRepositoryMock, $this->riftHistoryRepositoryMock, $this->userRepositoryMock, $this->slackApiMock, $this->slackMessageHistoryRepositoryMock);
     }
 
     public function testRiftHistoryCreated()
@@ -59,8 +69,10 @@ class RiftProcessorTest extends TestCaseBase
             'text' => 'Angel ND+1',
             'user_id' => 'Test User'
         );
+
         $this->slackApiMock->expects($this->once())
-                ->method('SendMessage');
+                ->method('SendMessage')
+                ->willReturn($this->responseMock);
         $this->riftHistoryRepositoryMock->expects($this->once())
                 ->method('CreateRiftHistory')
                 ->with($this->callback(function(RiftHistoryModel $history) use ($user, $rift)
@@ -97,7 +109,9 @@ class RiftProcessorTest extends TestCaseBase
                             $typeCorrect = $attachments[0]['fields'][1]['value'] === 'Angel';
                             $timeCorrect = $attachments[0]['fields'][2]['value'] === 'ND+1';
                             return $colorCorrect && $typeCorrect && $timeCorrect;
-                        }));
+                        }))
+                ->willReturn($this->responseMock);
+
         $this->command->Process($payload);
         $this->command->SendResponse();
     }
@@ -128,7 +142,9 @@ class RiftProcessorTest extends TestCaseBase
                             $typeCorrect = $attachments[0]['fields'][1]['value'] === 'Angel';
                             $timeCorrect = $attachments[0]['fields'][2]['value'] === 'After New Day';
                             return $colorCorrect && $typeCorrect && $timeCorrect;
-                        }));
+                        }))
+                ->willReturn($this->responseMock);
+
         $this->command->Process($payload);
         $this->command->SendResponse();
     }
@@ -158,7 +174,8 @@ class RiftProcessorTest extends TestCaseBase
                             $typeCorrect = $attachments[0]['fields'][1]['value'] === null;
                             $timeCorrect = $attachments[0]['fields'][2]['value'] === 'ND+1';
                             return $colorCorrect && $typeCorrect && $timeCorrect;
-                        }));
+                        }))
+                ->willReturn($this->responseMock);
         $this->command->Process($payload);
         $this->command->SendResponse();
     }
@@ -189,7 +206,8 @@ class RiftProcessorTest extends TestCaseBase
                             $typeCorrect = $attachments[0]['fields'][1]['value'] === null;
                             $timeCorrect = $attachments[0]['fields'][2]['value'] === 'Nagel';
                             return $colorCorrect && $typeCorrect && $timeCorrect;
-                        }));
+                        }))
+                ->willReturn($this->responseMock);
         $this->command->Process($payload);
         $this->command->SendResponse();
     }

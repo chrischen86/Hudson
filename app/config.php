@@ -27,6 +27,8 @@ return [
             ->constructor(DI\get('IDataAccessAdapter')),
     'RiftHistoryRepository' => DI\object('dal\managers\RiftHistoryRepository')
             ->constructor(DI\get('IDataAccessAdapter')),
+    'SlackMessageHistoryRepository' => DI\object('dal\managers\SlackMessageHistoryRepository')
+            ->constructor(DI\get('IDataAccessAdapter')),
     'ISlackApi' => DI\object('framework\slack\SlackApi'),
     'ImageChartApi' => DI\object('framework\google\ImageChartApi'),
     'StatusCommandStrategy' => DI\object('framework\command\StatusCommandStrategy')
@@ -79,5 +81,5 @@ return [
                 return new CommandStrategyFactory($strategies);
             })->parameter('strategies', DI\get('framework\command\ICommandStrategy')),
     'ReactionProcessor' => DI\object('framework\ReactionProcessor')->constructor(DI\get('ConquestManager'), DI\get('StatusCommandStrategy'), DI\get('ISlackApi')),
-    'RiftProcessor' => DI\object('framework\rift\RiftProcessor')->constructor(DI\get('RiftTypeRepository'), DI\get('RiftHistoryRepository'), DI\get('UserRepository'), DI\get('ISlackApi')),
+    'RiftProcessor' => DI\object('framework\rift\RiftProcessor')->constructor(DI\get('RiftTypeRepository'), DI\get('RiftHistoryRepository'), DI\get('UserRepository'), DI\get('ISlackApi'), DI\get('SlackMessageHistoryRepository')),
 ];

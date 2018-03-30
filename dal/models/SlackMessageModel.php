@@ -1,20 +1,16 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace dal\models;
 
-/**
- * Description of StateModel
- *
- * @author chris
- */
-class RiftTypeModel {
+class SlackMessageModel
+{
     public $id;
-    public $name;
-    public $thumbnail;
+    public $message_type;
+    public $user_id;
+    public $text;
+    public $bot_id;
+    public $attachments;
+    public $ts;
+    public $channel;
+
 }

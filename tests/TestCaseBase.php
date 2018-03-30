@@ -111,7 +111,7 @@ class TestCaseBase extends TestCase
                         return new CommandStrategyFactory($strategies);
                     })->parameter('strategies', DI\get('framework\command\ICommandStrategy')),
             'ReactionProcessor' => DI\object('framework\ReactionProcessor')->constructor(DI\get('ConquestManager'), DI\get('StatusCommandStrategy'), DI\get('ISlackApi')),
-            'RiftProcessor' => DI\object('framework\rift\RiftProcessor')->constructor(DI\get('RiftTypeRepository'), DI\get('RiftHistoryRepository'), DI\get('UserRepository'), DI\get('ISlackApi')),
+            'RiftProcessor' => DI\object('framework\rift\RiftProcessor')->constructor(DI\get('RiftTypeRepository'), DI\get('RiftHistoryRepository'), DI\get('UserRepository'), DI\get('ISlackApi'), DI\get('SlackMessageHistoryRepository')),
         ]);
 
         return $container->build();

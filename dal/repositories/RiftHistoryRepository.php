@@ -38,9 +38,9 @@ class RiftHistoryRepository
     public function CreateRiftHistory(RiftHistoryModel $history)
     {
         $owner = $history->owner_id;
-        $type = $history->type_id;
+        $type = empty($history->type_id) ? 'NULL' : $history->type_id;
         $time = $history->scheduled_time->format('Y-m-d H:i:s');
-        $slack_message_id = $history->slack_message_id;
+        $slack_message_id = empty($history->slack_message_id) ? 'NULL' : $history->slack_message_id;
         $sql = 'INSERT INTO rift_history(owner_id, type_id, scheduled_time, slack_message_id) ' .
                 "VALUES('$owner', $type, '$time', $slack_message_id)";
 

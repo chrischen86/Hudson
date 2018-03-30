@@ -39,10 +39,10 @@ class RiftHistoryRepository
     {
         $owner = $history->owner_id;
         $type = $history->type_id;
-        $time = $history->scheduled_time;
+        $time = $history->scheduled_time->format('Y-m-d H:i:s');
         $slack_message_id = $history->slack_message_id;
         $sql = 'INSERT INTO rift_history(owner_id, type_id, scheduled_time, slack_message_id) ' .
-                "VALUES('$owner', $type, $time, $slack_message_id)";
+                "VALUES('$owner', $type, '$time', $slack_message_id)";
 
         $id = $this->adapter->query($sql);
         return $id;

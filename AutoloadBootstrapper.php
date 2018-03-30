@@ -18,6 +18,7 @@ require_once __DIR__ . '/dal/models' . '/NodeModel.php';
 require_once __DIR__ . '/dal/models' . '/StrikeModel.php';
 require_once __DIR__ . '/dal/models' . '/ConsensusModel.php';
 require_once __DIR__ . '/dal/models' . '/RiftTypeModel.php';
+require_once __DIR__ . '/dal/models' . '/RiftHistoryModel.php';
 
 require_once __DIR__ . '/dal/repositories' . '/CoreRepository.php';
 require_once __DIR__ . '/dal/repositories' . '/ConquestRepository.php';
@@ -27,6 +28,7 @@ require_once __DIR__ . '/dal/repositories' . '/NodeRepository.php';
 require_once __DIR__ . '/dal/repositories' . '/StrikeRepository.php';
 require_once __DIR__ . '/dal/repositories' . '/ConsensusRepository.php';
 require_once __DIR__ . '/dal/repositories' . '/RiftTypeRepository.php';
+require_once __DIR__ . '/dal/repositories' . '/RiftHistoryRepository.php';
 
 require_once __DIR__ . '/framework' . '/ReactionProcessor.php';
 

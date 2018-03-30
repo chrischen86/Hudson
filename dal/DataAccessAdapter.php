@@ -30,8 +30,9 @@ class DataAccessAdapter implements IDataAccessAdapter
             $connection->close();
             return $data;
         }
+        $id = $connection->insert_id;
         $connection->close();
-        return null;
+        return $id;
     }
 
     public function query_single($sql)
@@ -48,14 +49,9 @@ class DataAccessAdapter implements IDataAccessAdapter
             $connection->close();
             return $data[0];
         }
+        $id = $connection->insert_id;
         $connection->close();
-        return null;
-    }
-
-    public function CreateRift()
-    {
-        $sql = "INSERT INTO test(`username`, `date_created`) VALUES ('test', UTC_TIMESTAMP())";
-        $this->conn->query($sql);
+        return $id;
     }
 
 }

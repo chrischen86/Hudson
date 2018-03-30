@@ -4,6 +4,7 @@ namespace framework\rift;
 
 use framework\command\ICommandStrategy;
 use dal\managers\RiftTypeRepository;
+use dal\managers\RiftHistoryRepository;
 use dal\managers\UserRepository;
 use framework\slack\ISlackApi;
 
@@ -15,6 +16,11 @@ use framework\slack\ISlackApi;
 class RiftProcessor implements ICommandStrategy
 {
     /**
+     * @var RiftHistoryRepository
+     */
+    private $riftHistoryRepository;
+
+    /**
      * @var UserRepository
      */
     private $userRepository;
@@ -25,12 +31,14 @@ class RiftProcessor implements ICommandStrategy
     private $channel;
 
     public function __construct(RiftTypeRepository $riftTypeRepository,
+                                RiftHistoryRepository $riftHistoryRepository,
                                 UserRepository $userRepository,
                                 ISlackApi $slackApi)
     {
         $this->riftTypeRepository = $riftTypeRepository;
         $this->slackApi = $slackApi;
         $this->userRepository = $userRepository;
+        $this->riftHistoryRepository = $riftHistoryRepository;
     }
 
     public function IsJarvisCommand()
@@ -55,8 +63,8 @@ class RiftProcessor implements ICommandStrategy
             $this->response = "Unfortunatly I'm not sure who you are.  You are not registered in my database.";
             return;
         }
-        
-        $time = $this->ProcessTime($message);        
+
+        $time = $this->ProcessTime($message);
         $colour = $this->GetColour($user->vip);
         $attachments = array();
         array_push($attachments, array(
@@ -81,29 +89,37 @@ class RiftProcessor implements ICommandStrategy
             ),
             'thumb_url' => $riftType->thumbnail,
         ));
-        
+
         $this->response = "*************** *Scheduled Rift* ***************";
         $this->attachments = $attachments;
         $this->channel = $payload['channel_id'];
+        
+        $history = new \dal\models\RiftHistoryModel();
+        $history->owner_id = $user->id;
+        $history->type_id = $riftType != null ? $riftType->id : null;
+        $history->scheduled_time = new \DateTime();
+        $this->riftHistoryRepository->CreateRiftHistory($history);
     }
 
     public function SendResponse()
     {
-        $this->slackApi->SendMessage($this->response, $this->attachments, $this->channel);
+        $response = $this->slackApi->SendMessage($this->response, $this->attachments, $this->channel);
+        //($response->body->ts, $response->body->channel);
         unset($this->response);
         unset($this->attachments);
         unset($this->channel);
     }
-    
+
     private function ProcessTime($message)
     {
         $explodedMessage = explode(' ', $message);
         //if there aren't more than 1 parameters, the time is the first value.
-        if(count($explodedMessage) === 1){
+        if (count($explodedMessage) === 1)
+        {
             return $explodedMessage[0];
         }
         $type = $explodedMessage[0];
-        $time = trim(str_ireplace($type, '', $message));        
+        $time = trim(str_ireplace($type, '', $message));
         return $time;
     }
 

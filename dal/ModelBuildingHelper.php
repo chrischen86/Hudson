@@ -15,6 +15,7 @@ use dal\models\StrikeModel;
 use dal\models\CoreModel;
 use dal\models\ConsensusModel;
 use dal\models\RiftTypeModel;
+use dal\models\RiftHistoryModel;
 use DateTime;
 /**
  * Description of ModelBuildingHelper
@@ -120,8 +121,21 @@ class ModelBuildingHelper {
     public static function BuildRiftTypeModel($result)
     {
         $toReturn = new RiftTypeModel();
+        $toReturn->id = $result['rift_type_id'];
         $toReturn->name = $result['name'];
         $toReturn->thumbnail = $result['thumbnail'];
         return $toReturn;        
+    }
+    
+    public static function BuildRiftHistoryModel($result)
+    {
+        $toReturn = new RiftHistoryModel();
+        $toReturn->id = $result['rift_history_id'];
+        $toReturn->owner = ModelBuildingHelper::BuildUserModel($result);
+        $toReturn->owner_id = $result['owner_id'];
+        $toReturn->type = ModelBuildingHelper::BuildRiftTypeModel($result);
+        $toReturn->type_id = $result['type_id'];
+        $toReturn->scheduled_time = $result['scheduled_time'];
+        return $toReturn;
     }
 }

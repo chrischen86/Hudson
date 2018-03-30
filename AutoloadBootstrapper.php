@@ -18,6 +18,8 @@ require_once __DIR__ . '/dal/models' . '/NodeModel.php';
 require_once __DIR__ . '/dal/models' . '/StrikeModel.php';
 require_once __DIR__ . '/dal/models' . '/ConsensusModel.php';
 require_once __DIR__ . '/dal/models' . '/RiftTypeModel.php';
+require_once __DIR__ . '/dal/models' . '/RiftHistoryModel.php';
+require_once __DIR__ . '/dal/models' . '/SlackMessageModel.php';
 
 require_once __DIR__ . '/dal/repositories' . '/CoreRepository.php';
 require_once __DIR__ . '/dal/repositories' . '/ConquestRepository.php';
@@ -27,6 +29,8 @@ require_once __DIR__ . '/dal/repositories' . '/NodeRepository.php';
 require_once __DIR__ . '/dal/repositories' . '/StrikeRepository.php';
 require_once __DIR__ . '/dal/repositories' . '/ConsensusRepository.php';
 require_once __DIR__ . '/dal/repositories' . '/RiftTypeRepository.php';
+require_once __DIR__ . '/dal/repositories' . '/RiftHistoryRepository.php';
+require_once __DIR__ . '/dal/repositories' . '/SlackMessageHistoryRepository.php';
 
 require_once __DIR__ . '/framework' . '/ReactionProcessor.php';
 
@@ -74,6 +78,7 @@ require_once __DIR__ . '/framework' . '/rift' . '/RiftProcessor.php';
 require_once __DIR__ . '/framework' . '/rift' . '/RiftLevel.php';
 
 require_once __DIR__ . '/framework' . '/system' . '/SlackFileManager.php';
+require_once __DIR__ . '/framework' . '/system' . '/SlackMessageHistoryHelper.php';
 require_once __DIR__ . '/framework' . '/system' . '/models' . '/FileInfoModel.php';
 require_once __DIR__ . '/framework' . '/system' . '/models' . '/FileListModel.php';
 require_once __DIR__ . '/framework' . '/system' . '/models' . '/PagingModel.php';

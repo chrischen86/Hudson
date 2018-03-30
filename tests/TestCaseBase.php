@@ -57,6 +57,8 @@ class TestCaseBase extends TestCase
                     ->constructor(DI\get('IDataAccessAdapter')),
             'ConsensusRepository' => DI\object('dal\managers\ConsensusRepository')
                     ->constructor(DI\get('IDataAccessAdapter')),
+            'RiftHistoryRepository' => DI\object('dal\managers\RiftHistoryRepository')
+                    ->constructor(DI\get('IDataAccessAdapter')),
             'ISlackApi' => DI\object('framework\slack\NullSlackApi'),
             'ImageChartApi' => DI\object('framework\google\ImageChartApi'),
             'StatusCommandStrategy' => DI\object('framework\command\StatusCommandStrategy')
@@ -105,10 +107,11 @@ class TestCaseBase extends TestCase
                         ->constructor(DI\get('ConquestManager'), DI\get('UserRepository'), DI\get('ISlackApi')),
             ],
             'CommandStrategyFactory' => DI\factory(function($strategies)
-            {
-                return new CommandStrategyFactory($strategies);
-            })->parameter('strategies', DI\get('framework\command\ICommandStrategy')),
+                    {
+                        return new CommandStrategyFactory($strategies);
+                    })->parameter('strategies', DI\get('framework\command\ICommandStrategy')),
             'ReactionProcessor' => DI\object('framework\ReactionProcessor')->constructor(DI\get('ConquestManager'), DI\get('StatusCommandStrategy'), DI\get('ISlackApi')),
+            'RiftProcessor' => DI\object('framework\rift\RiftProcessor')->constructor(DI\get('RiftTypeRepository'), DI\get('RiftHistoryRepository'), DI\get('UserRepository'), DI\get('ISlackApi'), DI\get('SlackMessageHistoryRepository')),
         ]);
 
         return $container->build();

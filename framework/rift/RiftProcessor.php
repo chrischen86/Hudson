@@ -84,7 +84,7 @@ class RiftProcessor implements ICommandStrategy
             'fields' => array(
                 array(
                     'title' => 'Owner',
-                    'value' => "<@" . $owner . ">",
+                    'value' => $user->name,
                     'short' => true,
                 ),
                 array(

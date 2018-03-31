@@ -13,25 +13,14 @@ namespace framework\slack;
  *
  * @author chris
  */
-class SlackApi implements ISlackApi
+class SlackApi extends SlackApiBase
 {
-    private $PostMessageApiUri = 'https://slack.com/api/chat.postMessage';
-    private $PostEphemeralApiUri = 'https://slack.com/api/chat.postEphemeral';
-    private $UpdateMessageApiUri = 'https://slack.com/api/chat.update';
-    private $GroupHistoryApiUri = 'https://slack.com/api/channels.history';
-    private $TopicApiUri = 'https://slack.com/api/channels.setTopic';
-    private $CheckPresenceUri = 'https://slack.com/api/users.getPresence';
-    private $DeleteMessageApiUri = 'https://slack.com/api/chat.delete';
-    private $FileListApiUri = 'https://slack.com/api/files.list';
-    private $FileDeleteApiUri = 'https://slack.com/api/files.delete';
-    private $AddReactionsApiUri = 'https://slack.com/api/reactions.add';
-
     public function SendMessage($message, $attachments = null,
-                                $channel = 'test2')
+                                $channel = 'test2', $asUser = 'true')
     {
         $queryString = "token=" . \Config::$BotUserOAuthToken;
         $queryString .= "&channel=" . $channel;
-        $queryString .= "&as_user=" . "true";
+        $queryString .= "&as_user=" . $asUser;
         $queryString .= "&text=" . urlencode($message);
         if ($attachments != null)
         {
@@ -193,6 +182,22 @@ class SlackApi implements ISlackApi
                 ->addHeader('Content-Type', 'text/plain; charset=utf-8')
                 ->send();
         return $response;
+    }
+
+    public function OpenDMChannel($user)
+    {
+        $queryString = "token=" . \Config::$BotUserOAuthToken;
+        $queryString .= "&user=" . $user;
+        $uri = $this->OpenDMChannelUri . "?" . $queryString;
+        $response = \Httpful\Request::post($uri)
+                ->addHeader('Content-Type', 'text/plain; charset=utf-8')
+                ->send();
+        return $response;
+    }
+
+    public function SendSlackMessage(SlackMessage $message)
+    {
+        return $this->SendMessage($message->message, $message->attachments, $message->channel, 'false');
     }
 
 }

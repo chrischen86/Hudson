@@ -41,6 +41,19 @@ $client->on('reaction_removed', function ($data) use ($client)
     $processor = $container->get('ReactionProcessor');
     $processor->Process($data);
 });
+$client->on('user_change', function ($data) use ($client)
+{
+    global $container;
+    $processor = $container->get('UserChangeEventProcessor');
+    $message = $processor->Process($data);
+    if ($message == null)
+    {
+        return;
+    }
+    
+    $slackApi = $container->get('ISlackApi');
+    $slackApi->SendSlackMessage($message);
+});
 
 $client->connect()->then(function ()
 {

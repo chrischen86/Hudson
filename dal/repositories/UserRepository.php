@@ -4,6 +4,7 @@ namespace dal\managers;
 
 use dal\ModelBuildingHelper;
 use dal\IDataAccessAdapter;
+use dal\models\UserModel;
 
 /**
  * Description of UserRepository
@@ -70,6 +71,14 @@ class UserRepository
             array_push($toReturn, $user);
         }
         return $toReturn;
+    }
+    
+    public function UpdateUser(UserModel $user)
+    {
+        $sql = 'UPDATE users ' .
+                "SET name = '" . $user->name . "' " .
+                "WHERE id = '" . $user->id . "'";
+        $this->adapter->query($sql);
     }
 
 }

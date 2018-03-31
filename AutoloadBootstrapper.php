@@ -44,8 +44,10 @@ require_once __DIR__ . '/framework/donation' . '/DonationMessageDto.php';
 require_once __DIR__ . '/framework/donation' . '/SheetManager.php';
 
 require_once __DIR__ . '/framework' . '/slack' . '/ISlackApi.php';
+require_once __DIR__ . '/framework' . '/slack' . '/SlackApiBase.php';
 require_once __DIR__ . '/framework' . '/slack' . '/SlackApi.php';
 require_once __DIR__ . '/framework' . '/slack' . '/NullSlackApi.php';
+require_once __DIR__ . '/framework' . '/slack' . '/SlackMessage.php';
 
 require_once __DIR__ . '/framework' . '/google' . '/ImageChartApi.php';
 
@@ -82,3 +84,6 @@ require_once __DIR__ . '/framework' . '/system' . '/SlackMessageHistoryHelper.ph
 require_once __DIR__ . '/framework' . '/system' . '/models' . '/FileInfoModel.php';
 require_once __DIR__ . '/framework' . '/system' . '/models' . '/FileListModel.php';
 require_once __DIR__ . '/framework' . '/system' . '/models' . '/PagingModel.php';
+
+require_once __DIR__ . '/framework' . '/events' . '/EventProcessor.php';
+require_once __DIR__ . '/framework' . '/events' . '/UserChangeEventProcessor.php';

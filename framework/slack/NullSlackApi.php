@@ -13,22 +13,14 @@ namespace framework\slack;
  *
  * @author chris
  */
-class NullSlackApi implements ISlackApi
+class NullSlackApi extends SlackApiBase
 {
-    private $PostMessageApiUri = 'https://slack.com/api/chat.postMessage';
-    private $PostEphemeralApiUri = 'https://slack.com/api/chat.postEphemeral';
-    private $UpdateMessageApiUri = 'https://slack.com/api/chat.update';
-    private $GroupHistoryApiUri = 'https://slack.com/api/channels.history';
-    private $TopicApiUri = 'https://slack.com/api/channels.setTopic';
-    private $CheckPresenceUri = 'https://slack.com/api/users.getPresence';
-    private $DeleteMessageApiUri = 'https://slack.com/api/chat.delete';
-
     public function SendMessage($message, $attachments = null,
-                                $channel = 'test2')
+                                $channel = 'test2', $asUser = 'true')
     {
         $queryString = "token=" . \Config::$BotUserOAuthToken;
         $queryString .= "&channel=" . $channel;
-        $queryString .= "&as_user=" . "true";
+        $queryString .= "&as_user=" . $asUser;
         $queryString .= "&text=" . urlencode($message);
         if ($attachments != null)
         {
@@ -124,6 +116,16 @@ class NullSlackApi implements ISlackApi
     public function AddReaction($ts, $channel, $reaction)
     {
         return null;
+    }
+
+    public function OpenDMChannel($user)
+    {
+        return null;
+    }
+
+    public function SendSlackMessage(SlackMessage $message)
+    {
+        
     }
 
 }

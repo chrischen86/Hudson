@@ -2,6 +2,7 @@
 
 namespace framework\slack;
 
+use React\Promise\Deferred;
 use Devristo\Phpws\Messaging\WebSocketMessageInterface;
 use Devristo\Phpws\Client\WebSocket;
 use Slack\ConnectionException;
@@ -13,7 +14,7 @@ class RealTimeClientExtended extends RealTimeClient
 {
     public function connect()
     {
-        $deferred = new Promise\Deferred();
+        $deferred = new Deferred();
         // Request a real-time connection...
         $this->apiCall('rtm.connect')
                 // then connect to the socket...
@@ -78,7 +79,7 @@ class RealTimeClientExtended extends RealTimeClient
         $this->websocket->send(json_encode($data));
         // Create a deferred object and add message to pending list so when a
         // success message arrives, we can de-queue it and resolve the promise.
-        $deferred = new \React\Promise\Deferred();
+        $deferred = new Deferred();
         $this->pendingMessages[$this->lastMessageId] = $deferred;
         return $deferred->promise();
     }

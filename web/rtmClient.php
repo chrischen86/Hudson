@@ -63,7 +63,7 @@ $client->connect()->then(function ()
 
 $loop->addPeriodicTimer(30, function() use ($client){
     $client->Ping()->then(function() {
-        error_log('pong');
+        //error_log('pong');
     });
 });
 

@@ -33,7 +33,6 @@ class RealTimeClientExtended extends RealTimeClient
         }
 
         $this->websocket->send(json_encode($data));
-        error_log('ping');
         // Create a deferred object and add message to pending list so when a
         // success message arrives, we can de-queue it and resolve the promise.
         $deferred = new \React\Promise\Deferred();

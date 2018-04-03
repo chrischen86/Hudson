@@ -5,6 +5,7 @@ require_once __DIR__ . '/Config.php';
 require_once __DIR__ . '/framework/process/ProcessManager.php';
 require_once __DIR__ . '/framework/slack/ISlackApi.php';
 require_once __DIR__ . '/framework/slack/SlackApi.php';
+require_once __DIR__ . '/framework/slack/SlackApiBase.php';
 
 use framework\slack\SlackApi;
 

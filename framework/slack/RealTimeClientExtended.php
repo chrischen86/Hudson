@@ -57,9 +57,9 @@ class RealTimeClientExtended extends RealTimeClient
         {
             $this->onMessage($message);
         });
-        $websocket->on('message', function($message)
+        $websocket->on('close', function()
         {
-            $this->onPingMessage($message);
+            $this->emit('close');
         });
     }
 
@@ -110,8 +110,10 @@ class RealTimeClientExtended extends RealTimeClient
                     $this->connected = true;
                     break;
                 case 'pong':
-                    error_log('pong response');
-                    error_log(print_r($payload, 1));
+                    error_log('pong response:' . $payload['reply_to']);
+                    $deferred = $this->pendingMessages[$payload['reply_to']];
+                    $deferred->resolve();
+                    unset($this->pendingMessages[$payload['reply_to']]);
                     break;
             }
             // emit an event with the attached json

@@ -56,10 +56,16 @@ $client->on('user_change', function ($data) use ($client)
     $slackApi->SendSlackMessage($message);
 });
 
-$client->on('goodbye', function($data) use ($client){
+$client->on('goodbye', function() use ($client){
     error_log('slack disconnecting, attempting to restart');
     $client->connect()->then(function(){
         error_log("Reconnecting from goodbye");
+    });
+});
+$client->on('close', function() use ($client){
+    error_log('stream closing, attempting to restart');
+    $client->connect()->then(function(){
+        error_log("Reconnecting from stream closing");
     });
 });
 

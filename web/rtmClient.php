@@ -12,7 +12,8 @@ if (!flock($f, LOCK_EX | LOCK_NB))
 
 $loop = React\EventLoop\Factory::create();
 
-$client = new Slack\RealTimeClient($loop);
+//$client = new Slack\RealTimeClient($loop);
+$client = new framework\slack\RealTimeClientExtended($loop);
 $client->setToken(Config::$BotUserOAuthToken);
 
 // disconnect after first message
@@ -58,6 +59,12 @@ $client->on('user_change', function ($data) use ($client)
 $client->connect()->then(function ()
 {
     error_log("Connected!\n");
+});
+
+$loop->addPeriodicTimer(30, function() use ($client){
+    $client->Ping()->then(function($payload) {
+        error_log(print_r($payload, 1));
+    });
 });
 
 $loop->run();

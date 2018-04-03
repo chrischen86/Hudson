@@ -43,6 +43,7 @@ require_once __DIR__ . '/framework/donation' . '/DonationManager.php';
 require_once __DIR__ . '/framework/donation' . '/DonationMessageDto.php';
 require_once __DIR__ . '/framework/donation' . '/SheetManager.php';
 
+require_once __DIR__ . '/framework' . '/slack' . '/RealTimeClientExtended.php';
 require_once __DIR__ . '/framework' . '/slack' . '/ISlackApi.php';
 require_once __DIR__ . '/framework' . '/slack' . '/SlackApiBase.php';
 require_once __DIR__ . '/framework' . '/slack' . '/SlackApi.php';

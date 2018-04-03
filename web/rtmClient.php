@@ -56,14 +56,23 @@ $client->on('user_change', function ($data) use ($client)
     $slackApi->SendSlackMessage($message);
 });
 
+$client->on('goodbye', function($data) use ($client){
+    error_log('slack disconnecting, attempting to restart');
+    $client->connect()->then(function(){
+        error_log("Reconnecting from goodbye");
+    });
+});
+
 $client->connect()->then(function ()
 {
     error_log("Connected!\n");
 });
 
 $loop->addPeriodicTimer(30, function() use ($client){
-    $client->Ping()->then(function() {
+    $client->ping()->then(function() {
         //error_log('pong');
+    })->otherwise(function ($reason){
+        error_log($reason);
     });
 });
 

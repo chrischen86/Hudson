@@ -2,6 +2,7 @@
 
 namespace framework\slack;
 
+use Devristo\Phpws\Messaging\WebSocketMessageInterface;
 use Slack\RealTimeClient;
 use DateTime;
 
@@ -25,27 +26,33 @@ class RealTimeClientExtended extends RealTimeClient
         if (!$this->eventSet)
         {
             $this->eventSet = true;
-            $this->websocket->on('message', function(\Devristo\Phpws\Messaging\WebSocketMessageInterface $message)
+            $this->websocket->on('message', function($message)
             {
-                $payload = \Slack\Payload::fromJson($message->getData());
-                if (isset($payload['reply_to']))
-                {
-                    if (isset($this->pendingMessages[$payload['reply_to']]))
-                    {
-                        $deferred = $this->pendingMessages[$payload['reply_to']];
-                        $deferred->resolve();
-                        unset($this->pendingMessages[$payload['reply_to']]);
-                    }
-                }
+                $this->onPingMessage($message);
             });
         }
 
         $this->websocket->send(json_encode($data));
+        error_log('ping');
         // Create a deferred object and add message to pending list so when a
         // success message arrives, we can de-queue it and resolve the promise.
         $deferred = new \React\Promise\Deferred();
         $this->pendingMessages[$this->lastMessageId] = $deferred;
         return $deferred->promise();
+    }
+
+    private function onPingMessage(WebSocketMessageInterface $message)
+    {
+        $payload = \Slack\Payload::fromJson($message->getData());
+        if (isset($payload['reply_to']))
+        {
+            if (isset($this->pendingMessages[$payload['reply_to']]))
+            {
+                $deferred = $this->pendingMessages[$payload['reply_to']];
+                $deferred->resolve();
+                unset($this->pendingMessages[$payload['reply_to']]);
+            }
+        }
     }
 
 }

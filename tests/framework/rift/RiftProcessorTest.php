@@ -180,6 +180,39 @@ class RiftProcessorTest extends TestCaseBase
         $this->command->SendResponse();
     }
 
+    public function testRiftCreateTypeWithSpaceSuccess()
+    {
+        $rift = new \dal\models\RiftTypeModel();
+        $rift->name = 'Angel';
+        $user = new \dal\models\UserModel();
+        $user->vip = 19;
+        $user->id = 'Test User';
+        $this->userRepositoryMock->expects($this->once())
+                ->method('GetUserById')
+                ->willReturn($user);
+        $this->riftTypeRepositoryMock->expects($this->once())
+                ->method('GetRiftType')
+                ->willReturn($rift);
+        $payload = array(
+            'channel_id' => 'TESTCHANNEL',
+            'text' => 'Giant Man ND+1',
+            'user_id' => 'Test User'
+        );
+        $this->slackApiMock->expects($this->once())
+                ->method('SendMessage')
+                ->with($this->equalTo("*************** *Scheduled Rift* ***************"), $this->callback(function($attachments)
+                        {
+                            $colorCorrect = $attachments[0]['color'] === \framework\rift\RiftLevel::$Legendary;
+                            $typeCorrect = $attachments[0]['fields'][1]['value'] === 'Giant Man';  //Ant Man Or Yellow Jacket
+                            $timeCorrect = $attachments[0]['fields'][2]['value'] === 'ND+1';
+                            return $colorCorrect && $typeCorrect && $timeCorrect;
+                        }))
+                ->willReturn($this->responseMock);
+
+        $this->command->Process($payload);
+        $this->command->SendResponse();
+    }
+
     public function testRiftCreateFailure()
     {
         $rift = new \dal\models\RiftTypeModel();

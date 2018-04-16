@@ -67,11 +67,14 @@ class RiftProcessor implements ICommandStrategy
         $message = $payload['text'];
         $owner = $payload['user_id'];
         $riftType = $this->ProcessType($message);
-
         $user = $this->userRepository->GetUserById($owner);
         if ($user == null)
         {
             $this->response = "Unfortunatly I'm not sure who you are.  You are not registered in my database.";
+            return;
+        }
+        if($riftType === "cancel"){
+            CancelRift($user);
             return;
         }
 
@@ -135,6 +138,12 @@ class RiftProcessor implements ICommandStrategy
             return $explodedMessage[0];
         }
         $type = $explodedMessage[0];
+        //This if statement fixes the bug for Yellow Jacket, Giant Man or Ant Man rifts
+        if(strtolower($explodedMessage[0]) === "man" ||
+        strtolower($explodedMessage[0]) === "jacket"){
+            $type = $explodedMessage[1];
+        }
+        
         $time = trim(str_ireplace($type, '', $message));
         return $time;
     }
@@ -142,7 +151,22 @@ class RiftProcessor implements ICommandStrategy
     private function ProcessType($message)
     {
         $type = explode(' ', $message)[0];
+        //Return if cancel, and then do the cancel processing above
+        if(strtolower($type) === "cancel")
+        {
+            return "cancel";
+        }
         return $this->riftTypeRepository->GetRiftType($type);
+    }
+
+    private function CancelRift($user){
+        //get previous rift, cancel it. (within last hour?)
+        //Go through history, find rift (created by user in last hour) and cancel it.
+        $riftHistory = $this->riftHistoryRepostory->GetRiftHistoryByUser($user);
+        //TODO: get highest id, and cancel that (set cancel flag on history)
+        //then go to Slack Message history and delete last rift message for the current user.
+        
+        
     }
 
     private function GetColour($vip)
@@ -178,5 +202,4 @@ class RiftProcessor implements ICommandStrategy
                 return RiftLevel::$Normal;
         }
     }
-
 }

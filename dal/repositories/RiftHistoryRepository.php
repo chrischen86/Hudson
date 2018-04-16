@@ -24,7 +24,8 @@ class RiftHistoryRepository
                 'FROM rift_history h ' .
                 'INNER JOIN users u ' .
                 'INNER JOIN rift_type r ON r.id = h.type_id ' .
-                "WHERE owner_id = '" . $user->id . "'";
+                "WHERE owner_id = '" . $user->id . "'" .
+                'ORDER BY rift_history_id';
         $results = $this->adapter->query($sql);
         $toReturn = [];
         foreach ($results as $item)

@@ -43,6 +43,8 @@ class SummaryCommandStrategyTest extends TestCaseBase
         
         $strike = new \dal\models\StrikeModel();
         $stats->strikes = [$strike];
+        $stats->forDate = new \DateTime();
+        $stats->endDate = new \DateTime();
         
         $this->conquestManagerMock->expects($this->once())
                 ->method('GetSummaryStats')

@@ -73,9 +73,6 @@ class StatusCommandStrategyTest extends TestCaseBase
                 ->willReturn((object)array('body' => (object)array('ts' => 1, 'channel' => 'test')));
         $coreState = new \dal\models\CoreModel();
         $coreState->state = \StateEnum::Coordinating;
-        $this->coreRepositoryMock->expects($this->once())
-                ->method('GetState')
-                ->willReturn($coreState);
         
         $payload = array(
             'channel' => 'TESTCHANNEL',

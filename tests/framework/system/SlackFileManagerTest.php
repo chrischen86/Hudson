@@ -22,6 +22,10 @@ class SlackFileManagerTest extends TestCaseBase
         $this->slackApi = new SlackApi();
         $this->manager = new SlackFileManager($this->slackApi);
     }
+    
+    public function testDummy()
+    {
+    }
 /*
     public function testFetchFileList()
     {

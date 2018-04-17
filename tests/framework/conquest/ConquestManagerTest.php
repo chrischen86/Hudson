@@ -40,7 +40,6 @@ class ConquestManagerTest extends TestCaseBase
                 ->setConstructorArgs([$adapter])
                 ->getMock();
         $this->consensusRepositoryMock = $this->getMockBuilder(\dal\managers\ConsensusRepository::class)
-                ->setMethods([''])
                 ->setConstructorArgs([$adapter])
                 ->getMock();
         $this->manager = new ConquestManager($this->conquestRepositoryMock, $this->zoneRepositoryMock, $this->nodeRepositoryMock, $this->strikeRepositoryMock, $this->consensusRepositoryMock);

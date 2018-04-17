@@ -180,10 +180,43 @@ class RiftProcessorTest extends TestCaseBase
         $this->command->SendResponse();
     }
 
-    public function testRiftCreateTypeWithSpaceSuccess()
+    public function testRiftCreateTypeWithSpaceAntManSuccess()
     {
         $rift = new \dal\models\RiftTypeModel();
-        $rift->name = 'Angel';
+        $rift->name = 'Ant Man';
+        $user = new \dal\models\UserModel();
+        $user->vip = 19;
+        $user->id = 'Test User';
+        $this->userRepositoryMock->expects($this->once())
+                ->method('GetUserById')
+                ->willReturn($user);
+        $this->riftTypeRepositoryMock->expects($this->once())
+                ->method('GetRiftType')
+                ->willReturn($rift);
+        $payload = array(
+            'channel_id' => 'TESTCHANNEL',
+            'text' => 'Ant Man ND + 1',
+            'user_id' => 'Test User'
+        );
+        $this->slackApiMock->expects($this->once())
+                ->method('SendMessage')
+                ->with($this->equalTo("*************** *Scheduled Rift* ***************"), $this->callback(function($attachments)
+                        {
+                            $colorCorrect = $attachments[0]['color'] === \framework\rift\RiftLevel::$Legendary;
+                            $typeCorrect = $attachments[0]['fields'][1]['value'] === 'Ant Man';  //Ant Man Or Yellow Jacket
+                            $timeCorrect = $attachments[0]['fields'][2]['value'] === 'ND + 1';
+                            return $colorCorrect && $typeCorrect && $timeCorrect;
+                        }))
+                ->willReturn($this->responseMock);
+
+        $this->command->Process($payload);
+        $this->command->SendResponse();
+    }
+
+    public function testRiftCreateTypeWithSpaceGiantManSuccess()
+    {
+        $rift = new \dal\models\RiftTypeModel();
+        $rift->name = 'Giant Man';
         $user = new \dal\models\UserModel();
         $user->vip = 19;
         $user->id = 'Test User';
@@ -204,6 +237,39 @@ class RiftProcessorTest extends TestCaseBase
                         {
                             $colorCorrect = $attachments[0]['color'] === \framework\rift\RiftLevel::$Legendary;
                             $typeCorrect = $attachments[0]['fields'][1]['value'] === 'Giant Man';  //Ant Man Or Yellow Jacket
+                            $timeCorrect = $attachments[0]['fields'][2]['value'] === 'ND+1';
+                            return $colorCorrect && $typeCorrect && $timeCorrect;
+                        }))
+                ->willReturn($this->responseMock);
+
+        $this->command->Process($payload);
+        $this->command->SendResponse();
+    }
+
+    public function testRiftCreateTypeWithSpaceYellowjacketSuccess()
+    {
+        $rift = new \dal\models\RiftTypeModel();
+        $rift->name = 'Yellow Jacket';
+        $user = new \dal\models\UserModel();
+        $user->vip = 19;
+        $user->id = 'Test User';
+        $this->userRepositoryMock->expects($this->once())
+                ->method('GetUserById')
+                ->willReturn($user);
+        $this->riftTypeRepositoryMock->expects($this->once())
+                ->method('GetRiftType')
+                ->willReturn($rift);
+        $payload = array(
+            'channel_id' => 'TESTCHANNEL',
+            'text' => 'Yellow Jacket ND+1',
+            'user_id' => 'Test User'
+        );
+        $this->slackApiMock->expects($this->once())
+                ->method('SendMessage')
+                ->with($this->equalTo("*************** *Scheduled Rift* ***************"), $this->callback(function($attachments)
+                        {
+                            $colorCorrect = $attachments[0]['color'] === \framework\rift\RiftLevel::$Legendary;
+                            $typeCorrect = $attachments[0]['fields'][1]['value'] === 'Yellow Jacket';  //Ant Man Or Yellow Jacket
                             $timeCorrect = $attachments[0]['fields'][2]['value'] === 'ND+1';
                             return $colorCorrect && $typeCorrect && $timeCorrect;
                         }))

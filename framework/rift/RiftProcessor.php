@@ -139,10 +139,12 @@ class RiftProcessor implements ICommandStrategy
         }
         $type = $explodedMessage[0];
         //This if statement fixes the bug for Yellow Jacket, Giant Man or Ant Man rifts
-        if(strtolower($explodedMessage[0]) === "man" ||
-        strtolower($explodedMessage[0]) === "jacket"){
-            $type = $explodedMessage[1];
+        if(count($explodedMessage) >= 3 &&  
+            (strtolower($explodedMessage[1]) === "man" ||
+            strtolower($explodedMessage[1]) === "jacket")){
+                $type = $explodedMessage[0] . " " . $explodedMessage[1];
         }
+        
         
         $time = trim(str_ireplace($type, '', $message));
         return $time;

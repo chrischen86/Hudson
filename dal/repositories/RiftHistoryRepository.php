@@ -18,8 +18,8 @@ class RiftHistoryRepository
 
     public function GetRiftHistoryByUser(UserModel $user)
     {
-        $sql = 'SELECT h.id AS rift_history_id, h.owner_id, h.type_id, h.scheduled_time, ' .
-                'u.id AS user_id, u.name, u.vip, u.is_archived ' .
+        $sql = 'SELECT h.id AS rift_history_id, h.owner_id, h.type_id, h.scheduled_time, h.is_deleted, ' .
+                'u.id AS user_id, u.name, u.vip, u.is_archived, ' .
                 'r.id AS rift_type_id, r.name, r.thumbnail ' .
                 'FROM rift_history h ' .
                 'INNER JOIN users u ' .

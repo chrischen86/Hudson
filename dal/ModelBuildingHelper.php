@@ -136,6 +136,7 @@ class ModelBuildingHelper {
         $toReturn->type = ModelBuildingHelper::BuildRiftTypeModel($result);
         $toReturn->type_id = $result['type_id'];
         $toReturn->scheduled_time = $result['scheduled_time'];
+        $toReturn->is_deleted = $result['is_deleted'];
         return $toReturn;
     }
 }

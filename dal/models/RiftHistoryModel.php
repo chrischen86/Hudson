@@ -19,4 +19,5 @@ class RiftHistoryModel
     public $slack_message;
     public $slack_message_id;
 
+    public $is_deleted;
 }

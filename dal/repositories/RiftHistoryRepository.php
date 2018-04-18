@@ -49,4 +49,37 @@ class RiftHistoryRepository
         return $id;
     }
 
+    public function SetIsDeletedOnRiftHistory($id, bool $isDeleted)
+    {
+        $sql = "UPDATE rift_history" .
+                "SET is_deleted = '$isDeleted' " .
+                "WHERE id = '$id'";
+
+        $id = $this->adapter->query($sql);
+        return $id;
+    }
+
+    public function GetCancellableRiftsByUser(UserModel $user)
+    {
+        //A rift is cancellable if is_deleted = false 
+        //and the create time (scheduled_time) is within the last hour
+        $sql = 'SELECT h.id AS rift_history_id, h.owner_id, h.type_id, h.scheduled_time, h.is_deleted, h.slack_message_id' .
+                'u.id AS user_id, u.name, u.vip, u.is_archived, ' .
+                'r.id AS rift_type_id, r.name, r.thumbnail ' .
+                'FROM rift_history h ' .
+                'INNER JOIN users u ' .
+                'INNER JOIN rift_type r ON r.id = h.type_id ' .
+                "WHERE owner_id = '" . $user->id . "'" .
+                "AND h.is_deleted = FALSE" .
+                "AND h.scheduled_time > DATEADD(hour, -1, NOW())" .
+                'ORDER BY rift_history_id DESC';
+        $results = $this->adapter->query($sql);
+        $toReturn = [];
+        foreach ($results as $item)
+        {
+            $history = ModelBuildingHelper::BuildRiftHistoryModel($item);
+            array_push($toReturn, $history);
+        }
+        return $toReturn;
+    }
 }

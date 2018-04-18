@@ -162,13 +162,24 @@ class RiftProcessor implements ICommandStrategy
     }
 
     private function CancelRift($user){
-        //get previous rift, cancel it. (within last hour?)
-        //Go through history, find rift (created by user in last hour) and cancel it.
-        $riftHistory = $this->riftHistoryRepostory->GetRiftHistoryByUser($user);
-        //TODO: get highest id, and cancel that (set cancel flag on history)
+        //Get rifts able to be cancelled by user id.
+        $riftHistory = $this->riftHistoryRepostory->GetCancellableRiftsByUser($user);
+        //if there aren't any available to cancel, alert user and exit.
+        if($riftHistory == null || 
+            count($riftHistory) <= 0){
+            //TODO: send message "Unable to find rift to cancel."
+            return;
+        }
+
+        //Cancel first rift in list (newest one in list as they're ordered desc)
+        $riftToCancel = $riftHistory[0];
+        $this->riftHistoryRepository->SetIsDeleteOnRiftHistory($riftHistory->$id, true);
+        
         //then go to Slack Message history and delete last rift message for the current user.
-        
-        
+        $this->slackMessageHistoryRepository->DeleteSlackMessageHistoryRecord($riftToCancel->$slack_message_id);               
+
+        //TODO: Alert user that the rift was successfully cancelled?
+        //"Rift Cancelled."
     }
 
     private function GetColour($vip)

@@ -49,7 +49,7 @@ class RiftHistoryRepository
         return $id;
     }
 
-    public function SetIsDeletedOnRiftHistory($id, bool $isDeleted)
+    public function SetIsDeletedOnRiftHistory(int $id, bool $isDeleted)
     {
         $sql = "UPDATE rift_history" .
                 "SET is_deleted = '$isDeleted' " .
@@ -69,9 +69,9 @@ class RiftHistoryRepository
                 'FROM rift_history h ' .
                 'INNER JOIN users u ' .
                 'INNER JOIN rift_type r ON r.id = h.type_id ' .
-                "WHERE owner_id = '" . $user->id . "'" .
+                "WHERE owner_id = '" . $user->id . "' " .
                 "AND h.is_deleted = FALSE" .
-                "AND h.scheduled_time > DATEADD(hour, -1, NOW())" .
+                "AND h.scheduled_time > DATEADD(hour, -1, NOW()) " .
                 'ORDER BY rift_history_id DESC';
         $results = $this->adapter->query($sql);
         $toReturn = [];

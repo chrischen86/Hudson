@@ -30,8 +30,8 @@ class SlackMessageHistoryRepository
         return $id;
     }
 
-    public function DeleteSlackMessageHistoryRecord($recordId){
-        $sql = "DELETE FROM  slack_message_history". 
+    public function DeleteSlackMessageHistoryRecord(int $recordId){
+        $sql = "DELETE FROM slack_message_history ". 
                 "WHERE id = '$recordId'";
 
         $id = $this->adapter->query($sql);

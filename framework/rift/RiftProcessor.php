@@ -74,7 +74,7 @@ class RiftProcessor implements ICommandStrategy
             return;
         }
         if($riftType === "cancel"){
-            CancelRift($user);
+            CancelRift($user);            
             return;
         }
 
@@ -176,7 +176,8 @@ class RiftProcessor implements ICommandStrategy
         $this->riftHistoryRepository->SetIsDeleteOnRiftHistory($riftHistory->$id, true);
         
         //then go to Slack Message history and delete last rift message for the current user.
-        $this->slackMessageHistoryRepository->DeleteSlackMessageHistoryRecord($riftToCancel->$slack_message_id);               
+        //TODO: For right now we'll not delete the message to avoid foreign key issues
+        //$this->slackMessageHistoryRepository->DeleteSlackMessageHistoryRecord($riftToCancel->$slack_message_id);               
 
         //TODO: Alert user that the rift was successfully cancelled?
         //"Rift Cancelled."

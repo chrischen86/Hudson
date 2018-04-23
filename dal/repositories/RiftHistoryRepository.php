@@ -49,13 +49,13 @@ class RiftHistoryRepository
         return $id;
     }
 
-    public function SetIsDeletedOnRiftHistory(int $id, bool $isDeleted)
+    public function SetIsDeletedOnRiftHistory($id, $isDeleted)
     {
         $sql = "UPDATE rift_history" .
                 "SET is_deleted = '$isDeleted' " .
                 "WHERE id = '$id'";
 
-        $id = $this->adapter->query($sql);
+        $this->adapter->query($sql);
         return $id;
     }
 
@@ -63,16 +63,16 @@ class RiftHistoryRepository
     {
         //A rift is cancellable if is_deleted = false 
         //and the create time (scheduled_time) is within the last hour
-        $sql = 'SELECT h.id AS rift_history_id, h.owner_id, h.type_id, h.scheduled_time, h.is_deleted, h.slack_message_id' .
+        $sql = 'SELECT h.id AS rift_history_id, h.owner_id, h.type_id, h.scheduled_time, h.is_deleted, h.slack_message_id, ' .
                 'u.id AS user_id, u.name, u.vip, u.is_archived, ' .
                 'r.id AS rift_type_id, r.name, r.thumbnail ' .
                 'FROM rift_history h ' .
                 'INNER JOIN users u ' .
                 'INNER JOIN rift_type r ON r.id = h.type_id ' .
                 "WHERE owner_id = '" . $user->id . "' " .
-                "AND h.is_deleted = FALSE" .
+                "AND h.is_deleted = 0 " .
                 "AND h.scheduled_time > DATEADD(hour, -1, NOW()) " .
-                'ORDER BY rift_history_id DESC';
+                'ORDER BY h.id DESC';
         $results = $this->adapter->query($sql);
         $toReturn = [];
         foreach ($results as $item)

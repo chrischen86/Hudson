@@ -29,14 +29,14 @@ class RiftProcessorTest extends TestCaseBase
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->slackApiMock = $this->getMockBuilder(\framework\slack\SlackApi::class)
-                ->setMethods(['SendMessage'])
+                ->setMethods(['SendMessage', 'SendEphemeral', 'DeleteMessage'])
                 ->getMock();
         $this->riftTypeRepositoryMock = $this->getMockBuilder(\dal\managers\RiftTypeRepository::class)
                 ->setMethods(['GetRiftType'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();
         $this->riftHistoryRepositoryMock = $this->getMockBuilder(\dal\managers\RiftHistoryRepository::class)
-                ->setMethods(['CreateRiftHistory'])
+                ->setMethods(['CreateRiftHistory', 'GetCancellableRiftsByUser', 'SetIsDeleteOnRiftHistory'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();
         $this->slackMessageHistoryRepositoryMock = $this->getMockBuilder(\dal\managers\SlackMessageHistoryRepository::class)
@@ -311,30 +311,8 @@ class RiftProcessorTest extends TestCaseBase
         $this->command->SendResponse();
     }
 
-    public function testRiftCancelSuccess(){
-        // $user = new \dal\models\UserModel();
-        // $user->vip = 19;
-        // $user->id = 'Test User';
-        // $this->userRepositoryMock->expects($this->once())
-        //         ->method('GetUserById')
-        //         ->willReturn($user);
-        // $payload = array(
-        //     'channel_id' => 'TESTCHANNEL',
-        //     'text' => 'cancel',
-        //     'user_id' => 'Test User'
-        // );
-        // //TODO: setup mock for riftHistoryRepository and SlackMessageHistory
-        // //Actually, do call to create rift first, then go and clear it.
-        // $this->slackApiMock->expects($this->once())
-        //         ->method('SendMessage')
-        //         ->with($this->equalTo("Rift Cancelled."))
-        //         ->willReturn($this->responseMock);
-
-        // $this->command->Process($payload);
-        // $this->command->SendResponse();
-    }
-
-    public function testRiftCancelFailureNoRecords(){
+    public function testRiftCancelSuccess()
+    {
         $user = new \dal\models\UserModel();
         $user->vip = 19;
         $user->id = 'Test User';
@@ -346,6 +324,48 @@ class RiftProcessorTest extends TestCaseBase
             'text' => 'cancel',
             'user_id' => 'Test User'
         );
+
+        $riftHistory = new RiftHistoryModel();
+        $riftHistory->id = 'riftHistoryId1';
+        $slackMessage = new \dal\models\SlackMessageModel();
+        $slackMessage->id = 'slackMessageId1';
+        $slackMessage->channel = 'slackMessageChannel';
+        $slackMessage->ts = '12345.6789';
+        $riftHistory->slack_message = $slackMessage;
+
+        $this->riftHistoryRepositoryMock->expects($this->once())
+                ->method('GetCancellableRiftsByUser')
+                ->willReturn([$riftHistory]);
+        
+        $this->riftHistoryRepositoryMock->expects($this->once())
+                ->method('SetIsDeleteOnRiftHistory')
+                ->with($this->equalTo('riftHistoryId1'), $this->equalTo(true));
+        
+        $this->slackApiMock->expects($this->once())
+                ->method('DeleteMessage')
+                ->with($this->equalTo('12345.6789'), $this->equalTo('slackMessageChannel'));
+
+        $this->slackApiMock->expects($this->once())
+                ->method('SendEphemeral')
+                ->with($this->equalTo("I've removed your scheduled rift!"));
+        $this->command->Process($payload);
+        $this->command->SendResponse();
+    }
+
+    public function testRiftCancelFailureNoRecords()
+    {
+        $user = new \dal\models\UserModel();
+        $user->vip = 19;
+        $user->id = 'Test User';
+        $this->userRepositoryMock->expects($this->once())
+                ->method('GetUserById')
+                ->willReturn($user);
+        $payload = array(
+            'channel_id' => 'TESTCHANNEL',
+            'text' => 'cancel',
+            'user_id' => 'Test User'
+        );
+
         $this->slackApiMock->expects($this->once())
                 ->method('SendMessage')
                 ->with($this->equalTo("Unable to find rift to cancel."))
@@ -353,5 +373,6 @@ class RiftProcessorTest extends TestCaseBase
 
         $this->command->Process($payload);
         $this->command->SendResponse();
-    }    
+    }
+
 }

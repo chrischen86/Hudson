@@ -180,6 +180,105 @@ class RiftProcessorTest extends TestCaseBase
         $this->command->SendResponse();
     }
 
+    public function testRiftCreateTypeWithSpaceAntManSuccess()
+    {
+        $rift = new \dal\models\RiftTypeModel();
+        $rift->name = 'Ant Man';
+        $user = new \dal\models\UserModel();
+        $user->vip = 19;
+        $user->id = 'Test User';
+        $this->userRepositoryMock->expects($this->once())
+                ->method('GetUserById')
+                ->willReturn($user);
+        $this->riftTypeRepositoryMock->expects($this->once())
+                ->method('GetRiftType')
+                ->willReturn($rift);
+        $payload = array(
+            'channel_id' => 'TESTCHANNEL',
+            'text' => 'Ant Man ND + 1',
+            'user_id' => 'Test User'
+        );
+        $this->slackApiMock->expects($this->once())
+                ->method('SendMessage')
+                ->with($this->equalTo("*************** *Scheduled Rift* ***************"), $this->callback(function($attachments)
+                        {
+                            $colorCorrect = $attachments[0]['color'] === \framework\rift\RiftLevel::$Legendary;
+                            $typeCorrect = $attachments[0]['fields'][1]['value'] === 'Ant Man';  //Ant Man Or Yellow Jacket
+                            $timeCorrect = $attachments[0]['fields'][2]['value'] === 'ND + 1';
+                            return $colorCorrect && $typeCorrect && $timeCorrect;
+                        }))
+                ->willReturn($this->responseMock);
+
+        $this->command->Process($payload);
+        $this->command->SendResponse();
+    }
+
+    public function testRiftCreateTypeWithSpaceGiantManSuccess()
+    {
+        $rift = new \dal\models\RiftTypeModel();
+        $rift->name = 'Giant Man';
+        $user = new \dal\models\UserModel();
+        $user->vip = 19;
+        $user->id = 'Test User';
+        $this->userRepositoryMock->expects($this->once())
+                ->method('GetUserById')
+                ->willReturn($user);
+        $this->riftTypeRepositoryMock->expects($this->once())
+                ->method('GetRiftType')
+                ->willReturn($rift);
+        $payload = array(
+            'channel_id' => 'TESTCHANNEL',
+            'text' => 'Giant Man ND+1',
+            'user_id' => 'Test User'
+        );
+        $this->slackApiMock->expects($this->once())
+                ->method('SendMessage')
+                ->with($this->equalTo("*************** *Scheduled Rift* ***************"), $this->callback(function($attachments)
+                        {
+                            $colorCorrect = $attachments[0]['color'] === \framework\rift\RiftLevel::$Legendary;
+                            $typeCorrect = $attachments[0]['fields'][1]['value'] === 'Giant Man';  //Ant Man Or Yellow Jacket
+                            $timeCorrect = $attachments[0]['fields'][2]['value'] === 'ND+1';
+                            return $colorCorrect && $typeCorrect && $timeCorrect;
+                        }))
+                ->willReturn($this->responseMock);
+
+        $this->command->Process($payload);
+        $this->command->SendResponse();
+    }
+
+    public function testRiftCreateTypeWithSpaceYellowjacketSuccess()
+    {
+        $rift = new \dal\models\RiftTypeModel();
+        $rift->name = 'Yellow Jacket';
+        $user = new \dal\models\UserModel();
+        $user->vip = 19;
+        $user->id = 'Test User';
+        $this->userRepositoryMock->expects($this->once())
+                ->method('GetUserById')
+                ->willReturn($user);
+        $this->riftTypeRepositoryMock->expects($this->once())
+                ->method('GetRiftType')
+                ->willReturn($rift);
+        $payload = array(
+            'channel_id' => 'TESTCHANNEL',
+            'text' => 'Yellow Jacket ND+1',
+            'user_id' => 'Test User'
+        );
+        $this->slackApiMock->expects($this->once())
+                ->method('SendMessage')
+                ->with($this->equalTo("*************** *Scheduled Rift* ***************"), $this->callback(function($attachments)
+                        {
+                            $colorCorrect = $attachments[0]['color'] === \framework\rift\RiftLevel::$Legendary;
+                            $typeCorrect = $attachments[0]['fields'][1]['value'] === 'Yellow Jacket';  //Ant Man Or Yellow Jacket
+                            $timeCorrect = $attachments[0]['fields'][2]['value'] === 'ND+1';
+                            return $colorCorrect && $typeCorrect && $timeCorrect;
+                        }))
+                ->willReturn($this->responseMock);
+
+        $this->command->Process($payload);
+        $this->command->SendResponse();
+    }
+
     public function testRiftCreateFailure()
     {
         $rift = new \dal\models\RiftTypeModel();
@@ -212,4 +311,47 @@ class RiftProcessorTest extends TestCaseBase
         $this->command->SendResponse();
     }
 
+    public function testRiftCancelSuccess(){
+        // $user = new \dal\models\UserModel();
+        // $user->vip = 19;
+        // $user->id = 'Test User';
+        // $this->userRepositoryMock->expects($this->once())
+        //         ->method('GetUserById')
+        //         ->willReturn($user);
+        // $payload = array(
+        //     'channel_id' => 'TESTCHANNEL',
+        //     'text' => 'cancel',
+        //     'user_id' => 'Test User'
+        // );
+        // //TODO: setup mock for riftHistoryRepository and SlackMessageHistory
+        // //Actually, do call to create rift first, then go and clear it.
+        // $this->slackApiMock->expects($this->once())
+        //         ->method('SendMessage')
+        //         ->with($this->equalTo("Rift Cancelled."))
+        //         ->willReturn($this->responseMock);
+
+        // $this->command->Process($payload);
+        // $this->command->SendResponse();
+    }
+
+    public function testRiftCancelFailureNoRecords(){
+        $user = new \dal\models\UserModel();
+        $user->vip = 19;
+        $user->id = 'Test User';
+        $this->userRepositoryMock->expects($this->once())
+                ->method('GetUserById')
+                ->willReturn($user);
+        $payload = array(
+            'channel_id' => 'TESTCHANNEL',
+            'text' => 'cancel',
+            'user_id' => 'Test User'
+        );
+        $this->slackApiMock->expects($this->once())
+                ->method('SendMessage')
+                ->with($this->equalTo("Unable to find rift to cancel."))
+                ->willReturn($this->responseMock);
+
+        $this->command->Process($payload);
+        $this->command->SendResponse();
+    }    
 }

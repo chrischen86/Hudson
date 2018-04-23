@@ -67,11 +67,14 @@ class RiftProcessor implements ICommandStrategy
         $message = $payload['text'];
         $owner = $payload['user_id'];
         $riftType = $this->ProcessType($message);
-
         $user = $this->userRepository->GetUserById($owner);
         if ($user == null)
         {
             $this->response = "Unfortunatly I'm not sure who you are.  You are not registered in my database.";
+            return;
+        }
+        if($riftType === "cancel"){
+            CancelRift($user);            
             return;
         }
 
@@ -135,6 +138,14 @@ class RiftProcessor implements ICommandStrategy
             return $explodedMessage[0];
         }
         $type = $explodedMessage[0];
+        //This if statement fixes the bug for Yellow Jacket, Giant Man or Ant Man rifts
+        if(count($explodedMessage) >= 3 &&  
+            (strtolower($explodedMessage[1]) === "man" ||
+            strtolower($explodedMessage[1]) === "jacket")){
+                $type = $explodedMessage[0] . " " . $explodedMessage[1];
+        }
+        
+        
         $time = trim(str_ireplace($type, '', $message));
         return $time;
     }
@@ -142,7 +153,34 @@ class RiftProcessor implements ICommandStrategy
     private function ProcessType($message)
     {
         $type = explode(' ', $message)[0];
+        //Return if cancel, and then do the cancel processing above
+        if(strtolower($type) === "cancel")
+        {
+            return "cancel";
+        }
         return $this->riftTypeRepository->GetRiftType($type);
+    }
+
+    private function CancelRift($user){
+        //Get rifts able to be cancelled by user id.
+        $riftHistory = $this->riftHistoryRepostory->GetCancellableRiftsByUser($user);
+        //if there aren't any available to cancel, alert user and exit.
+        if($riftHistory == null || 
+            count($riftHistory) <= 0){
+            //TODO: send message "Unable to find rift to cancel."
+            return;
+        }
+
+        //Cancel first rift in list (newest one in list as they're ordered desc)
+        $riftToCancel = $riftHistory[0];
+        $this->riftHistoryRepository->SetIsDeleteOnRiftHistory($riftHistory->$id, true);
+        
+        //then go to Slack Message history and delete last rift message for the current user.
+        //TODO: For right now we'll not delete the message to avoid foreign key issues
+        //$this->slackMessageHistoryRepository->DeleteSlackMessageHistoryRecord($riftToCancel->$slack_message_id);               
+
+        //TODO: Alert user that the rift was successfully cancelled?
+        //"Rift Cancelled."
     }
 
     private function GetColour($vip)
@@ -178,5 +216,4 @@ class RiftProcessor implements ICommandStrategy
                 return RiftLevel::$Normal;
         }
     }
-
 }

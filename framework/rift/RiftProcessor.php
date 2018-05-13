@@ -183,7 +183,7 @@ class RiftProcessor implements ICommandStrategy
 
         //Cancel first rift in list (newest one in list as they're ordered desc)
         $riftToCancel = $riftHistory[0];
-        $this->riftHistoryRepository->SetIsDeletedOnRiftHistory($riftToCancel->id, true);
+        $this->riftHistoryRepository->SetIsDeletedOnRiftHistory($riftToCancel->id, 1);
 
         //then go to Slack Message history and delete last rift message for the current user.
         //TODO: For right now we'll not delete the message to avoid foreign key issues

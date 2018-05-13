@@ -36,7 +36,7 @@ class RiftProcessorTest extends TestCaseBase
                 ->setConstructorArgs([$adapter])
                 ->getMock();
         $this->riftHistoryRepositoryMock = $this->getMockBuilder(\dal\managers\RiftHistoryRepository::class)
-                ->setMethods(['CreateRiftHistory', 'GetCancellableRiftsByUser', 'SetIsDeleteOnRiftHistory'])
+                ->setMethods(['CreateRiftHistory', 'GetCancellableRiftsByUser', 'SetIsDeletedOnRiftHistory'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();
         $this->slackMessageHistoryRepositoryMock = $this->getMockBuilder(\dal\managers\SlackMessageHistoryRepository::class)
@@ -338,7 +338,7 @@ class RiftProcessorTest extends TestCaseBase
                 ->willReturn([$riftHistory]);
         
         $this->riftHistoryRepositoryMock->expects($this->once())
-                ->method('SetIsDeleteOnRiftHistory')
+                ->method('SetIsDeletedOnRiftHistory')
                 ->with($this->equalTo('riftHistoryId1'), $this->equalTo(true));
         
         $this->slackApiMock->expects($this->once())

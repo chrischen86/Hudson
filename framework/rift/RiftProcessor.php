@@ -189,7 +189,7 @@ class RiftProcessor implements ICommandStrategy
         //TODO: For right now we'll not delete the message to avoid foreign key issues
         //$this->slackMessageHistoryRepository->DeleteSlackMessageHistoryRecord($riftToCancel->$slack_message_id);
         $this->slackApi->DeleteMessage($riftToCancel->slack_message->ts, $riftToCancel->slack_message->channel);
-        $this->slackApi->SendEphemeral("I've removed your scheduled rift!", $user->id);
+        $this->slackApi->SendEphemeral("I've removed your scheduled rift!", $user->id, $riftToCancel->slack_message->channel);
     }
 
     private function GetColour($vip)

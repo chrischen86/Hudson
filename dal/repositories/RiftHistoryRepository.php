@@ -67,11 +67,11 @@ class RiftHistoryRepository
                 'u.id AS user_id, u.name, u.vip, u.is_archived, ' .
                 'r.id AS rift_type_id, r.name, r.thumbnail ' .
                 'FROM rift_history h ' .
-                'INNER JOIN users u ' .
-                'INNER JOIN rift_type r ON r.id = h.type_id ' .
+                'INNER JOIN users u ON u.id = h.owner_id ' .
+                'LEFT JOIN rift_type r ON r.id = h.type_id ' .
                 "WHERE owner_id = '" . $user->id . "' " .
                 "AND h.is_deleted = 0 " .
-                "AND h.scheduled_time > DATEADD(hour, -1, NOW()) " .
+                "AND h.scheduled_time > DATE_ADD(NOW(), INTERVAL 1 hour) " .
                 'ORDER BY h.id DESC';
         $results = $this->adapter->query($sql);
         $toReturn = [];

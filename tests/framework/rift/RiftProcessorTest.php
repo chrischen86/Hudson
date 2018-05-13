@@ -321,7 +321,7 @@ class RiftProcessorTest extends TestCaseBase
                 ->willReturn($user);
         $payload = array(
             'channel_id' => 'TESTCHANNEL',
-            'text' => 'cancel',
+            'text' => ' cancel',
             'user_id' => 'Test User'
         );
 

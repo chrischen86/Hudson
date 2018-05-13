@@ -40,6 +40,7 @@ class RiftProcessor implements ICommandStrategy
 
     /** @var RiftHistoryModel */
     private $history;
+    private $CancelRegex = "/cancel/i";
 
     public function __construct(RiftTypeRepository $riftTypeRepository,
                                 RiftHistoryRepository $riftHistoryRepository,
@@ -68,19 +69,18 @@ class RiftProcessor implements ICommandStrategy
     {
         $message = $payload['text'];
         $owner = $payload['user_id'];
-        $riftType = $this->ProcessType($message);
         $user = $this->userRepository->GetUserById($owner);
         if ($user == null)
         {
             $this->response = "Unfortunatly I'm not sure who you are.  You are not registered in my database.";
             return;
         }
-        if ($riftType === "cancel")
+        if (preg_match($this->CancelRegex, $message))
         {
             $this->CancelRift($user);
             return;
         }
-
+        $riftType = $this->ProcessType($message);
         $time = $this->ProcessTime($message);
         $colour = $this->GetColour($user->vip);
         $attachments = array();
@@ -123,13 +123,13 @@ class RiftProcessor implements ICommandStrategy
         {
             return;
         }
-        
+
         $response = $this->slackApi->SendMessage($this->response, $this->attachments, $this->channel);
         if ($this->response == 'Unable to find rift to cancel.')
         {
             return;
         }
-        
+
         $slackMessage = SlackMessageHistoryHelper::ParseResponse($response);
 
         $messageId = $this->slackMessageHistoryRepository->CreateSlackMessageHistory($slackMessage);
@@ -167,11 +167,6 @@ class RiftProcessor implements ICommandStrategy
     private function ProcessType($message)
     {
         $type = explode(' ', $message)[0];
-        //Return if cancel, and then do the cancel processing above
-        if (strtolower($type) === "cancel")
-        {
-            return "cancel";
-        }
         return $this->riftTypeRepository->GetRiftType($type);
     }
 

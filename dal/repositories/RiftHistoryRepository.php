@@ -51,7 +51,7 @@ class RiftHistoryRepository
 
     public function SetIsDeletedOnRiftHistory($id, $isDeleted)
     {
-        $sql = "UPDATE rift_history" .
+        $sql = "UPDATE rift_history " .
                 "SET is_deleted = '$isDeleted' " .
                 "WHERE id = '$id'";
 

@@ -71,10 +71,14 @@ class RiftHistoryRepository
                 'LEFT JOIN rift_type r ON r.id = h.type_id ' .
                 "WHERE owner_id = '" . $user->id . "' " .
                 "AND h.is_deleted = 0 " .
-                "AND h.scheduled_time > DATE_ADD(NOW(), INTERVAL 1 hour) " .
+                "AND h.scheduled_time > DATE_ADD(NOW(), INTERVAL -1 hour) " .
                 'ORDER BY h.id DESC';
         $results = $this->adapter->query($sql);
         $toReturn = [];
+        if ($results == null)
+        {
+            return $toReturn;
+        }
         foreach ($results as $item)
         {
             $history = ModelBuildingHelper::BuildRiftHistoryModel($item);

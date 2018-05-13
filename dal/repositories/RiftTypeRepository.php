@@ -22,5 +22,4 @@ class RiftTypeRepository
         $riftType = ModelBuildingHelper::BuildRiftTypeModel($result);
         return $riftType;
     }
-
 }

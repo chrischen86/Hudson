@@ -137,6 +137,18 @@ class ModelBuildingHelper {
         $toReturn->type_id = $result['type_id'];
         $toReturn->scheduled_time = $result['scheduled_time'];
         $toReturn->is_deleted = $result['is_deleted'];
+        
+        $toReturn->slack_message = ModelBuildingHelper::BuildSlackMessageHistoryModel($result);
+        $toReturn->slack_message_id = $result['slack_message_history_id'];
+        return $toReturn;
+    }
+    
+    public static function BuildSlackMessageHistoryModel($result)
+    {
+        $toReturn = new models\SlackMessageModel();
+        $toReturn->id = $result['slack_message_history_id'];
+        $toReturn->ts = $result['slack_message_history_ts'];
+        $toReturn->channel = $result['slack_message_history_channel'];
         return $toReturn;
     }
 }

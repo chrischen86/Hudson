@@ -1,6 +1,7 @@
 <?php
 
 namespace dal\specifications;
+use dal\ISqlSpecification;
 
 /**
  * Description of RiftHistoryByUserIdSpecification

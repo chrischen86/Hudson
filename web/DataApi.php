@@ -9,6 +9,7 @@ use web\controllers\RiftController;
 
 $app = new Silex\Application();
 $app['debug'] = true;
+$app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
 $app["RiftController"] = function () use ($app)
 {

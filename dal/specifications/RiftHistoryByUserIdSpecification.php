@@ -21,7 +21,7 @@ class RiftHistoryByUserIdSpecification implements ISqlSpecification
     {
         return "SELECT h.id AS rift_history_id, h.owner_id, h.type_id, h.scheduled_time, h.is_deleted " .
                 "FROM rift_history h " .
-                "WHERE user_id = '$this->userId'";
+                "WHERE owner_id = '$this->userId' AND is_deleted=0";
     }
 
 }

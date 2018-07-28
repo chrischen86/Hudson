@@ -24,8 +24,7 @@ class RiftHistoryRepository
         $toReturn = [];
         foreach ($results as $item)
         {
-            $history = ModelBuildingHelper::BuildRiftHistoryModel($item);
-            array_push($toReturn, $history);
+            array_push($toReturn, $item);
         }
         return $toReturn;
     }

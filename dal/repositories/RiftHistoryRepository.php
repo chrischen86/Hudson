@@ -6,6 +6,7 @@ use dal\IDataAccessAdapter;
 use dal\ModelBuildingHelper;
 use dal\models\UserModel;
 use dal\models\RiftHistoryModel;
+use dal\ISqlSpecification;
 
 class RiftHistoryRepository
 {
@@ -14,6 +15,19 @@ class RiftHistoryRepository
     public function __construct(IDataAccessAdapter $adapter)
     {
         $this->adapter = $adapter;
+    }
+    
+    public function query(ISqlSpecification $specification)
+    {
+        $sql = $specification->toSqlQuery();
+        $results = $this->adapter->query($sql);
+        $toReturn = [];
+        foreach ($results as $item)
+        {
+            $history = ModelBuildingHelper::BuildRiftHistoryModel($item);
+            array_push($toReturn, $history);
+        }
+        return $toReturn;
     }
 
     public function GetRiftHistoryByUser(UserModel $user)

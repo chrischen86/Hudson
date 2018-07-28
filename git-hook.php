@@ -48,7 +48,8 @@ if (preg_match('/(Friday)/i', $currentDirectory))
     exec("git checkout $branch -f", $output);
 }
 exec('git pull', $output);
-exec('/opt/php56/bin/php composer.phar update', $output);
+//exec('/opt/php56/bin/php composer.phar update', $output);
+include 'composer_update.php';
 
 PrintOutput($output);
 error_log("End: Pull code from Github");

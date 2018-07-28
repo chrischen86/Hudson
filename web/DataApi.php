@@ -9,15 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 $app = new Silex\Application();
 $app['debug'] = true;
 
-$app->get('/rift', function (Request $request) use ($app)
-{
-    $params = $request->query->all();
-    foreach ($params as $key => $val)
-    {
-        error_log($key . ":" . $val);
-    }
-    return $app->json();
-});
+$app->get('/rift', 'web\\controllers\\RiftController::getRiftHistory');
 
 $app->post('/rift', function(Request $request){
     $data = $request->request->all();

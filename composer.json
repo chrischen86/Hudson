@@ -47,7 +47,8 @@
             "framework\\rift\\": "framework/rift/",
             "framework\\slack\\": "framework/slack/",
             "framework\\system\\": "framework/system/",
-            "framework\\user\\": "framework/user/"
+            "framework\\user\\": "framework/user/",
+            "web\\controllers\\": "web/controllers/"
         }
     }
 }

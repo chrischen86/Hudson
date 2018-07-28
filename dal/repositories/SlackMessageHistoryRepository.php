@@ -1,6 +1,6 @@
 <?php
 
-namespace dal\managers;
+namespace dal\repositories;
 
 use dal\IDataAccessAdapter;
 use dal\models\SlackMessageModel;

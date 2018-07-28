@@ -7,9 +7,9 @@
  */
 
 namespace framework\command;
-use dal\managers\CoreRepository;
+use dal\repositories\CoreRepository;
 use framework\slack\ISlackApi;
-use StateEnum;
+use dal\enums\StateEnum;
 /**
  * Description of InitCommandStategy
  *

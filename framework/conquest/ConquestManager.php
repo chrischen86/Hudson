@@ -10,11 +10,11 @@ namespace framework\conquest;
 
 use \DateTime;
 use dal\Phases;
-use dal\managers\ConquestRepository;
-use dal\managers\ZoneRepository;
-use dal\managers\NodeRepository;
-use dal\managers\StrikeRepository;
-use dal\managers\ConsensusRepository;
+use dal\repositories\ConquestRepository;
+use dal\repositories\ZoneRepository;
+use dal\repositories\NodeRepository;
+use dal\repositories\StrikeRepository;
+use dal\repositories\ConsensusRepository;
 use framework\conquest\SetupResultEnum;
 
 /**

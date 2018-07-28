@@ -4,6 +4,7 @@ namespace tests\framework\command;
 
 use tests\TestCaseBase;
 use framework\command\StatusCommandStrategy;
+use dal\enums\StateEnum;
 
 /**
  * Description of StatusCommandStrategyTest
@@ -22,19 +23,19 @@ class StatusCommandStrategyTest extends TestCaseBase
     protected function setUp()
     {
         $adapter = new \dal\NullDataAccessAdapter();
-        $this->coreRepositoryMock = $this->getMockBuilder(\dal\managers\CoreRepository::class)
+        $this->coreRepositoryMock = $this->getMockBuilder(\dal\repositories\CoreRepository::class)
                 ->setMethods(['GetMessageChannel', 'SetMessageProperties'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();
-        $this->conquestRepositoryMock = $this->getMockBuilder(\dal\managers\ConquestRepository::class)
+        $this->conquestRepositoryMock = $this->getMockBuilder(\dal\repositories\ConquestRepository::class)
                 ->setMethods(['GetCurrentConquest'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();
-        $this->zoneRepositoryMock = $this->getMockBuilder(\dal\managers\ZoneRepository::class)
+        $this->zoneRepositoryMock = $this->getMockBuilder(\dal\repositories\ZoneRepository::class)
                 ->setMethods(['GetAllZones'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();
-        $this->strikeRepositoryMock = $this->getMockBuilder(\dal\managers\StrikeRepository::class)
+        $this->strikeRepositoryMock = $this->getMockBuilder(\dal\repositories\StrikeRepository::class)
                 ->setMethods(['GetStrikesByZone'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();
@@ -72,7 +73,7 @@ class StatusCommandStrategyTest extends TestCaseBase
                 ->with($this->equalTo('Here are the active zones I am tracking:'))
                 ->willReturn((object)array('body' => (object)array('ts' => 1, 'channel' => 'test')));
         $coreState = new \dal\models\CoreModel();
-        $coreState->state = \StateEnum::Coordinating;
+        $coreState->state = StateEnum::Coordinating;
         
         $payload = array(
             'channel' => 'TESTCHANNEL',

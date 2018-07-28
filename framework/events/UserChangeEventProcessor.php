@@ -2,7 +2,7 @@
 
 namespace framework\events;
 
-use dal\managers\UserRepository;
+use dal\repositories\UserRepository;
 use framework\slack\ISlackApi;
 use framework\slack\SlackMessage;
 

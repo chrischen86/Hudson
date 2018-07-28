@@ -23,23 +23,23 @@ class ConquestManagerTest extends TestCaseBase
     protected function setUp()
     {
         $adapter = new \dal\NullDataAccessAdapter();
-        $this->conquestRepositoryMock = $this->getMockBuilder(\dal\managers\ConquestRepository::class)
+        $this->conquestRepositoryMock = $this->getMockBuilder(\dal\repositories\ConquestRepository::class)
                 ->setMethods(['GetConquestByDate', 'GetConquests'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();
-        $this->zoneRepositoryMock = $this->getMockBuilder(\dal\managers\ZoneRepository::class)
+        $this->zoneRepositoryMock = $this->getMockBuilder(\dal\repositories\ZoneRepository::class)
                 ->setMethods(['GetAllZonesByConquest'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();
-        $this->nodeRepositoryMock = $this->getMockBuilder(\dal\managers\NodeRepository::class)
+        $this->nodeRepositoryMock = $this->getMockBuilder(\dal\repositories\NodeRepository::class)
                 ->setMethods(['GetAllNodesByConquest'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();
-        $this->strikeRepositoryMock = $this->getMockBuilder(\dal\managers\StrikeRepository::class)
+        $this->strikeRepositoryMock = $this->getMockBuilder(\dal\repositories\StrikeRepository::class)
                 ->setMethods(['GetStrikesByConquest'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();
-        $this->consensusRepositoryMock = $this->getMockBuilder(\dal\managers\ConsensusRepository::class)
+        $this->consensusRepositoryMock = $this->getMockBuilder(\dal\repositories\ConsensusRepository::class)
                 ->setConstructorArgs([$adapter])
                 ->getMock();
         $this->manager = new ConquestManager($this->conquestRepositoryMock, $this->zoneRepositoryMock, $this->nodeRepositoryMock, $this->strikeRepositoryMock, $this->consensusRepositoryMock);

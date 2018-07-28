@@ -1,6 +1,6 @@
 <?php
 
-namespace dal\managers;
+namespace dal\repositories;
 
 use dal\models\UserModel;
 use dal\models\NodeModel;

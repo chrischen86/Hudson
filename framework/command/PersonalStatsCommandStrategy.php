@@ -3,7 +3,7 @@
 namespace framework\command;
 
 use framework\conquest\ConquestManager;
-use dal\managers\UserRepository;
+use dal\repositories\UserRepository;
 use framework\slack\ISlackApi;
 use DateTime;
 /**

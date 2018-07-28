@@ -3,12 +3,12 @@
 namespace framework\rift;
 
 use framework\command\ICommandStrategy;
-use dal\managers\RiftTypeRepository;
-use dal\managers\RiftHistoryRepository;
-use dal\managers\UserRepository;
+use dal\repositories\RiftTypeRepository;
+use dal\repositories\RiftHistoryRepository;
+use dal\repositories\UserRepository;
 use framework\slack\ISlackApi;
 use framework\system\SlackMessageHistoryHelper;
-use dal\managers\SlackMessageHistoryRepository;
+use dal\repositories\SlackMessageHistoryRepository;
 use dal\models\UserModel;
 
 /**

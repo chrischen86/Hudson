@@ -31,19 +31,19 @@ class RiftProcessorTest extends TestCaseBase
         $this->slackApiMock = $this->getMockBuilder(\framework\slack\SlackApi::class)
                 ->setMethods(['SendMessage', 'SendEphemeral', 'DeleteMessage'])
                 ->getMock();
-        $this->riftTypeRepositoryMock = $this->getMockBuilder(\dal\managers\RiftTypeRepository::class)
+        $this->riftTypeRepositoryMock = $this->getMockBuilder(\dal\repositories\RiftTypeRepository::class)
                 ->setMethods(['GetRiftType'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();
-        $this->riftHistoryRepositoryMock = $this->getMockBuilder(\dal\managers\RiftHistoryRepository::class)
+        $this->riftHistoryRepositoryMock = $this->getMockBuilder(\dal\repositories\RiftHistoryRepository::class)
                 ->setMethods(['CreateRiftHistory', 'GetCancellableRiftsByUser', 'SetIsDeletedOnRiftHistory'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();
-        $this->slackMessageHistoryRepositoryMock = $this->getMockBuilder(\dal\managers\SlackMessageHistoryRepository::class)
+        $this->slackMessageHistoryRepositoryMock = $this->getMockBuilder(\dal\repositories\SlackMessageHistoryRepository::class)
                 ->setMethods(['CreateSlackMessageHistory'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();
-        $this->userRepositoryMock = $this->getMockBuilder(\dal\managers\UserRepository::class)
+        $this->userRepositoryMock = $this->getMockBuilder(\dal\repositories\UserRepository::class)
                 ->setMethods(['GetUserById'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();

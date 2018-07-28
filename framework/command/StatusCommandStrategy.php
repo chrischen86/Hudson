@@ -3,10 +3,10 @@
 namespace framework\command;
 
 use framework\slack\ISlackApi;
-use dal\managers\ConquestRepository;
-use dal\managers\ZoneRepository;
-use dal\managers\StrikeRepository;
-use dal\managers\CoreRepository;
+use dal\repositories\ConquestRepository;
+use dal\repositories\ZoneRepository;
+use dal\repositories\StrikeRepository;
+use dal\repositories\CoreRepository;
 
 /**
  * Description of StatusCommandStrategy

@@ -19,7 +19,7 @@ class TrainingModeCommandStrategyTest extends TestCaseBase
     protected function setUp()
     {
         $adapter = new \dal\NullDataAccessAdapter();
-        $this->coreRepositoryMock = $this->getMockBuilder(\dal\managers\CoreRepository::class)
+        $this->coreRepositoryMock = $this->getMockBuilder(\dal\repositories\CoreRepository::class)
                 ->setMethods(['SetState'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();

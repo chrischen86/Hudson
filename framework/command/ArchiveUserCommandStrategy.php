@@ -2,7 +2,7 @@
 
 namespace framework\command;
 
-use dal\managers\UserRepository;
+use dal\repositories\UserRepository;
 use framework\slack\ISlackApi;
 
 class ArchiveUserCommandStrategy implements ICommandStrategy

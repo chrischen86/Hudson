@@ -21,11 +21,11 @@ class ZoneCommandStrategyTest extends TestCaseBase
     protected function setUp()
     {
         $adapter = new \dal\NullDataAccessAdapter();
-        $this->conquestRepositoryMock = $this->getMockBuilder(\dal\managers\ConquestRepository::class)
+        $this->conquestRepositoryMock = $this->getMockBuilder(\dal\repositories\ConquestRepository::class)
                 ->setMethods(['GetCurrentConquest'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();
-        $this->zoneRepositoryMock = $this->getMockBuilder(\dal\managers\ZoneRepository::class)
+        $this->zoneRepositoryMock = $this->getMockBuilder(\dal\repositories\ZoneRepository::class)
                 ->setMethods(['GetZone', 'UpdateZone'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();

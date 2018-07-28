@@ -9,25 +9,25 @@ use Config;
 return [
     'ConquestChannel' => Config::$ConquestChannel,
     'IDataAccessAdapter' => DI\object('dal\DataAccessAdapter'),
-    'CoreRepository' => DI\object('dal\managers\CoreRepository')
+    'CoreRepository' => DI\object('dal\repositories\CoreRepository')
             ->constructor(DI\get('IDataAccessAdapter')),
-    'ConquestRepository' => DI\object('dal\managers\ConquestRepository')
+    'ConquestRepository' => DI\object('dal\repositories\ConquestRepository')
             ->constructor(DI\get('IDataAccessAdapter')),
-    'ZoneRepository' => DI\object('dal\managers\ZoneRepository')
+    'ZoneRepository' => DI\object('dal\repositories\ZoneRepository')
             ->constructor(DI\get('IDataAccessAdapter')),
-    'NodeRepository' => DI\object('dal\managers\NodeRepository')
+    'NodeRepository' => DI\object('dal\repositories\NodeRepository')
             ->constructor(DI\get('IDataAccessAdapter')),
-    'StrikeRepository' => DI\object('dal\managers\StrikeRepository')
+    'StrikeRepository' => DI\object('dal\repositories\StrikeRepository')
             ->constructor(DI\get('IDataAccessAdapter')),
-    'UserRepository' => DI\object('dal\managers\UserRepository')
+    'UserRepository' => DI\object('dal\repositories\UserRepository')
             ->constructor(DI\get('IDataAccessAdapter')),
-    'ConsensusRepository' => DI\object('dal\managers\ConsensusRepository')
+    'ConsensusRepository' => DI\object('dal\repositories\ConsensusRepository')
             ->constructor(DI\get('IDataAccessAdapter')),
-    'RiftTypeRepository' => DI\object('dal\managers\RiftTypeRepository')
+    'RiftTypeRepository' => DI\object('dal\repositories\RiftTypeRepository')
             ->constructor(DI\get('IDataAccessAdapter')),
-    'RiftHistoryRepository' => DI\object('dal\managers\RiftHistoryRepository')
+    'RiftHistoryRepository' => DI\object('dal\repositories\RiftHistoryRepository')
             ->constructor(DI\get('IDataAccessAdapter')),
-    'SlackMessageHistoryRepository' => DI\object('dal\managers\SlackMessageHistoryRepository')
+    'SlackMessageHistoryRepository' => DI\object('dal\repositories\SlackMessageHistoryRepository')
             ->constructor(DI\get('IDataAccessAdapter')),
     'ISlackApi' => DI\object('framework\slack\SlackApi'),
     'ImageChartApi' => DI\object('framework\google\ImageChartApi'),

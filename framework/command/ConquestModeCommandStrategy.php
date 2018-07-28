@@ -1,8 +1,8 @@
 <?php
 
 namespace framework\command;
-use dal\managers\CoreRepository;
-use StateEnum;
+use dal\repositories\CoreRepository;
+use dal\enums\StateEnum;
 use framework\slack\ISlackApi;
 /**
  * Description of TrainingModeCommandStrategy

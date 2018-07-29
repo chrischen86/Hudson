@@ -50,6 +50,9 @@ class RiftController
                     $filter->addParam(new SqlParam($key, $val, $val == "null" ? SqlParam::$NULL
                                         : SqlParam::$NUMBER));
                     break;
+                case "is_deleted":
+                    $filter->addParam(new SqlParam($key, $val, SqlParam::$NUMBER));
+                    break;
                 default:
                     break;
             }

@@ -9,9 +9,9 @@ use Symfony\Component\Console\Input\ArrayInput;
 putenv('COMPOSER_HOME=' . __DIR__ . '/vendor/bin/composer');
 
 // call `composer install` command programmatically
-$input = new ArrayInput(array('command' => 'dump-autoload'));
+$inputCommand = new ArrayInput(array('command' => 'dump-autoload'));
 $application = new Application();
 $application->setAutoExit(false); // prevent `$application->run` method from exitting the script
-$application->run($input);
+$application->run($inputCommand);
 
 echo "Done.";

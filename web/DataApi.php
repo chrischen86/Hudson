@@ -14,8 +14,8 @@ $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 $app["RiftController"] = function () use ($app)
 {
     global $container;
-    $repository = $container->get('RiftHistoryRepository');
-    return new web\controllers\RiftController($repository);
+    $dataService = $container->get('DataService');
+    return new web\controllers\RiftController($dataService);
 };
 $app["RiftTypeController"] = function () use ($app)
 {

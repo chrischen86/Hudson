@@ -20,9 +20,9 @@ class DataAccessAdapter implements IDataAccessAdapter
     {
         $connection = $this->getConnection();
         $result = $connection->query($sql);
+        $data = array();
         if ($result->num_rows > 0)
         {
-            $data = array();
             while ($row = $result->fetch_assoc())
             {
                 $data[] = $row;
@@ -30,9 +30,8 @@ class DataAccessAdapter implements IDataAccessAdapter
             $connection->close();
             return $data;
         }
-        $id = $connection->insert_id;
         $connection->close();
-        return $id;
+        return $data;
     }
 
     public function query_single($sql)

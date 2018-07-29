@@ -4,10 +4,11 @@ namespace web\controllers;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use dal\repositories\RiftHistoryRepository;
-use dal\specifications\RiftHistoryByUserIdSpecification;
+use dal\DataService;
 use dal\SqlFilter;
 use dal\SqlParam;
+use dal\SqlPredicate;
+use dal\SqlGroupBy;
 
 /**
  * Description of RiftController
@@ -17,32 +18,35 @@ use dal\SqlParam;
 class RiftController
 {
     /**
-     * @var RiftHistoryRepository
+     * @var DataService
      */
-    private $repository;
+    private $service;
 
-    public function __construct(RiftHistoryRepository $repository)
+    public function __construct(DataService $service)
     {
-        $this->repository = $repository;
+        $this->service = $service;
     }
 
     public function getRiftHistory(Request $request, Application $app)
     {
         $params = $request->query->all();
-        $filter = $this->createFilterFromParameters($params);
-        $specification = new \dal\specifications\RiftHistoryByFilterSpecification($filter);
-
-        $results = $this->repository->query($specification);
+        $predicate = $this->createPredicateFromParameters($params);
+        $results = $this->service->query($predicate);
         return $app->json($results);
     }
 
-    private function createFilterFromParameters($params)
+    private function createPredicateFromParameters($params)
     {
+        $predicate = new SqlPredicate("rift_history");
         $filter = new SqlFilter();
         foreach ($params as $key => $val)
         {
             switch ($key)
             {
+                case '$groupBy':
+                    $groupBy = new SqlGroupBy($val);
+                    $predicate->setGroupBy($groupBy);
+                    break;
                 case "owner_id":
                     $filter->addParam(new SqlParam($key, $val, SqlParam::$TEXT));
                     break;
@@ -58,7 +62,8 @@ class RiftController
             }
         }
 
-        return $filter;
+        $predicate->setFilter($filter);
+        return $predicate;
     }
 
 }

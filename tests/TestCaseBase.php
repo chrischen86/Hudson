@@ -43,6 +43,8 @@ class TestCaseBase extends TestCase
         $container->addDefinitions([
             'ConquestChannel' => Config::$ConquestChannel,
             'IDataAccessAdapter' => $this->CreateMockAdapter(),
+            'DataService' => DI\object('dal\DataService')
+                    ->constructor(DI\get('IDataAccessAdapter')),
             'CoreRepository' => DI\object('dal\repositories\CoreRepository')
                     ->constructor(DI\get('IDataAccessAdapter')),
             'ConquestRepository' => DI\object('dal\repositories\ConquestRepository')

@@ -9,6 +9,8 @@ use Config;
 return [
     'ConquestChannel' => Config::$ConquestChannel,
     'IDataAccessAdapter' => DI\object('dal\DataAccessAdapter'),
+    'DataService' => DI\object('dal\DataService')
+            ->constructor(DI\get('IDataAccessAdapter')),
     'CoreRepository' => DI\object('dal\repositories\CoreRepository')
             ->constructor(DI\get('IDataAccessAdapter')),
     'ConquestRepository' => DI\object('dal\repositories\ConquestRepository')

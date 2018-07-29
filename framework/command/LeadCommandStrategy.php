@@ -2,8 +2,8 @@
 
 namespace framework\command;
 
-use dal\managers\ConquestRepository;
-use dal\managers\UserRepository;
+use dal\repositories\ConquestRepository;
+use dal\repositories\UserRepository;
 use framework\slack\ISlackApi;
 
 /**

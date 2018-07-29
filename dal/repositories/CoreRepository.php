@@ -1,10 +1,10 @@
 <?php
 
-namespace dal\managers;
+namespace dal\repositories;
 
 use dal\IDataAccessAdapter;
 use dal\ModelBuildingHelper;
-use StateEnum;
+use dal\enums\StateEnum;
 
 /**
  * Description of StateManager

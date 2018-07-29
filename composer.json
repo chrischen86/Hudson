@@ -20,8 +20,37 @@
         "coderstephen/slack-client": "^0.3.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7"
+        "phpunit/phpunit": "^5.7",
+        "composer/composer": "dev-master",
+        "symfony/console": "3.4.x-dev"
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "autoload-dev": {
+        "psr-4": {
+            "tests\\": "src/tests/"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Hudson\\": "",
+            "dal\\": "dal/",
+            "dal\\enums\\": "dal/enums/",
+            "dal\\models\\": "dal/models/",
+            "dal\\repositories\\": "dal/repositories/",
+            "dal\\specifications\\": "dal/specifications/",
+            "framework\\": "framework/",
+            "framework\\command\\": "framework/command/",
+            "framework\\conquest\\": "framework/conquest/",
+            "framework\\donation\\": "framework/donation/",
+            "framework\\events\\": "framework/events/",
+            "framework\\google\\": "framework/google/",
+            "framework\\process\\": "framework/process/",
+            "framework\\rift\\": "framework/rift/",
+            "framework\\slack\\": "framework/slack/",
+            "framework\\system\\": "framework/system/",
+            "framework\\user\\": "framework/user/",
+            "web\\controllers\\": "web/controllers/"
+        }
+    }
 }

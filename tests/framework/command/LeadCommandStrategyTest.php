@@ -21,11 +21,11 @@ class LeadCommandStrategyTest extends TestCaseBase
     protected function setUp()
     {
         $adapter = new \dal\NullDataAccessAdapter();
-        $this->conquestRepositoryMock = $this->getMockBuilder(\dal\managers\ConquestRepository::class)
+        $this->conquestRepositoryMock = $this->getMockBuilder(\dal\repositories\ConquestRepository::class)
                 ->setMethods(['GetCurrentConquest'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();
-        $this->userRepositoryMock = $this->getMockBuilder(\dal\managers\UserRepository::class)
+        $this->userRepositoryMock = $this->getMockBuilder(\dal\repositories\UserRepository::class)
                 ->setMethods(['GetUserById'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();

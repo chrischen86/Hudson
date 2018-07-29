@@ -29,7 +29,7 @@ class UserChangeEventProcessorTest extends TestCaseBase
                 ->setMethods(['OpenDMChannel'])
                 ->getMock();
 
-        $this->userRepositoryMock = $this->getMockBuilder(\dal\managers\UserRepository::class)
+        $this->userRepositoryMock = $this->getMockBuilder(\dal\repositories\UserRepository::class)
                 ->setMethods(['GetUserById', 'UpdateUser'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();

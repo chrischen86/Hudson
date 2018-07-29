@@ -8,10 +8,10 @@
 
 namespace framework\command;
 
-use dal\managers\ZoneRepository;
-use dal\managers\NodeRepository;
-use dal\managers\ConquestRepository;
-use dal\managers\StrikeRepository;
+use dal\repositories\ZoneRepository;
+use dal\repositories\NodeRepository;
+use dal\repositories\ConquestRepository;
+use dal\repositories\StrikeRepository;
 use framework\slack\ISlackApi;
 use framework\command\StatusCommandStrategy;
 

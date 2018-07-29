@@ -3,10 +3,10 @@
 namespace framework\command;
 
 use framework\slack\ISlackApi;
-use dal\managers\CoreRepository;
+use dal\repositories\CoreRepository;
 use framework\conquest\ConquestManager;
 use framework\command\StatusCommandStrategy;
-use StateEnum;
+use dal\enums\StateEnum;
 use framework\conquest\SetupResultEnum;
 
 /**

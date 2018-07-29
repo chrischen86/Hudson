@@ -24,23 +24,23 @@ class NodeCallCommandStrategyTest extends TestCaseBase
     protected function setUp()
     {
         $adapter = new \dal\NullDataAccessAdapter();
-        $this->conquestRepositoryMock = $this->getMockBuilder(\dal\managers\ConquestRepository::class)
+        $this->conquestRepositoryMock = $this->getMockBuilder(\dal\repositories\ConquestRepository::class)
                 ->setMethods(['GetCurrentConquest'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();
-        $this->zoneRepositoryMock = $this->getMockBuilder(\dal\managers\ZoneRepository::class)
+        $this->zoneRepositoryMock = $this->getMockBuilder(\dal\repositories\ZoneRepository::class)
                 ->setMethods(['GetZone'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();
-        $this->nodeRepositoryMock = $this->getMockBuilder(\dal\managers\NodeRepository::class)
+        $this->nodeRepositoryMock = $this->getMockBuilder(\dal\repositories\NodeRepository::class)
                 ->setMethods(['GetMessageChannel', 'SetMessageProperties'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();
-        $this->strikeRepositoryMock = $this->getMockBuilder(\dal\managers\StrikeRepository::class)
+        $this->strikeRepositoryMock = $this->getMockBuilder(\dal\repositories\StrikeRepository::class)
                 ->setMethods(['GetStrikesByZone'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();
-        $this->userRepositoryMock = $this->getMockBuilder(\dal\managers\UserRepository::class)
+        $this->userRepositoryMock = $this->getMockBuilder(\dal\repositories\UserRepository::class)
                 ->setMethods(['GetUserById'])
                 ->setConstructorArgs([$adapter])
                 ->getMock();

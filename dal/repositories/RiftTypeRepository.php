@@ -1,6 +1,6 @@
 <?php
 
-namespace dal\managers;
+namespace dal\repositories;
 
 use dal\IDataAccessAdapter;
 use dal\ModelBuildingHelper;
@@ -12,6 +12,12 @@ class RiftTypeRepository
     public function __construct(IDataAccessAdapter $adapter)
     {
         $this->adapter = $adapter;
+    }
+    
+    public function GetAllRiftType()
+    {
+        $sql = 'SELECT id, name, thumbnail FROM rift_type';
+        return $this->adapter->query($sql);
     }
 
     public function GetRiftType($type)

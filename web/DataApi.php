@@ -6,7 +6,6 @@ require_once __DIR__ . '/../AutoloadBootstrapper.php';
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use web\controllers\RiftController;
 
 $app = new Silex\Application();
 $app['debug'] = true;
@@ -16,19 +15,19 @@ $app["RiftController"] = function () use ($app)
 {
     global $container;
     $repository = $container->get('RiftHistoryRepository');
-    return new RiftController($repository);
+    return new web\controllers\RiftController($repository);
 };
 $app["RiftTypeController"] = function () use ($app)
 {
     global $container;
     $repository = $container->get('RiftTypeRepository');
-    return new RiftController($repository);
+    return new \web\controllers\RiftTypeController($repository);
 };
 $app["UserController"] = function () use ($app)
 {
     global $container;
     $repository = $container->get('UserRepository');
-    return new RiftController($repository);
+    return new \web\controllers\UserController($repository);
 };
 
 $app->get('/rift', 'RiftController:getRiftHistory');

@@ -13,6 +13,12 @@ class RiftTypeRepository
     {
         $this->adapter = $adapter;
     }
+    
+    public function GetAllRiftType()
+    {
+        $sql = 'SELECT id, name, thumbnail FROM rift_type';
+        return $this->adapter->query($sql);
+    }
 
     public function GetRiftType($type)
     {

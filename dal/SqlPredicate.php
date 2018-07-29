@@ -59,7 +59,8 @@ class SqlPredicate
         {
             $groupBy = $this->groupBy->getGroupBy();
             $aggregrate = $this->groupBy->getAggregrate();
-            $sql = sprintf("%s, %s(%s) AS %s_%s", $sql, $aggregrate, $groupBy, $aggregrate, $groupBy);
+            $aggregrateProperty = $this->groupBy->getAggregrateProperty();
+            $sql = sprintf("%s, %s(%s) AS %s_%s", $sql, $aggregrate, $aggregrateProperty, $aggregrate, $groupBy);
         }
         $sql = sprintf("%s FROM %s", $sql, $this->table);
         if ($this->filter != null && $this->filter->any())

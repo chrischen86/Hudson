@@ -13,6 +13,7 @@ class SqlGroupBy
     public static $SUM = "SUM";
     private $aggregrate;
     private $groupBy;
+    private $aggregrateProperty;
 
     public function __construct($groupBy, $aggregrate = "COUNT")
     {
@@ -28,6 +29,16 @@ class SqlGroupBy
     public function getAggregrate()
     {
         return $this->aggregrate;
+    }
+
+    public function setAggregrateProperty($value)
+    {
+        $this->aggregrateProperty = $value;
+    }
+
+    public function getAggregrateProperty()
+    {
+        return $this->aggregrateProperty != null ? $this->aggregrateProperty : $this->groupBy;
     }
 
 }

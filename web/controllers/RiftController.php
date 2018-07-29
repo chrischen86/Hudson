@@ -45,6 +45,7 @@ class RiftController
             {
                 case '$groupBy':
                     $groupBy = new SqlGroupBy($val);
+                    $groupBy->setAggregrateProperty("1");
                     $predicate->setGroupBy($groupBy);
                     break;
                 case '$select':

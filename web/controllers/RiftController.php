@@ -47,6 +47,10 @@ class RiftController
                     $groupBy = new SqlGroupBy($val);
                     $predicate->setGroupBy($groupBy);
                     break;
+                case '$select':
+                    $select = explode(',', $val);
+                    $predicate->setSelect($select);
+                    break;
                 case "owner_id":
                     $filter->addParam(new SqlParam($key, $val, SqlParam::$TEXT));
                     break;

@@ -46,7 +46,7 @@ class SqlPredicateTest extends TestCaseBase
         $predicate->setSelect(["property1", "property2"]);
 
         $actual = $predicate->toQuery();
-        $expected = "SELECT property1, property2, COUNT(property2) AS group_property2 FROM rifts WHERE (property1 = '1') GROUP BY property2";
+        $expected = "SELECT property1, property2, COUNT(property2) AS COUNT_property2 FROM rifts WHERE (property1 = '1') GROUP BY property2";
         $this->assertEquals($expected, $actual);
     }
 

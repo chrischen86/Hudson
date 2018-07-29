@@ -25,10 +25,10 @@ class RiftHistoryByFilterSpecification implements ISqlSpecification
     public function toSqlQuery()
     {
         $sql = "SELECT h.id AS rift_history_id, h.owner_id, h.type_id, h.scheduled_time, h.is_deleted " .
-                "FROM rift_history h ";
+                "FROM rift_history h";
         if ($this->filter->any())
         {
-            $sql = sprintf("WHERE %s", $this->filter->toWhereClause());
+            $sql = sprintf("%s WHERE %s", $sql, $this->filter->toWhereClause());
         }
         return $sql;
     }

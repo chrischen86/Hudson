@@ -31,7 +31,7 @@ class RiftController
         $params = $request->query->all();
         $filter = $this->createFilterFromParameters($params);
         $specification = new \dal\specifications\RiftHistoryByFilterSpecification($filter);
-        
+
         $results = $this->repository->query($specification);
         return $app->json($results);
     }
@@ -47,7 +47,8 @@ class RiftController
                     $filter->addParam(new SqlParam($key, $val, SqlParam::$TEXT));
                     break;
                 case "type_id":
-                    $filter->addParam(new SqlParam($key, $val, SqlParam::$NUMBER));
+                    $filter->addParam(new SqlParam($key, $val, $val == "null" ? SqlParam::$NULL
+                                        : SqlParam::$NUMBER));
                     break;
                 default:
                     break;

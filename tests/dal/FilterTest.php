@@ -39,6 +39,18 @@ class FilterTest extends TestCaseBase
         $expected = "(property1 = 1)";
         $this->assertEquals($expected, $actual);
     }
+    
+    public function testSimpleSqlNullFilter()
+    {
+        $filter = new SqlFilter();
+
+        $param = new SqlParam("property1", null, SqlParam::$NULL);
+        $filter->addParam($param);
+
+        $actual = $filter->toWhereClause();
+        $expected = "(property1 IS NULL)";
+        $this->assertEquals($expected, $actual);
+    }
 
     public function testCombinedSqlStringFilter()
     {

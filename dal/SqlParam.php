@@ -14,6 +14,7 @@ class SqlParam implements ISqlFilter
     public static $TEXT = 'text';
     public static $NUMBER = 'number';
     public static $DATE = 'date';
+    public static $NULL = 'null';
     private $type;
     private $name;
     private $value;
@@ -48,7 +49,13 @@ class SqlParam implements ISqlFilter
 
     public function toWhereClause()
     {
-        return sprintf("%s = %s", $this->getProperty(), $this->getValue());
+        switch ($this->type)
+        {
+            case SqlParam::$NULL:
+                return sprintf("%s IS NULL", $this->getProperty());
+            default:
+                return sprintf("%s = %s", $this->getProperty(), $this->getValue());
+        }
     }
 
 }

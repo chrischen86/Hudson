@@ -4,7 +4,7 @@ namespace tests\framework\system;
 
 use tests\TestCaseBase;
 use framework\system\SlackFileManager;
-use framework\slack\SlackApi;
+use framework\slack\NullSlackApi;
 use DateTime;
 
 /**
@@ -19,12 +19,15 @@ class SlackFileManagerTest extends TestCaseBase
 
     protected function setUp()
     {
-        $this->slackApi = new SlackApi();
+        $this->slackApi = new NullSlackApi();
         $this->manager = new SlackFileManager($this->slackApi);
     }
     
-    public function testDummy()
+    public function testDeleteFiles()
     {
+        $amount = 100;
+        $dateTime = new DateTime();
+        $this->manager->DeleteOldImages($dateTime, $amount);
     }
 /*
     public function testFetchFileList()

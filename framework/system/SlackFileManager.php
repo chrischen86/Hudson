@@ -3,9 +3,9 @@
 namespace framework\system;
 
 use framework\slack\ISlackApi;
-use framwork\system\models\FileListModel;
-use framwork\system\models\FileInfoModel;
-use framwork\system\models\PagingModel;
+use framework\system\models\FileListModel;
+use framework\system\models\FileInfoModel;
+use framework\system\models\PagingModel;
 use DateTime;
 
 /**

@@ -48,7 +48,8 @@
             "framework\\process\\": "framework/process/",
             "framework\\rift\\": "framework/rift/",
             "framework\\slack\\": "framework/slack/",
-            "framework\\system\\": "framework/system/",
+            "framework\\system\\models\\": "framework/system/models/",
+            "framework\\system\\": "framework/system/", 
             "framework\\user\\": "framework/user/",
             "web\\controllers\\": "web/controllers/"
         }

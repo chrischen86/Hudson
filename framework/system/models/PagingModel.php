@@ -1,6 +1,6 @@
 <?php
 
-namespace framwork\system\models;
+namespace framework\system\models;
 
 /**
  * Description of PagingModel
